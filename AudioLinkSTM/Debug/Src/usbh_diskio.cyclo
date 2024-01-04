@@ -1,0 +1,5 @@
+../Src/usbh_diskio.c:91:9:USBH_initialize	1
+../Src/usbh_diskio.c:103:9:USBH_status	1
+../Src/usbh_diskio.c:212:9:USBH_ioctl	8
+../Src/usbh_diskio.c:127:9:USBH_read	5
+../Src/usbh_diskio.c:167:9:USBH_write	7

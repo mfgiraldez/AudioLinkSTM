@@ -44,20 +44,32 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "waveplayer.h"
+#include <transmitter.h>
 #include "waverecorder.h" 
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
-#define TOUCH_RECORD_XMIN       300
-#define TOUCH_RECORD_XMAX       340
-#define TOUCH_RECORD_YMIN       212
-#define TOUCH_RECORD_YMAX       252
+//#define TOUCH_RECORD_XMIN       300
+//#define TOUCH_RECORD_XMAX       340
+//#define TOUCH_RECORD_YMIN       212
+//#define TOUCH_RECORD_YMAX       252
+//
+//#define TOUCH_PLAYBACK_XMIN     125
+//#define TOUCH_PLAYBACK_XMAX     165
+//#define TOUCH_PLAYBACK_YMIN     212
+//#define TOUCH_PLAYBACK_YMAX     252
 
-#define TOUCH_PLAYBACK_XMIN     125
-#define TOUCH_PLAYBACK_XMAX     165
-#define TOUCH_PLAYBACK_YMIN     212
-#define TOUCH_PLAYBACK_YMAX     252
+// Definición de los límites para los botones de los modos TRANSMITTER y RECEIVER
+#define TOUCH_TRANSMITTER_XMIN     40
+#define TOUCH_TRANSMITTER_XMAX     210
+#define TOUCH_TRANSMITTER_YMIN     150
+#define TOUCH_TRANSMITTER_YMAX     180
+
+
+#define TOUCH_RECEIVER_XMIN     40
+#define TOUCH_RECEIVER_XMAX     210
+#define TOUCH_RECEIVER_YMIN     200
+#define TOUCH_RECEIVER_YMAX     230
 
 /* Private macro -------------------------------------------------------------*/
 /* Global extern variables ---------------------------------------------------*/
@@ -81,80 +93,142 @@ void AUDIO_MenuProcess(void)
 {
   AUDIO_ErrorTypeDef  status;
   TS_StateTypeDef  TS_State;
-  Point PlaybackLogoPoints[] = {{TOUCH_PLAYBACK_XMIN, TOUCH_PLAYBACK_YMIN},
-                                {TOUCH_PLAYBACK_XMAX, (TOUCH_PLAYBACK_YMIN+TOUCH_PLAYBACK_YMAX)/2},
-                                {TOUCH_PLAYBACK_XMIN, TOUCH_PLAYBACK_YMAX}};
+//  Point PlaybackLogoPoints[] = {{TOUCH_PLAYBACK_XMIN, TOUCH_PLAYBACK_YMIN},
+//                                {TOUCH_PLAYBACK_XMIN, TOUCH_PLAYBACK_YMAX},
+//                                {TOUCH_PLAYBACK_XMAX, TOUCH_PLAYBACK_YMIN},
+//  	  	  	  	  	  	  	  	{TOUCH_PLAYBACK_XMAX, TOUCH_PLAYBACK_YMAX}};
+
   
+  /* Hacemos un rectangulo con el tamaño del receiver y del transmitter */
+  Point TransmitterPoints[] = {{TOUCH_TRANSMITTER_XMIN,TOUCH_TRANSMITTER_YMIN},
+                              {TOUCH_TRANSMITTER_XMAX, TOUCH_TRANSMITTER_YMIN},
+                              {TOUCH_TRANSMITTER_XMAX, TOUCH_TRANSMITTER_YMAX},
+							  {TOUCH_TRANSMITTER_XMIN, TOUCH_TRANSMITTER_YMAX}};
+
+  Point ReceiverPoints[] = {{TOUCH_RECEIVER_XMIN, TOUCH_RECEIVER_YMIN},
+                            {TOUCH_RECEIVER_XMAX, TOUCH_RECEIVER_YMIN},
+                            {TOUCH_RECEIVER_XMAX, TOUCH_RECEIVER_YMAX},
+                            {TOUCH_RECEIVER_XMIN, TOUCH_RECEIVER_YMAX}};
+
+
   if(appli_state == APPLICATION_READY)
   { 
     switch(AudioDemo.state)
     {
-    case AUDIO_DEMO_IDLE:
-      
-      AudioDemo.state = AUDIO_DEMO_WAIT;
-      
-      BSP_LCD_SetFont(&LCD_LOG_HEADER_FONT);
-      BSP_LCD_ClearStringLine(13);     /* Clear touch screen buttons dedicated zone */
-      BSP_LCD_ClearStringLine(14);
-      BSP_LCD_ClearStringLine(15);
-      BSP_LCD_SetTextColor(LCD_COLOR_CYAN);
-      BSP_LCD_FillPolygon(PlaybackLogoPoints, 3);                 /* Playback sign */
-      BSP_LCD_FillCircle((TOUCH_RECORD_XMAX+TOUCH_RECORD_XMIN)/2, /* Record circle */
-                         (TOUCH_RECORD_YMAX+TOUCH_RECORD_YMIN)/2,
-                         (TOUCH_RECORD_XMAX-TOUCH_RECORD_XMIN)/2);
-      BSP_LCD_SetTextColor(LCD_COLOR_GREEN);
-      BSP_LCD_SetFont(&LCD_LOG_TEXT_FONT);
-      BSP_LCD_DisplayStringAtLine(15, (uint8_t *)"Use touch screen to enter playback or record menu");
-      break;    
-      
-    case AUDIO_DEMO_WAIT:
-      
-      BSP_TS_GetState(&TS_State);
-      if(TS_State.touchDetected == 1)
-      {
-        if ((TS_State.touchX[0] > TOUCH_RECORD_XMIN) && (TS_State.touchX[0] < TOUCH_RECORD_XMAX) &&
-            (TS_State.touchY[0] > TOUCH_RECORD_YMIN) && (TS_State.touchY[0] < TOUCH_RECORD_YMAX))
-        {
-          AudioDemo.state = AUDIO_DEMO_IN;
-        }
-        else if ((TS_State.touchX[0] > TOUCH_PLAYBACK_XMIN) && (TS_State.touchX[0] < TOUCH_PLAYBACK_XMAX) &&
-                 (TS_State.touchY[0] > TOUCH_PLAYBACK_YMIN) && (TS_State.touchY[0] < TOUCH_PLAYBACK_YMAX))
-        {
-          AudioDemo.state = AUDIO_DEMO_PLAYBACK;
-        }
-        else
-        {
-          AudioDemo.state = AUDIO_DEMO_EXPLORE;
-        }
-        
+    /*
+    ESTADO 1: IDLE
+    DEFINICION: actualizar la pantalla con la intefaz de usuario.
+    TRANSICION--> WAIT
+    */
+    case IDLE:
+      AudioDemo.state = WAIT;
+	  BSP_LCD_SetBackColor(LCD_COLOR_DARKGREEN);
+	  BSP_LCD_SetFont(&LCD_LOG_TEXT_FONT);
+	  BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
+
+	  BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"       ___          ___      __   _      __    ____________  ___");
+	  BSP_LCD_DisplayStringAtLine(3, (uint8_t *)"      / _ |__ _____/ (_)__  / /  (_)__  / /__ / __/_  __/  |/  /");
+	  BSP_LCD_DisplayStringAtLine(4, (uint8_t *)"     / __ / // / _  / / _ \\/ /__/ / _ \\/  '_/_\\ \\  / / / /|_/ / ");
+	  BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"    /_/ |_\\_,_/\\_,_/_/\___/____/_/_//_/_/\\_\\/___/ /_/ /_/  /_/  ");
+
+	  //BSP_LCD_ClearStringLine(13);     /* Clear touch screen buttons dedicated zone */
+
+	  // Pintamos en la pantalla las posibles opciones (estados) a los qque podamos pasar al pulsar.
+	  // MIRAR LA TIPOGRAFÍA PARA PONER ALGUNA MÁS RETRO
+	  BSP_LCD_SetFont(&LCD_LOG_HEADER_FONT);
+	  BSP_LCD_DisplayStringAtLine(10, (uint8_t *)"    >> TRANSMITTER");
+	  BSP_LCD_DisplayStringAtLine(13, (uint8_t *)"    >> RECEIVER");
+
+	  // Creamos los rectángulos de contanto para la selección del modo
+	  // Aseguramos de seleccionar la capa 1 y, no se si funcionará, pero es poner la trasparencia.
+	  BSP_LCD_SelectLayer(1);
+	  BSP_LCD_SetTransparency(1, 0);  // Establecer transparencia en la capa 1
+	  BSP_LCD_FillPolygon(TransmitterPoints, 4);
+	  BSP_LCD_FillPolygon(ReceiverPoints, 4);
+	  break;
+
+    /*											****************************************
+    ESTADO 2: WAIT
+    DEFINICION: Se crean los eventos de tocar la pantalla tactil en alguno de los rectángulos que identifican a cada uno de los estados.
+    TRANSICION-->
+    			TRANSMITTER: Si se toca el area correspondiente al estado TRANSMITTER
+    			RECEIVER : Si se toca el area correspondiente al estado RECEIVER
+    			EXPLORE ??????
+    */
+    case WAIT:
+    	BSP_TS_GetState(&TS_State);
+    	if(TS_State.touchDetected == 1)
+    	{
+    		//Se pulsa sobre el area correspondiente a TRANSMITTER, por lo que se transiciona a dicho estado
+    		if ((TS_State.touchX[0] > TOUCH_TRANSMITTER_XMIN) &&
+    			(TS_State.touchX[0] < TOUCH_TRANSMITTER_XMAX) &&
+    			(TS_State.touchY[0] > TOUCH_TRANSMITTER_YMIN) &&
+				(TS_State.touchY[0] < TOUCH_TRANSMITTER_YMAX))
+    		{
+    			AudioDemo.state = TRANSMITTER;
+    		}
+    		//Se pulsa sobre el area correspondiente a RECEIVER, por lo que se transiciona a dicho estado
+    		else if ((TS_State.touchX[0] > TOUCH_RECEIVER_XMIN) &&
+    				 (TS_State.touchX[0] < TOUCH_RECEIVER_XMIN) &&
+    				 (TS_State.touchY[0] > TOUCH_RECEIVER_XMIN) &&
+					 (TS_State.touchY[0] < TOUCH_RECEIVER_XMIN))
+    		{
+    			AudioDemo.state = RECEIVER;
+    		}
+
         /* Wait for touch released */
         do
         {
           BSP_TS_GetState(&TS_State);
         }while(TS_State.touchDetected > 0);
       }
-      break;
+    break;
+
+    /*											****************************************
+    ESTADO 3: EXPLORER
+    DEFINICION: Utiliza la funcion "AUDIO_ShowWavFiles" definida en "explorer.c" para comprobar que existen archivos
+    			en el USB y posteriormente los pinta por pantalla.
+    TRANSICION-->
+        		IDLE: La función "AUDIO_ShowWavFiles" no ha encontrado ningún archivo.
+        		WAIT: Si se toca el area correspondiente al estado RECEIVER
+        		EXPLORE ??????
+    */
+//    case EXPLORE:
+//      if(AUDIO_ShowWavFiles() > 0)
+//	  {
+//    	 LCD_ErrLog("There is no WAV file on the USB Key.\n");
+//		 AUDIO_ChangeSelectMode(AUDIO_SELECT_MENU);
+//		 AudioDemo.state = IDLE;
+//	  }
+//	  else
+//	  {
+//		 AudioDemo.state = WAIT;
+//	  }
+//	  break;
+
+
+    case TRANSMITTER:
+    	/* Clear the LCD */
+    	LCD_ClearTextZone();
+    	BSP_LCD_SetFont(&LCD_LOG_HEADER_FONT);
+    	BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
+  	    BSP_LCD_DisplayStringAtLine(4, (uint8_t *)"    >> --TRANSMITTER--");
+  	    BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"    >> Reading from USB...");
+
+
+    	break;
+
+    case RECEIVER:
+        	/* Clear the LCD */
+        	LCD_ClearTextZone();
+        	BSP_LCD_SetFont(&LCD_LOG_HEADER_FONT);
+        	BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
+      	    BSP_LCD_DisplayStringAtLine(4, (uint8_t *)"    >> --RECEIVER--");
+      	    BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"    >> Ready to receive...");
+
       
-    case AUDIO_DEMO_EXPLORE: 
-      if(appli_state == APPLICATION_READY)
-      {
-        if(AUDIO_ShowWavFiles() > 0)
-        {
-          LCD_ErrLog("There is no WAV file on the USB Key.\n");         
-          AUDIO_ChangeSelectMode(AUDIO_SELECT_MENU); 
-          AudioDemo.state = AUDIO_DEMO_IDLE;
-        }
-        else
-        {
-          AudioDemo.state = AUDIO_DEMO_WAIT;
-        }
-      }
-      else
-      {
-        AudioDemo.state = AUDIO_DEMO_WAIT;
-      }
-      break;
-      
+        	break;
+
     case AUDIO_DEMO_PLAYBACK:
       if(appli_state == APPLICATION_READY)
       {

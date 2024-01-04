@@ -44,7 +44,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "waveplayer.h"
+#include <transmitter.h>
 
 /* Private define ------------------------------------------------------------*/
 #define TOUCH_NEXT_XMIN         325
@@ -119,7 +119,7 @@ static void AUDIO_AcquireTouchButtons(void);
   */
 AUDIO_ErrorTypeDef AUDIO_PLAYER_Init(void)
 {
-  if(BSP_AUDIO_OUT_Init(OUTPUT_DEVICE_AUTO, uwVolume, I2S_AUDIOFREQ_48K) == 0)
+  if(BSP_AUDIO_OUT_Init(OUTPUT_DEVICE_AUTO, uwVolume, I2S_AUDIOFREQ_44K) == 0)
   {
     return AUDIO_ERROR_NONE;
   }

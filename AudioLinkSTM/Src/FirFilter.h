@@ -9,10 +9,10 @@ typedef struct {
     float buf[FIR_FILTER_LENGTH];
     uint8_t bufIndex;
     float out;        
-} FIRFilter;
+} FirFilter;
 
-void FIRFilter_Init(FIRFilter *fir);
-float FIRFilter_Update(FIRFilter *fir, float inp);
+void FirFilter_Init(FirFilter *fir);
+float FirFilter_Update(FirFilter *fir, float inp);
 
 #endif // FIR_FILTER_H
 

@@ -1,0 +1,2 @@
+../Src/menu.c:352:13:LCD_ClearTextZone	8	static
+../Src/menu.c:92:6:AUDIO_MenuProcess	104	static

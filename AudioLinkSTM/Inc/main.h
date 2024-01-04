@@ -81,10 +81,14 @@ typedef enum {
     
 /* Audio Demo State Structure */    
 typedef enum {
-  AUDIO_DEMO_IDLE = 0,
-  AUDIO_DEMO_WAIT,  
-  AUDIO_DEMO_EXPLORE,
+  IDLE = 0,    /* Estado para pintar la pantalla inicial */
+  WAIT,		   /* Estado para esperar la pulsacion */
+  RECEIVER,    /* Estado que activa la funcionalidad de receptor */
+  TRANSMITTER, /* Estado que activa la funcionalidad de transmisor */
+  EXPLORE,	   /* COMENTAR */
   AUDIO_DEMO_PLAYBACK,
+  AUDIO_DEMO_IDLE,
+  AUDIO_DEMO_WAIT,
   AUDIO_DEMO_IN,  
 }AUDIO_Demo_State;
 
@@ -94,6 +98,7 @@ typedef struct _DemoStateMachine {
   __IO uint8_t select;  
 }AUDIO_DEMO_StateMachine;
 
+/* Para la maquina de estados del waveplayer */
 typedef enum {
   AUDIO_STATE_IDLE = 0,
   AUDIO_STATE_WAIT,    

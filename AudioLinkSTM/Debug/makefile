@@ -1,6 +1,6 @@
 ################################################################################
 # Automatically-generated file. Do not edit!
-# Toolchain: GNU Tools for STM32 (10.3-2021.10)
+# Toolchain: GNU Tools for STM32 (11.3.rel1)
 ################################################################################
 
 -include ../makefile.init
@@ -42,37 +42,37 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := Practica02-AUDIO
+BUILD_ARTIFACT_NAME := AudioLinkSTM
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-Practica02-AUDIO.elf \
+AudioLinkSTM.elf \
 
 MAP_FILES += \
-Practica02-AUDIO.map \
+AudioLinkSTM.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-Practica02-AUDIO.list \
+AudioLinkSTM.list \
 
 OBJCOPY_BIN += \
-Practica02-AUDIO.bin \
+AudioLinkSTM.bin \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: Practica02-AUDIO.elf secondary-outputs
+main-build: AudioLinkSTM.elf secondary-outputs
 
 # Tool invocations
-Practica02-AUDIO.elf Practica02-AUDIO.map: $(OBJS) $(USER_OBJS) ../STM32F750N8Hx_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Practica02-AUDIO.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"../STM32F750N8Hx_FLASH.ld" --specs=nosys.specs -Wl,-Map="Practica02-AUDIO.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+AudioLinkSTM.elf AudioLinkSTM.map: $(OBJS) $(USER_OBJS) ../STM32F750N8Hx_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "AudioLinkSTM.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"../STM32F750N8Hx_FLASH.ld" --specs=nosys.specs -Wl,-Map="AudioLinkSTM.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -81,19 +81,19 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Practica02-AUDIO.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "Practica02-AUDIO.list"
+AudioLinkSTM.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "AudioLinkSTM.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
-Practica02-AUDIO.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "Practica02-AUDIO.bin"
+AudioLinkSTM.bin: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objcopy  -O binary $(EXECUTABLES) "AudioLinkSTM.bin"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) Practica02-AUDIO.bin Practica02-AUDIO.elf Practica02-AUDIO.list Practica02-AUDIO.map default.size.stdout
+	-$(RM) AudioLinkSTM.bin AudioLinkSTM.elf AudioLinkSTM.list AudioLinkSTM.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST) $(OBJCOPY_BIN)

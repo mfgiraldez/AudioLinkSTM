@@ -1,0 +1,4 @@
+../Src/main.c:168:13:USBH_UserProcess	8	static
+../Src/main.c:72:5:main	208	static,ignoring_inline_asm
+../Src/main.c:292:6:BSP_AUDIO_OUT_ClockConfig	144	static
+../Src/main.c:335:6:BSP_LCD_ClockConfig	0	static

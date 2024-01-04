@@ -44,8 +44,8 @@
   */
   
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __WAVEPLAYER_H
-#define __WAVEPLAYER_H
+#ifndef __TRANSMITTER_H
+#define __TRANSMITTER_H
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"

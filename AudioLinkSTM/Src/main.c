@@ -44,7 +44,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "waveplayer.h"
+#include "transmitter.h"
 #include "waverecorder.h"
 
 /* Private typedef -----------------------------------------------------------*/
@@ -148,7 +148,7 @@ static void AUDIO_InitApplication(void)
   /* Init the LCD Log module */
   LCD_LOG_Init();
   
-  LCD_LOG_SetHeader((uint8_t *)"Audio Playback and Record Application");
+  //LCD_LOG_SetHeader((uint8_t *)"AudioLinkSTM");
   
   LCD_UsrLog("USB Host library started.\n"); 
   
