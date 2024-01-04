@@ -64,8 +64,8 @@ uint16_t NumObs = 0;
   */
 FRESULT AUDIO_StorageParse(void)
 {
-  FRESULT res = FR_OK;
-  FILINFO fno;
+  FRESULT res = FR_OK; //Resultado de la operacion
+  FILINFO fno; // Informacion del fichero
   DIR dir;
   char *fn;
   
@@ -91,12 +91,10 @@ FRESULT AUDIO_StorageParse(void)
       {
         if((fno.fattrib & AM_DIR) == 0)
         {
-          if((strstr(fn, "wav")) || (strstr(fn, "WAV")))
-          {
-            strncpy((char *)FileList.file[FileList.ptr].name, (char *)fn, FILEMGR_FILE_NAME_SIZE);
-            FileList.file[FileList.ptr].type = FILETYPE_FILE;
-            FileList.ptr++;
-          }
+          // Se comprueba si wav esta en el nombre del fichero
+          strncpy((char *)FileList.file[FileList.ptr].name, (char *)fn, FILEMGR_FILE_NAME_SIZE);
+          FileList.file[FileList.ptr].type = FILETYPE_FILE;
+          FileList.ptr++;
         }
       }   
     }
@@ -119,6 +117,7 @@ uint8_t AUDIO_ShowWavFiles(void)
 
   if(AUDIO_StorageParse() ==  FR_OK)
   {
+	// ptr es el numero de ficheros que hay en el USB
     if(FileList.ptr > 0)
     {
       BSP_LCD_SetTextColor(LCD_COLOR_WHITE);

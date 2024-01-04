@@ -65,10 +65,10 @@
 #define     LCD_LOG_TEXT_FONT                     Font12
             
 /* Define the LCD LOG Color  */
-#define     LCD_LOG_BACKGROUND_COLOR              LCD_COLOR_BLACK
+#define     LCD_LOG_BACKGROUND_COLOR              LCD_COLOR_DARKGREEN
 #define     LCD_LOG_TEXT_COLOR                    LCD_COLOR_WHITE
 
-#define     LCD_LOG_SOLID_BACKGROUND_COLOR        LCD_COLOR_DARKGREEN
+#define     LCD_LOG_SOLID_BACKGROUND_COLOR        LCD_COLOR_BLACK
 #define     LCD_LOG_SOLID_TEXT_COLOR              LCD_COLOR_WHITE
 
 /* Define the cache depth */

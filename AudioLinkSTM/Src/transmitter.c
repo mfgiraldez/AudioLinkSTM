@@ -44,7 +44,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include <transmitter.h>
+#include "transmitter.h"
 
 /* Private define ------------------------------------------------------------*/
 #define TOUCH_NEXT_XMIN         325
@@ -91,6 +91,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 static AUDIO_OUT_BufferTypeDef  BufferCtl;
+static DATA_FILE_BufferTypeDef  BufferFile; // En este buffer se almacena el archivo a transmitir.
 static int16_t FilePos = 0;
 static __IO uint32_t uwVolume = 30;
 static Point NextPoints[] = {{TOUCH_NEXT_XMIN, TOUCH_NEXT_YMIN},
@@ -101,11 +102,14 @@ static Point PreviousPoints[] = {{TOUCH_PREVIOUS_XMIN, (TOUCH_PREVIOUS_YMIN+TOUC
                                  {TOUCH_PREVIOUS_XMAX, TOUCH_PREVIOUS_YMAX}};
 
 WAVE_FormatTypeDef WaveFormat;
+FILE_FormatTypeDef FileFormat; // Para guardar el tamanio del fichero a leer
 FIL WavFile;
+FIL FileHandler;
 extern FILELIST_FileTypeDef FileList;
 
 /* Private function prototypes -----------------------------------------------*/
 static AUDIO_ErrorTypeDef GetFileInfo(uint16_t file_idx, WAVE_FormatTypeDef *info);
+static AUDIO_ErrorTypeDef GetGenericFileInfo(uint16_t file_idx, FILE_FormatTypeDef *info);
 static uint8_t PlayerInit(uint32_t AudioFreq);
 static void AUDIO_PlaybackDisplayButtons(void);
 static void AUDIO_AcquireTouchButtons(void);
@@ -127,6 +131,26 @@ AUDIO_ErrorTypeDef AUDIO_PLAYER_Init(void)
   {
     return AUDIO_ERROR_IO;
   }
+}
+
+/**
+ * @brief Almacenamos el fichero en BufferFile.
+ * @param idx: File index
+ * @retval Audio error
+ */
+AUDIO_ErrorTypeDef ReadFileIntoBuffer(uint8_t idx)
+{
+	uint32_t bytesread;
+
+	f_close(&FileHandler);
+
+	if(FileList.ptr > idx)
+	{
+		GetGenericFileInfo(idx, &FileFormat);
+
+		return AUDIO_ERROR_NONE;
+	}
+	return AUDIO_ERROR_IO;
 }
 
 /**
@@ -178,7 +202,7 @@ AUDIO_ErrorTypeDef AUDIO_PLAYER_Start(uint8_t idx)
   * @param  None
   * @retval Audio error
   */
-AUDIO_ErrorTypeDef AUDIO_PLAYER_Process(void)
+AUDIO_ErrorTypeDef TRANSMITTER_Process(void)
 {
   uint32_t bytesread, elapsed_time;
   AUDIO_ErrorTypeDef audio_error = AUDIO_ERROR_NONE;
@@ -244,7 +268,7 @@ AUDIO_ErrorTypeDef AUDIO_PLAYER_Process(void)
                      TOUCH_STOP_XMAX - TOUCH_STOP_XMIN,
                      TOUCH_STOP_YMAX - TOUCH_STOP_YMIN);
     BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
-    AudioState = AUDIO_STATE_IDLE; 
+    AudioState = AUDIO_STATE_IDLE;
     audio_error = AUDIO_ERROR_IO;
     break;
     
@@ -322,9 +346,15 @@ AUDIO_ErrorTypeDef AUDIO_PLAYER_Process(void)
     AudioState = AUDIO_STATE_PLAY;
     break;
     
+  case AUDIO_STATE_INIT:
+	/* Pintamos todos los botones y obtenemos los nombre de los ficheros del USB */
+	GetGenericFileInfo(FilePos, &FileFormat);
+	BSP_LCD_DisplayStringAtLine(9, (uint8_t *)"       (PREVIOUS)  (NEXT)  (RETURN)");
+	AudioState = AUDIO_STATE_WAIT;
+	break;
+
   case AUDIO_STATE_WAIT:
   case AUDIO_STATE_IDLE:
-  case AUDIO_STATE_INIT:    
   default:
     /* Update audio state machine according to touch acquisition */
     AUDIO_AcquireTouchButtons();
@@ -420,6 +450,39 @@ static AUDIO_ErrorTypeDef GetFileInfo(uint16_t file_idx, WAVE_FormatTypeDef *inf
       sprintf((char *)str,  "Volume : %lu", uwVolume);
       BSP_LCD_ClearStringLine(9);      
       BSP_LCD_DisplayStringAtLine(9, str);
+      return AUDIO_ERROR_NONE;
+    }
+    f_close(&WavFile);
+  }
+  return AUDIO_ERROR_IO;
+}
+
+/**
+  * @brief  Gets the file info and prints file name.
+  * @param  file_idx: File index
+  * @param  info: Pointer to file info
+  * @retval Audio error
+  */
+static AUDIO_ErrorTypeDef GetGenericFileInfo(uint16_t file_idx, FILE_FormatTypeDef *info)
+{
+  uint32_t bytesread;
+  uint8_t str[FILEMGR_FILE_NAME_SIZE + 20];
+
+  if(f_open(&FileHandler, (char *)FileList.file[file_idx].name, FA_OPEN_EXISTING | FA_READ) == FR_OK)
+  {
+    /* Fill the buffer to Send */
+    if(f_read(&FileHandler, info, sizeof(FileFormat), (void *)&bytesread) == FR_OK)
+    {
+      BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
+      BSP_LCD_SetFont(&LCD_LOG_HEADER_FONT);
+      sprintf((char *)str, "    >> Prepared file to TX (%d/%d):",
+              file_idx + 1, FileList.ptr);
+      BSP_LCD_ClearStringLine(6);
+      BSP_LCD_DisplayStringAtLine(6, str);
+      sprintf((char *)str, "       %s", (char *)FileList.file[file_idx].name);
+      BSP_LCD_ClearStringLine(7);
+      BSP_LCD_DisplayStringAtLine(7, str);
+
       return AUDIO_ERROR_NONE;
     }
     f_close(&WavFile);

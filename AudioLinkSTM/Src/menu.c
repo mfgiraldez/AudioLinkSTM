@@ -44,7 +44,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include <transmitter.h>
+#include "transmitter.h"
 #include "waverecorder.h" 
 
 /* Private typedef -----------------------------------------------------------*/
@@ -100,15 +100,15 @@ void AUDIO_MenuProcess(void)
 
   
   /* Hacemos un rectangulo con el tamaño del receiver y del transmitter */
-  Point TransmitterPoints[] = {{TOUCH_TRANSMITTER_XMIN,TOUCH_TRANSMITTER_YMIN},
-                              {TOUCH_TRANSMITTER_XMAX, TOUCH_TRANSMITTER_YMIN},
-                              {TOUCH_TRANSMITTER_XMAX, TOUCH_TRANSMITTER_YMAX},
-							  {TOUCH_TRANSMITTER_XMIN, TOUCH_TRANSMITTER_YMAX}};
-
-  Point ReceiverPoints[] = {{TOUCH_RECEIVER_XMIN, TOUCH_RECEIVER_YMIN},
-                            {TOUCH_RECEIVER_XMAX, TOUCH_RECEIVER_YMIN},
-                            {TOUCH_RECEIVER_XMAX, TOUCH_RECEIVER_YMAX},
-                            {TOUCH_RECEIVER_XMIN, TOUCH_RECEIVER_YMAX}};
+//  Point TransmitterPoints[] = {{TOUCH_TRANSMITTER_XMIN,TOUCH_TRANSMITTER_YMIN},
+//                              {TOUCH_TRANSMITTER_XMAX, TOUCH_TRANSMITTER_YMIN},
+//                              {TOUCH_TRANSMITTER_XMAX, TOUCH_TRANSMITTER_YMAX},
+//							  {TOUCH_TRANSMITTER_XMIN, TOUCH_TRANSMITTER_YMAX}};
+//
+//  Point ReceiverPoints[] = {{TOUCH_RECEIVER_XMIN, TOUCH_RECEIVER_YMIN},
+//                            {TOUCH_RECEIVER_XMAX, TOUCH_RECEIVER_YMIN},
+//                            {TOUCH_RECEIVER_XMAX, TOUCH_RECEIVER_YMAX},
+//                            {TOUCH_RECEIVER_XMIN, TOUCH_RECEIVER_YMAX}};
 
 
   if(appli_state == APPLICATION_READY)
@@ -129,7 +129,7 @@ void AUDIO_MenuProcess(void)
 	  BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"       ___          ___      __   _      __    ____________  ___");
 	  BSP_LCD_DisplayStringAtLine(3, (uint8_t *)"      / _ |__ _____/ (_)__  / /  (_)__  / /__ / __/_  __/  |/  /");
 	  BSP_LCD_DisplayStringAtLine(4, (uint8_t *)"     / __ / // / _  / / _ \\/ /__/ / _ \\/  '_/_\\ \\  / / / /|_/ / ");
-	  BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"    /_/ |_\\_,_/\\_,_/_/\___/____/_/_//_/_/\\_\\/___/ /_/ /_/  /_/  ");
+	  BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"    /_/ |_\\_,_/\\_,_/_/\\___/____/_/_//_/_/\\_\\/___/ /_/ /_/  /_/  ");
 
 	  //BSP_LCD_ClearStringLine(13);     /* Clear touch screen buttons dedicated zone */
 
@@ -142,9 +142,8 @@ void AUDIO_MenuProcess(void)
 	  // Creamos los rectángulos de contanto para la selección del modo
 	  // Aseguramos de seleccionar la capa 1 y, no se si funcionará, pero es poner la trasparencia.
 	  BSP_LCD_SelectLayer(1);
-	  BSP_LCD_SetTransparency(1, 0);  // Establecer transparencia en la capa 1
-	  BSP_LCD_FillPolygon(TransmitterPoints, 4);
-	  BSP_LCD_FillPolygon(ReceiverPoints, 4);
+	  //BSP_LCD_FillPolygon(TransmitterPoints, 4);
+	  //BSP_LCD_FillPolygon(ReceiverPoints, 4);
 	  break;
 
     /*											****************************************
@@ -166,12 +165,16 @@ void AUDIO_MenuProcess(void)
 				(TS_State.touchY[0] < TOUCH_TRANSMITTER_YMAX))
     		{
     			AudioDemo.state = TRANSMITTER;
+
+    			// Almacenamos todos los nombres de los ficheros almacenados en el USB
+    			AUDIO_StorageParse();
+
     		}
     		//Se pulsa sobre el area correspondiente a RECEIVER, por lo que se transiciona a dicho estado
     		else if ((TS_State.touchX[0] > TOUCH_RECEIVER_XMIN) &&
-    				 (TS_State.touchX[0] < TOUCH_RECEIVER_XMIN) &&
-    				 (TS_State.touchY[0] > TOUCH_RECEIVER_XMIN) &&
-					 (TS_State.touchY[0] < TOUCH_RECEIVER_XMIN))
+    				 (TS_State.touchX[0] < TOUCH_RECEIVER_XMAX) &&
+    				 (TS_State.touchY[0] > TOUCH_RECEIVER_YMIN) &&
+					 (TS_State.touchY[0] < TOUCH_RECEIVER_YMAX))
     		{
     			AudioDemo.state = RECEIVER;
     		}
@@ -184,93 +187,32 @@ void AUDIO_MenuProcess(void)
       }
     break;
 
-    /*											****************************************
-    ESTADO 3: EXPLORER
-    DEFINICION: Utiliza la funcion "AUDIO_ShowWavFiles" definida en "explorer.c" para comprobar que existen archivos
-    			en el USB y posteriormente los pinta por pantalla.
-    TRANSICION-->
-        		IDLE: La función "AUDIO_ShowWavFiles" no ha encontrado ningún archivo.
-        		WAIT: Si se toca el area correspondiente al estado RECEIVER
-        		EXPLORE ??????
-    */
-//    case EXPLORE:
-//      if(AUDIO_ShowWavFiles() > 0)
-//	  {
-//    	 LCD_ErrLog("There is no WAV file on the USB Key.\n");
-//		 AUDIO_ChangeSelectMode(AUDIO_SELECT_MENU);
-//		 AudioDemo.state = IDLE;
-//	  }
-//	  else
-//	  {
-//		 AudioDemo.state = WAIT;
-//	  }
-//	  break;
-
-
     case TRANSMITTER:
-    	/* Clear the LCD */
-    	LCD_ClearTextZone();
-    	BSP_LCD_SetFont(&LCD_LOG_HEADER_FONT);
-    	BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
-  	    BSP_LCD_DisplayStringAtLine(4, (uint8_t *)"    >> --TRANSMITTER--");
-  	    BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"    >> Reading from USB...");
+    	if(AudioState == AUDIO_STATE_IDLE)
+    	{
+    		BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
+    		BSP_LCD_SetFont(&LCD_LOG_HEADER_FONT);
+    		BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
+    		BSP_LCD_DisplayStringAtLine(4, (uint8_t *)"    >> --TRANSMITTER--");
 
-
+    		// Ponemos en funcionamiento la máquina de estados del transmisor
+    		AudioState = AUDIO_STATE_INIT;
+    	}
+    	else
+    	{
+    		TRANSMITTER_Process();
+    	}
     	break;
 
     case RECEIVER:
-        	/* Clear the LCD */
-        	LCD_ClearTextZone();
-        	BSP_LCD_SetFont(&LCD_LOG_HEADER_FONT);
-        	BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
-      	    BSP_LCD_DisplayStringAtLine(4, (uint8_t *)"    >> --RECEIVER--");
-      	    BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"    >> Ready to receive...");
+        /* Clear the LCD */
+		LCD_ClearTextZone();
+		BSP_LCD_SetFont(&LCD_LOG_HEADER_FONT);
+		BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
+		BSP_LCD_DisplayStringAtLine(4, (uint8_t *)"    >> --RECEIVER--");
+		BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"    >> Ready to receive...");
 
-      
-        	break;
-
-    case AUDIO_DEMO_PLAYBACK:
-      if(appli_state == APPLICATION_READY)
-      {
-        if(AudioState == AUDIO_STATE_IDLE)
-        {
-          if(AUDIO_ShowWavFiles() > 0)
-          {
-            LCD_ErrLog("There is no WAV file on the USB Key.\n");         
-            AUDIO_ChangeSelectMode(AUDIO_SELECT_MENU); 
-            AudioDemo.state = AUDIO_DEMO_IDLE;
-          }
-          else
-          {
-            /* Start Playing */
-            AudioState = AUDIO_STATE_INIT;
-          }
-          /* Clear the LCD */
-          LCD_ClearTextZone();
-          
-          if(AUDIO_PLAYER_Start(0) == AUDIO_ERROR_IO)
-          {
-            AUDIO_ChangeSelectMode(AUDIO_SELECT_MENU); 
-            AudioDemo.state = AUDIO_DEMO_IDLE;
-          }
-        }
-        else /* Not idle */
-        {
-          if(AUDIO_PLAYER_Process() == AUDIO_ERROR_IO)
-          {
-            /* Clear the LCD */
-            LCD_ClearTextZone();
-            
-            AUDIO_ChangeSelectMode(AUDIO_SELECT_MENU);  
-            AudioDemo.state = AUDIO_DEMO_IDLE;
-          }
-        }
-      }
-      else
-      {
-        AudioDemo.state = AUDIO_DEMO_WAIT;
-      }
-      break; 
+		break;
       
     case AUDIO_DEMO_IN:
       if(appli_state == APPLICATION_READY)

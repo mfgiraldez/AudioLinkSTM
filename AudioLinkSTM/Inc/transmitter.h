@@ -56,9 +56,10 @@
 /* Exported functions ------------------------------------------------------- */
 AUDIO_ErrorTypeDef AUDIO_PLAYER_Init(void);
 AUDIO_ErrorTypeDef AUDIO_PLAYER_Start(uint8_t idx);
-AUDIO_ErrorTypeDef AUDIO_PLAYER_Process(void);
+AUDIO_ErrorTypeDef ReadFileIntoBuffer(uint8_t idx);
+AUDIO_ErrorTypeDef TRANSMITTER_Process(void);
 AUDIO_ErrorTypeDef AUDIO_PLAYER_Stop(void);
 
-#endif /* __WAVEPLAYER_H */
+#endif /* __TRANSMITTER_H */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

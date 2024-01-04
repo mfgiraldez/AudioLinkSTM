@@ -61,6 +61,7 @@
 
 /* Exported Defines ----------------------------------------------------------*/
 #define AUDIO_OUT_BUFFER_SIZE                      8192
+#define DATA_FILE_BUFFER_SIZE					   1024
 #define AUDIO_IN_PCM_BUFFER_SIZE                   4*2304 /* buffer size in half-word */
 
 #define FILEMGR_LIST_DEPDTH                        24
@@ -98,7 +99,7 @@ typedef struct _DemoStateMachine {
   __IO uint8_t select;  
 }AUDIO_DEMO_StateMachine;
 
-/* Para la maquina de estados del waveplayer */
+/* Para la maquina de estados del transmisor */
 typedef enum {
   AUDIO_STATE_IDLE = 0,
   AUDIO_STATE_WAIT,    
@@ -137,6 +138,12 @@ typedef struct {
   uint32_t fptr;
 }AUDIO_OUT_BufferTypeDef;
 
+/* File buffer control struct */
+typedef struct {
+  uint8_t buff[DATA_FILE_BUFFER_SIZE];
+  uint32_t fptr;
+}DATA_FILE_BufferTypeDef;
+
 typedef enum {
   BUFFER_EMPTY = 0,  
   BUFFER_FULL,     
@@ -166,6 +173,10 @@ typedef struct {
   uint32_t SubChunk2ID;   /* 36 */   
   uint32_t SubChunk2Size; /* 40 */    
 }WAVE_FormatTypeDef;
+
+typedef struct {
+  uint32_t FileSize;      /* 4 */
+}FILE_FormatTypeDef;
 
 typedef struct _FILELIST_LineTypeDef {
   uint8_t type;
