@@ -99,7 +99,7 @@ typedef struct _DemoStateMachine {
   __IO uint8_t select;  
 }AUDIO_DEMO_StateMachine;
 
-/* Para la maquina de estados del transmisor */
+/* Para la maquina de estados del transmisor. Se ha aniadido el estado "AUDIO_STATE_BEGING_TRANSMISSION */
 typedef enum {
   AUDIO_STATE_IDLE = 0,
   AUDIO_STATE_WAIT,    
@@ -118,6 +118,7 @@ typedef enum {
   AUDIO_STATE_VOLUME_DOWN,
   AUDIO_STATE_ERROR,
   AUDIO_STATE_MUTE,
+  AUDIO_STATE_BEGING_TRANSMISSION
 }AUDIO_PLAYBACK_StateTypeDef;
 
 typedef enum {

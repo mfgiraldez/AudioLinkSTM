@@ -130,7 +130,6 @@ void AUDIO_MenuProcess(void)
 	  BSP_LCD_DisplayStringAtLine(3, (uint8_t *)"      / _ |__ _____/ (_)__  / /  (_)__  / /__ / __/_  __/  |/  /");
 	  BSP_LCD_DisplayStringAtLine(4, (uint8_t *)"     / __ / // / _  / / _ \\/ /__/ / _ \\/  '_/_\\ \\  / / / /|_/ / ");
 	  BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"    /_/ |_\\_,_/\\_,_/_/\\___/____/_/_//_/_/\\_\\/___/ /_/ /_/  /_/  ");
-
 	  //BSP_LCD_ClearStringLine(13);     /* Clear touch screen buttons dedicated zone */
 
 	  // Pintamos en la pantalla las posibles opciones (estados) a los qque podamos pasar al pulsar.
