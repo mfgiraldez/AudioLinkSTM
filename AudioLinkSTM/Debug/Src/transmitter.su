@@ -1,0 +1,8 @@
+../Src/transmitter.c:762:13:AUDIO_AcquireTouchButtons	8	static
+../Src/transmitter.c:159:20:AUDIO_PLAYER_Init	8	static
+../Src/transmitter.c:173:20:ReadFileIntoBuffer	32	static
+../Src/transmitter.c:211:20:AUDIO_PLAYER_Start	96	static
+../Src/transmitter.c:251:20:TRANSMITTER_Process	104	static
+../Src/transmitter.c:540:20:AUDIO_PLAYER_Stop	16	static
+../Src/transmitter.c:554:6:BSP_AUDIO_OUT_TransferComplete_CallBack	0	static
+../Src/transmitter.c:565:6:BSP_AUDIO_OUT_HalfTransfer_CallBack	0	static

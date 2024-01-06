@@ -6,7 +6,6 @@ Created on Sat Jan  6 13:32:42 2024
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
 
 fs = 44100 # Frecuencia de muestreo estándar
 frec0 = 5512.5 # Frecuencia de la senoidal para el cero

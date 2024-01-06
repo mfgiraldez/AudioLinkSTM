@@ -176,10 +176,6 @@ typedef struct {
   uint32_t SubChunk2Size; /* 40 */    
 }WAVE_FormatTypeDef;
 
-typedef struct {
-  uint32_t FileSize;      /* 4 */
-}FILE_FormatTypeDef;
-
 typedef struct _FILELIST_LineTypeDef {
   uint8_t type;
   uint8_t name[FILEMGR_FILE_NAME_SIZE];
