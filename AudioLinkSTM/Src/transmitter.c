@@ -148,6 +148,7 @@ static void TRANSMITTER_AcquireTouchButtons(void);
 static uint32_t WavProcess_EncInit(uint32_t Freq, uint8_t* pHeader);
 static uint32_t WavProcess_HeaderInit(uint8_t* pHeader, WAVE_FormatTypeDef* pWaveFormatStruct);
 static uint32_t WavProcess_HeaderUpdate(uint8_t* pHeader, WAVE_FormatTypeDef* pWaveFormatStruct);
+void InsertarBit(uint8_t byteLeido);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -494,15 +495,12 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		for (uint8_t i = 0; i < BufferFile.fptr; i++)
 		{
 			byteLeido = BufferFile.buff[i];
-
 			// Bit index: 1 2 3 4 5 6 7 8
 			// Orden Tx : 1 2 3 4 5 6 7 8
 			// Leemos el bit mas significativo de byteLeido
 			//InsertarBit(byteLeido >> 7);
-
 			//uint8_t msb = (byteLeido >> 7) & 1;
-
-
+			InsertarBit(byteLeido);
 		}
 
 		// COSAS QUE VAMOS A NECESITAR
@@ -572,6 +570,42 @@ void BSP_AUDIO_OUT_HalfTransfer_CallBack(void) {
 /*******************************************************************************
  Static Functions
  *******************************************************************************/
+/**
+ * @brief  Escribe la secuencia en el archivo WAV.
+ * @param  byteLeido: byte leido del fichero que txt que se quiere transmitir
+ */
+void InsertarBit(uint8_t byteLeido) 
+	{
+		uint8_t bit;
+
+		/* Bucle for que recorre los 8 bits del byte */
+		for (int i = 7; i >= 0; i--) 
+		{
+			// Se van leyendo los bits, desde el más significativo
+			bit = (byteLeido >> i) & 1;
+			if (bit == 1) {
+				// Se ha leido un 1, por lo que las muestras a escribir en el fichero seran: 0, 2, 4, 6
+				for (int j = 0; j < 8; j += 2) 
+				{
+					WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr] = sineSamples[j];
+					WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr] = sineSamples[j];
+
+					WaveBuffer.pcm_ptr += 2;
+				}
+			}else
+			{
+				// Se ha leido un 0, por lo que las muestras a escribir en el fichero seran todas
+				for (int j = 0; j < 8; j++) 
+				{
+					// Se escribe en el buffer
+					WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr] = sineSamples[j];
+					WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr] = sineSamples[j];
+					// Se actualiza el puntero
+					WaveBuffer.pcm_ptr += 2;
+				}
+			}
+		}
+	}
 
 /**
  * @brief  Gets the file info.
