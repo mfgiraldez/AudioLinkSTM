@@ -142,6 +142,7 @@ typedef struct {
 /* File buffer control struct */
 typedef struct {
   uint8_t buff[DATA_FILE_BUFFER_SIZE];
+  BUFFER_StateTypeDef state;
   uint32_t fptr;
 }DATA_FILE_BufferTypeDef;
 

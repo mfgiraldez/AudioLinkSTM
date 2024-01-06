@@ -1,9 +1,0 @@
-../Src/transmitter.c:572:13:AUDIO_AcquireTouchButtons	8	static
-../Src/transmitter.c:465:27:GetGenericFileInfo.constprop.isra	80	static
-../Src/transmitter.c:124:20:AUDIO_PLAYER_Init	8	static
-../Src/transmitter.c:141:20:ReadFileIntoBuffer	8	static
-../Src/transmitter.c:161:20:AUDIO_PLAYER_Start	96	static
-../Src/transmitter.c:205:20:TRANSMITTER_Process	40	static
-../Src/transmitter.c:370:20:AUDIO_PLAYER_Stop	16	static
-../Src/transmitter.c:385:6:BSP_AUDIO_OUT_TransferComplete_CallBack	0	static
-../Src/transmitter.c:398:6:BSP_AUDIO_OUT_HalfTransfer_CallBack	0	static

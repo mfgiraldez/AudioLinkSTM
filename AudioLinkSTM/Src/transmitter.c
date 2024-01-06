@@ -57,6 +57,11 @@
 //#define TOUCH_PREVIOUS_YMIN     212
 //#define TOUCH_PREVIOUS_YMAX     252
 
+#define TOUCH_BEGING_TRANSMISSION_XMIN     185
+#define TOUCH_BEGING_TRANSMISSION_XMAX     430
+#define TOUCH_BEGING_TRANSMISSION_YMIN     180
+#define TOUCH_BEGING_TRANSMISSION_YMAX     215
+
 #define TOUCH_STOP_XMIN         170
 #define TOUCH_STOP_XMAX         210
 #define TOUCH_STOP_YMIN         212
@@ -104,11 +109,6 @@
 #define TOUCH_RETURN_YMIN     155
 #define TOUCH_RETURN_YMAX     179
 
-#define TOUCH_BEGING_TRANSMISSION_XMIN     402
-#define TOUCH_BEGING_TRANSMISSION_XMAX     452
-#define TOUCH_BEGING_TRANSMISSION_YMIN     155
-#define TOUCH_BEGING_TRANSMISSION_YMAX     179
-
 /* Private macro -------------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -138,6 +138,7 @@ static AUDIO_ErrorTypeDef GetGenericFileInfo(uint16_t file_idx,
 static uint8_t PlayerInit(uint32_t AudioFreq);
 static void AUDIO_PlaybackDisplayButtons(void);
 static void AUDIO_AcquireTouchButtons(void);
+static void TRANSMITTER_AcquireTouchButtons(void);
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -168,7 +169,19 @@ AUDIO_ErrorTypeDef ReadFileIntoBuffer(uint8_t idx) {
 	if (FileList.ptr > idx) {
 		GetGenericFileInfo(idx, &FileFormat);
 
-		return AUDIO_ERROR_NONE;
+		BufferFile.state = BUFFER_OFFSET_NONE;
+
+		/* Get Data from USB Flash Disk */
+		f_lseek(&FileHandler, 0);
+
+		/* Fill whole buffer at first time */
+		if (f_read(&FileHandler, &BufferFile.buff[0], DATA_FILE_BUFFER_SIZE, (void*) &bytesread) == FR_OK)
+		{
+			if (bytesread != 0) {
+				BufferFile.fptr = bytesread;
+				return AUDIO_ERROR_NONE;
+			}
+		}
 	}
 	return AUDIO_ERROR_IO;
 }
@@ -223,6 +236,11 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 	AUDIO_ErrorTypeDef audio_error = AUDIO_ERROR_NONE;
 	static uint32_t prev_elapsed_time = 0xFFFFFFFF;
 	uint8_t str[16];
+	uint8_t strFileName[FILEMGR_FILE_NAME_SIZE + 20];
+	Point Begin_TransmissionPoints[] = {{TOUCH_BEGING_TRANSMISSION_XMIN,TOUCH_BEGING_TRANSMISSION_YMIN},
+	                             {TOUCH_BEGING_TRANSMISSION_XMAX, TOUCH_BEGING_TRANSMISSION_YMIN},
+	                             {TOUCH_BEGING_TRANSMISSION_XMAX, TOUCH_BEGING_TRANSMISSION_YMAX},
+	    						  {TOUCH_BEGING_TRANSMISSION_XMIN, TOUCH_BEGING_TRANSMISSION_YMAX}};
 
 	switch (AudioState) {
 	case AUDIO_STATE_PLAY:
@@ -356,6 +374,8 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		BSP_LCD_DisplayStringAtLine(9, (uint8_t*) "       (PREVIOUS)  (NEXT)  (RETURN)");
 		BSP_LCD_DisplayStringAtLine(12, (uint8_t*) "                >>  BEGING TRANSMISSION");
 
+		// Poligono de prueba
+		BSP_LCD_FillPolygon(Begin_TransmissionPoints, 4);
 		AudioState = AUDIO_STATE_WAIT;
 		break;
 
@@ -374,59 +394,66 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 	Se limpia la pantalla y se coloca un nuevo mensage que indica que se está realizando la transmision.
 	Se pinta un detalle de una antena.
 	Se comienza con el tratamiento de los datos, obteniendolos del buffer y haciendo las operaciones necesarias
-	para la conversion en formato wav a traves de la concatenacion de los dos simbolos con los que cuenta la modulacion
+	para la conversion en formato wav a traves de la concatenacion de los dos simbolos con los que cuenta la modulacion.
 	*/
 	case AUDIO_STATE_BEGING_TRANSMISSION:
-		BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
-		BSP_LCD_SetFont(&LCD_LOG_HEADER_FONT);
-		BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
-		
 		/*
 		Para pintar el efecto de parpadeo, podemos comprobar si el archivo wav se esta preparando, imprimiendo ">> PREPARING.."
 		o por otro lado, esta listo para ser enviado (ya se ha realizado el archivo wav con la modulacion) para que imprima ">> TRANSMITTING"
 		Hay que verificar como se haria esta condicion y aniadirla
 		*/
-		bool isLineVisible = true;
-		while (1)
-		{
-			isLineVisible = !isLineVisible;
-			if (isLineVisible)
-			{
-				BSP_LCD_DisplayStringAtLine(4, (uint8_t *)">> PREPARING THE TRANSMISSION OF %s", (char*) FileList.file[file_idx].name);
-			}
-			else
-			{
-				BSP_LCD_ClearStringLine(4);
-			}
-		}
-		//BSP_LCD_DisplayStringAtLine(4, (uint8_t *)">> PREPARING THE TRANSMISSION OF %s", (char*) FileList.file[file_idx].name);
+//		bool isLineVisible = true;
+//		while (1)
+//		{
+//			isLineVisible = !isLineVisible;
+//			if (isLineVisible)
+//			{
+//				BSP_LCD_DisplayStringAtLine(4, (uint8_t *)">> PREPARING THE TRANSMISSION OF %s", (char*) FileList.file[file_idx].name);
+//			}
+//			else
+//			{
+//				BSP_LCD_ClearStringLine(4);
+//			}
+//		}
 
-		BSP_LCD_SetFont(&LCD_LOG_TEXT_FONT);
-		BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"         ,-.");
-		BSP_LCD_DisplayStringAtLine(3, (uint8_t *)"        / \\  `.  __..-,O");
-		BSP_LCD_DisplayStringAtLine(4, (uint8_t *)"       :   \\ --''_..-'.'");
-		BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"       |    . .-' `. '.");
-		BSP_LCD_DisplayStringAtLine(6, (uint8_t *)"       :     .     .`.'");
-		BSP_LCD_DisplayStringAtLine(7, (uint8_t *)"        \\     `.  /  ..");
-		BSP_LCD_DisplayStringAtLine(8, (uint8_t *)"         \\      `.   ' .");
-		BSP_LCD_DisplayStringAtLine(9, (uint8_t *)"          `,       `.   \\");
-		BSP_LCD_DisplayStringAtLine(10, (uint8_t *)"         ,|,`.        `-.\\");
-		BSP_LCD_DisplayStringAtLine(11, (uint8_t *)"        '.||  ``-...__..-`");
-		BSP_LCD_DisplayStringAtLine(12, (uint8_t *)"         |  |");
-		BSP_LCD_DisplayStringAtLine(13, (uint8_t *)"         |__|");
-		BSP_LCD_DisplayStringAtLine(14, (uint8_t *)"         /||\\");
-		BSP_LCD_DisplayStringAtLine(15, (uint8_t *)"        //||\\\\");
-		BSP_LCD_DisplayStringAtLine(16, (uint8_t *)"       // || \\\\");
-		BSP_LCD_DisplayStringAtLine(17, (uint8_t *)"    __//__||__\\\__");
-		BSP_LCD_DisplayStringAtLine(18, (uint8_t *)"   '--------------' ");
+		BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"    >> PREPARING THE TRANSMISSION...");
+		sprintf((char*) strFileName, "          / \\  `.  __..-,O  / \\_/ \\_/ %s", (char*) FileList.file[FilePos].name);
+
+		BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"           ,-.               _   _");
+		BSP_LCD_DisplayStringAtLine(6, strFileName);
+		BSP_LCD_DisplayStringAtLine(7, (uint8_t *)"         :   \\ --''_..-'.'");
+		BSP_LCD_DisplayStringAtLine(8, (uint8_t *)"         |    . .-' `. '.");
+		BSP_LCD_DisplayStringAtLine(9, (uint8_t *)"         :     .     .`.'");
+		BSP_LCD_DisplayStringAtLine(10, (uint8_t *)"          \\     `.  /  ..");
+		BSP_LCD_DisplayStringAtLine(11, (uint8_t *)"           \\      `.   ' .");
+		BSP_LCD_DisplayStringAtLine(12, (uint8_t *)"            `,       `.   \\");
+		BSP_LCD_DisplayStringAtLine(13, (uint8_t *)"           ,|,`.        `-.\\");
+		BSP_LCD_DisplayStringAtLine(14, (uint8_t *)"          '.||  ``-...__..-`");
+		BSP_LCD_DisplayStringAtLine(15, (uint8_t *)"           |  |");
+		BSP_LCD_DisplayStringAtLine(16, (uint8_t *)"           |__|");
+		BSP_LCD_DisplayStringAtLine(17, (uint8_t *)"           /||\\");
+		BSP_LCD_DisplayStringAtLine(18, (uint8_t *)"          //||\\\\");
+		BSP_LCD_DisplayStringAtLine(19, (uint8_t *)"         // || \\\\");
+		BSP_LCD_DisplayStringAtLine(20, (uint8_t *)"      __//__||__\\\\__");
+		BSP_LCD_DisplayStringAtLine(21, (uint8_t *)"     '--------------' ");
+
+
+		/* Llenamos el buffer con el contenido del fichero del USB */
+		ReadFileIntoBuffer(FilePos);
+
+		/* Creamos la senal a transmitir y el archivo .wav */
+		// Tenemos que ir leyendo BufferFile.buff[i], donde estaran almacenados byte a byte los datos
+		// del fichero a transmitir.
+
+
 
 		/*
 		Mirar que cosas nos sirven del estado de PLAY de la maquina de estados original
 		Cuanro el archivo .wav se cree, estará listo para la transmisión, entonces se limpia la linea
 		4 y se escribe en ella >> TRANSMITTING.
-		BSP_LCD_ClearStringLine(4);
-		BSP_LCD_DisplayStringAtLine(4, (uint8_t *)">> TRANSMITTING %s", (char*) FileList.file[file_idx].name);
+		BSP_LCD_DisplayStringAtLine(3, (uint8_t *)">> TRANSMITTING");
 		*/
+
 
 		break;
 
@@ -646,6 +673,8 @@ static void AUDIO_PlaybackDisplayButtons(void) {
  * @retval None
  */
 static void TRANSMITTER_AcquireTouchButtons(void) {
+	static TS_StateTypeDef TS_State = { 0 };
+
 	if (TS_State.touchDetected == 1) /* If previous touch has not been released, we don't proceed any touch command */
 		{
 			BSP_TS_GetState(&TS_State);
@@ -679,6 +708,10 @@ static void TRANSMITTER_AcquireTouchButtons(void) {
 					     (TS_State.touchY[0] > TOUCH_BEGING_TRANSMISSION_YMIN) &&
 					     (TS_State.touchY[0] < TOUCH_BEGING_TRANSMISSION_YMAX))
 				{
+					BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
+					BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
+					BSP_LCD_SetFont(&LCD_LOG_TEXT_FONT);
+
 					AudioState = AUDIO_STATE_BEGING_TRANSMISSION;
 				}
 			}
