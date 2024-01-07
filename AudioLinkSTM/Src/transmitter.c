@@ -143,6 +143,7 @@ static AUDIO_ErrorTypeDef GetFileInfo(uint16_t file_idx,
 		WAVE_FormatTypeDef *info);
 static uint8_t PlayerInit(uint32_t AudioFreq);
 static void AUDIO_PlaybackDisplayButtons(void);
+static void InsertarBit(uint8_t bit);
 static void AUDIO_AcquireTouchButtons(void);
 static void TRANSMITTER_AcquireTouchButtons(void);
 static uint32_t WavProcess_EncInit(uint32_t Freq, uint8_t* pHeader);
@@ -247,6 +248,7 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 	uint32_t bytesread, elapsed_time;
 	uint32_t byteswritten = 0;
 	uint8_t byteLeido = 0;
+	uint8_t parity = 0;
 	AUDIO_ErrorTypeDef audio_error = AUDIO_ERROR_NONE;
 	static uint32_t prev_elapsed_time = 0xFFFFFFFF;
 	uint8_t str[16];
@@ -462,15 +464,15 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		BSP_LCD_DisplayStringAtLine(10, (uint8_t *)"          \\     `.  /  ..");
 		BSP_LCD_DisplayStringAtLine(11, (uint8_t *)"           \\      `.   ' .");
 		BSP_LCD_DisplayStringAtLine(12, (uint8_t *)"            `,       `.   \\");
-		BSP_LCD_DisplayStringAtLine(13, (uint8_t *)"           ,|,`.        `-.\\");
+		//BSP_LCD_DisplayStringAtLine(13, (uint8_t *)"           ,|,`.        `-.\\");
 		BSP_LCD_DisplayStringAtLine(14, (uint8_t *)"          '.||  ``-...__..-`");
 		BSP_LCD_DisplayStringAtLine(15, (uint8_t *)"           |  |");
 		BSP_LCD_DisplayStringAtLine(16, (uint8_t *)"           |__|");
 		BSP_LCD_DisplayStringAtLine(17, (uint8_t *)"           /||\\");
 		BSP_LCD_DisplayStringAtLine(18, (uint8_t *)"          //||\\\\");
 		BSP_LCD_DisplayStringAtLine(19, (uint8_t *)"         // || \\\\");
-		BSP_LCD_DisplayStringAtLine(20, (uint8_t *)"      __//__||__\\\\__");
-		BSP_LCD_DisplayStringAtLine(21, (uint8_t *)"     '--------------' ");
+		//BSP_LCD_DisplayStringAtLine(20, (uint8_t *)"      __//__||__\\\\__");
+		//BSP_LCD_DisplayStringAtLine(21, (uint8_t *)"     '--------------' ");
 
 
 		/* Llenamos el buffer con el contenido del fichero del USB */
@@ -481,9 +483,24 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		// del fichero a transmitir.
 
 		// Creamos un nuevo fichero
-		f_open(&MessageWavFile, (char*) FileList.file[FilePos].name, FA_CREATE_ALWAYS | FA_WRITE);
+		uint8_t resultadoWrite = f_open(&MessageWavFile, (char*) "mensajeModulado.wav", FA_CREATE_ALWAYS | FA_WRITE);
+		if (resultadoWrite == FR_OK)
+		{
+			BSP_LCD_DisplayStringAtLine(20, (uint8_t *)"Se ha creado correctamente el archivo");
+		} else {
+			sprintf((char*) strFileName, "%d", resultadoWrite);
+			BSP_LCD_DisplayStringAtLine(20, strFileName);
+		}
 		WavProcess_EncInit(I2S_AUDIOFREQ_44K, pMessageHeaderBuff);
-		f_write(&MessageWavFile, pMessageHeaderBuff, 44, (void*)&byteswritten);
+
+		resultadoWrite = f_write(&MessageWavFile, pMessageHeaderBuff, 44, (void*)&byteswritten);
+		if(resultadoWrite == FR_OK)
+		{
+			//BSP_LCD_DisplayStringAtLine(21, (uint8_t *)"La cabecera se ha escrito correctamente");
+		} else {
+			sprintf((char*) strFileName, "%d", resultadoWrite);
+			BSP_LCD_DisplayStringAtLine(21, strFileName);
+		}
 
 		WaveBuffer.fptr = byteswritten;
 		WaveBuffer.pcm_ptr = 0;
@@ -495,16 +512,42 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		for (uint8_t i = 0; i < BufferFile.fptr; i++)
 		{
 			byteLeido = BufferFile.buff[i];
-			// Bit index: 1 2 3 4 5 6 7 8
-			// Orden Tx : 1 2 3 4 5 6 7 8
-			// Leemos el bit mas significativo de byteLeido
-			//InsertarBit(byteLeido >> 7);
-			//uint8_t msb = (byteLeido >> 7) & 1;
-			InsertarBit(byteLeido);
+
+			InsertarBit(1); // BIT STOP
+			InsertarBit(0); // BIT START
+
+			// BITS DE DATOS (8 bits)
+			for (int8_t j = 7; j >= 0; j--)
+			{
+				InsertarBit((byteLeido >> j) & 1);
+			}
+
+			// Se calcula la paridad (par) del byte leido
+			// El bit de paridad es 0 si el numero de unos es par, y 1 si es impar
+			parity = 0;
+			for (uint8_t i = 0; i < 8; i++) {
+				parity ^= (byteLeido >> i) & 1;
+			}
+			InsertarBit(parity);
 		}
 
-		// COSAS QUE VAMOS A NECESITAR
+		InsertarBit(1); // BIT STOP
+		InsertarBit(1); // BIT FINALIZACION
 
+		// Se termina de generar el archivo .wav
+		f_write(&MessageWavFile, (uint16_t*)WaveBuffer.pcm_buff, WaveBuffer.pcm_ptr, (void*)&byteswritten);
+
+		/* Update the wav file header save it into wav file */
+
+		f_lseek(&MessageWavFile, 0);
+
+		WavProcess_HeaderUpdate(pMessageHeaderBuff, &MessageWaveFormat);
+
+		f_write(&MessageWavFile, pMessageHeaderBuff, sizeof(WAVE_FormatTypeDef), (void*)&byteswritten);
+
+		/* Close file */
+		f_close(&MessageWavFile);
+		BSP_LCD_DisplayStringAtLine(13, (uint8_t *)"Se ha almacenado el wav.");
 		/* MAX Recording time reached, so stop audio interface and close file */
 //		if(WaveBuffer.fptr >= REC_SAMPLE_LENGTH)
 //		{
@@ -520,6 +563,9 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		BSP_LCD_DisplayStringAtLine(3, (uint8_t *)">> TRANSMITTING");
 		*/
 
+
+		// Volvemos al estado de INIT
+		AudioState = AUDIO_STATE_WAIT;
 
 		break;
 
@@ -574,38 +620,43 @@ void BSP_AUDIO_OUT_HalfTransfer_CallBack(void) {
  * @brief  Escribe la secuencia en el archivo WAV.
  * @param  byteLeido: byte leido del fichero que txt que se quiere transmitir
  */
-void InsertarBit(uint8_t byteLeido) 
+static void InsertarBit(uint8_t bit)
+{
+	uint32_t byteswritten = 0;
+
+	if (WaveBuffer.pcm_ptr == AUDIO_IN_PCM_BUFFER_SIZE)
 	{
-		uint8_t bit;
+		// Si se ha llenado el buffer se escribe el buffer en el fichero
+		f_write(&MessageWavFile, (uint16_t*)WaveBuffer.pcm_buff, WaveBuffer.pcm_ptr, (void*)&byteswritten);
+		WaveBuffer.pcm_ptr = 0;
+	}
 
-		/* Bucle for que recorre los 8 bits del byte */
-		for (int i = 7; i >= 0; i--) 
+	if (bit == 1)
+	{
+		for (uint8_t periodo = 0; periodo < 4; periodo++)
 		{
-			// Se van leyendo los bits, desde el más significativo
-			bit = (byteLeido >> i) & 1;
-			if (bit == 1) {
-				// Se ha leido un 1, por lo que las muestras a escribir en el fichero seran: 0, 2, 4, 6
-				for (int j = 0; j < 8; j += 2) 
-				{
-					WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr] = sineSamples[j];
-					WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr] = sineSamples[j];
-
-					WaveBuffer.pcm_ptr += 2;
-				}
-			}else
+			for (uint8_t j = 0; j < 8; j += 2)
 			{
-				// Se ha leido un 0, por lo que las muestras a escribir en el fichero seran todas
-				for (int j = 0; j < 8; j++) 
-				{
-					// Se escribe en el buffer
-					WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr] = sineSamples[j];
-					WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr] = sineSamples[j];
-					// Se actualiza el puntero
-					WaveBuffer.pcm_ptr += 2;
-				}
+				WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr] = sineSamples[j];
+				WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr+1] = sineSamples[j];
+
+				WaveBuffer.pcm_ptr += 2;
+			}
+		}
+
+	} else {
+		for (uint8_t periodo = 0; periodo < 2; periodo++)
+		{
+			for (uint8_t j = 0; j < 8; j++)
+			{
+				WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr] = sineSamples[j];
+				WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr+1] = sineSamples[j];
+
+				WaveBuffer.pcm_ptr += 2;
 			}
 		}
 	}
+}
 
 /**
  * @brief  Gets the file info.
