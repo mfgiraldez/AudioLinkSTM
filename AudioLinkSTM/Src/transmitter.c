@@ -536,6 +536,7 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 
 		// Se termina de generar el archivo .wav
 		f_write(&MessageWavFile, (uint16_t*)WaveBuffer.pcm_buff, WaveBuffer.pcm_ptr, (void*)&byteswritten);
+		WaveBuffer.fptr += byteswritten;
 
 		/* Update the wav file header save it into wav file */
 
@@ -544,6 +545,7 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		WavProcess_HeaderUpdate(pMessageHeaderBuff, &MessageWaveFormat);
 
 		f_write(&MessageWavFile, pMessageHeaderBuff, sizeof(WAVE_FormatTypeDef), (void*)&byteswritten);
+		WaveBuffer.fptr += byteswritten;
 
 		/* Close file */
 		f_close(&MessageWavFile);
@@ -629,6 +631,7 @@ static void InsertarBit(uint8_t bit)
 		// Si se ha llenado el buffer se escribe el buffer en el fichero
 		f_write(&MessageWavFile, (uint16_t*)WaveBuffer.pcm_buff, WaveBuffer.pcm_ptr, (void*)&byteswritten);
 		WaveBuffer.pcm_ptr = 0;
+		WaveBuffer.fptr += byteswritten;
 	}
 
 	if (bit == 1)

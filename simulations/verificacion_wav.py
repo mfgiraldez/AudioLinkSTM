@@ -18,6 +18,9 @@ audio = wave.open("mensajeModulado.wav", "r")
 frames = audio.readframes(-1)
 signal = np.frombuffer(frames, dtype="int16")
 
+# Leemos las posiciones pares de signal
+signal = signal[::2]
+
 # Obtenemos los parámetros del audio
 fs = audio.getframerate()
 time = np.linspace(0, len(signal)/fs, num=len(signal))

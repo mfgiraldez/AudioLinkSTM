@@ -1,9 +1,9 @@
-../Src/transmitter.c:632:13:InsertarBit	32	static
-../Src/transmitter.c:858:13:AUDIO_AcquireTouchButtons	8	static
+../Src/transmitter.c:625:13:InsertarBit	32	static
+../Src/transmitter.c:852:13:AUDIO_AcquireTouchButtons	8	static
 ../Src/transmitter.c:161:20:AUDIO_PLAYER_Init	8	static
 ../Src/transmitter.c:175:20:ReadFileIntoBuffer	32	static
 ../Src/transmitter.c:207:20:AUDIO_PLAYER_Start	96	static
 ../Src/transmitter.c:247:20:TRANSMITTER_Process	120	static
-../Src/transmitter.c:595:20:AUDIO_PLAYER_Stop	16	static
-../Src/transmitter.c:609:6:BSP_AUDIO_OUT_TransferComplete_CallBack	0	static
-../Src/transmitter.c:620:6:BSP_AUDIO_OUT_HalfTransfer_CallBack	0	static
+../Src/transmitter.c:588:20:AUDIO_PLAYER_Stop	16	static
+../Src/transmitter.c:602:6:BSP_AUDIO_OUT_TransferComplete_CallBack	0	static
+../Src/transmitter.c:613:6:BSP_AUDIO_OUT_HalfTransfer_CallBack	0	static
