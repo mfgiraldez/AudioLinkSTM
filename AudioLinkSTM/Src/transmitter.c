@@ -88,7 +88,6 @@
 #define TOUCH_FX_YMAX     126
 
 // Se definen los puntos para los nuevos botones (PREVIOUS)  (NEXT)  (RETURN) (BEGGING TRANSMISSION) del transmisor
-// Hay que definir los valores de estos puntos
 #define TOUCH_PREVIOUS_XMIN     80
 #define TOUCH_PREVIOUS_XMAX     195
 #define TOUCH_PREVIOUS_YMIN     135
@@ -103,6 +102,17 @@
 #define TOUCH_RETURN_XMAX     452
 #define TOUCH_RETURN_YMIN     155
 #define TOUCH_RETURN_YMAX     179
+
+// Se definen los nuevos valores para los limites de los botones (BACK TO MENU) y (START TRANSISSION)
+#define TOUCH_BTM_XMIN     602
+#define TOUCH_BTM_XMAX     652
+#define TOUCH_BTM_YMIN     83
+#define TOUCH_BTM_YMAX     126
+
+#define TOUCH_START_TX_XMIN     700
+#define TOUCH_START_TX_XMAX     752
+#define TOUCH_START_TX_YMIN     155
+#define TOUCH_START_TX_YMAX     179
 
 /* Private macro -------------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
@@ -138,6 +148,16 @@ const int16_t sineSamples[] = {
 	    0b1010010101111111
 };
 
+static Point puntos_BTM[] = {{TOUCH_BTM_XMIN,TOUCH_BTM_YMIN},
+							 {TOUCH_BTM_XMIN, TOUCH_BTM_YMAX},
+							 {TOUCH_BTM_XMAX, TOUCH_BTM_YMIN},
+							 {TOUCH_BTM_XMAX, TOUCH_BTM_YMIN}};
+
+static Point puntos_START[] = {{TOUCH_START_TX_XMIN,TOUCH_START_TX_YMIN},
+							   {TOUCH_START_TX_XMIN, TOUCH_START_TX_YMAX},
+							   {TOUCH_START_TX_XMAX, TOUCH_START_TX_YMIN},
+							   {TOUCH_START_TX_XMAX, TOUCH_START_TX_YMIN}};
+
 /* Private function prototypes -----------------------------------------------*/
 static AUDIO_ErrorTypeDef GetFileInfo(uint16_t file_idx,
 		WAVE_FormatTypeDef *info);
@@ -150,6 +170,8 @@ static uint32_t WavProcess_EncInit(uint32_t Freq, uint8_t* pHeader);
 static uint32_t WavProcess_HeaderInit(uint8_t* pHeader, WAVE_FormatTypeDef* pWaveFormatStruct);
 static uint32_t WavProcess_HeaderUpdate(uint8_t* pHeader, WAVE_FormatTypeDef* pWaveFormatStruct);
 void InsertarBit(uint8_t byteLeido);
+static void TRANSMITTER_AcquireTouchButtons_TX();
+
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -176,27 +198,35 @@ AUDIO_ErrorTypeDef ReadFileIntoBuffer(uint8_t idx) {
 	uint32_t bytesread;
 
 	f_close(&FileHandler);
-	f_open(&FileHandler, (char*) FileList.file[idx].name,
-				FA_OPEN_EXISTING | FA_READ);
-
-
-	if (FileList.ptr > idx) {
-		BufferFile.state = BUFFER_OFFSET_NONE;
-
-		/* Get Data from USB Flash Disk */
-		f_lseek(&FileHandler, 0);
-
-		/* Fill whole buffer at first time */
-		if (f_read(&FileHandler, &BufferFile.buff[0], DATA_FILE_BUFFER_SIZE, (void*) &bytesread) == FR_OK)
+	if(f_open(&FileHandler, (char*) FileList.file[idx].name, FA_OPEN_EXISTING | FA_READ) == FR_OK)
+	{
+		if (FileList.ptr > idx)
 		{
-			if (bytesread != 0) {
-				BufferFile.fptr = bytesread;
-				return AUDIO_ERROR_NONE;
+			BufferFile.state = BUFFER_OFFSET_NONE;
+
+			/* Get Data from USB Flash Disk */
+			f_lseek(&FileHandler, 0);
+
+			/* Fill whole buffer at first time */
+			if (f_read(&FileHandler, &BufferFile.buff[0], DATA_FILE_BUFFER_SIZE, (void*) &bytesread) == FR_OK)
+			{
+				if (bytesread != 0)
+				{
+					BufferFile.fptr = bytesread;
+					return AUDIO_ERROR_NONE;
+				}
 			}
+
 		}
+		return AUDIO_ERROR_IO;
+	} else{
+		BSP_LCD_SetTextColor(LCD_COLOR_RED);
+		BSP_LCD_ClearStringLine(3);
+		BSP_LCD_DisplayStringAtLine(3, (uint8_t *)"    >>  FATAL ERROR FETCHING THE INFORMATION OF THE USB");
+		return AUDIO_ERROR_IO;
 
 	}
-	return AUDIO_ERROR_IO;
+
 }
 
 /**
@@ -434,94 +464,90 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 	para la conversion en formato wav a traves de la concatenacion de los dos simbolos con los que cuenta la modulacion.
 	*/
 	case AUDIO_STATE_BEGING_TRANSMISSION:
-		/*
-		Para pintar el efecto de parpadeo, podemos comprobar si el archivo wav se esta preparando, imprimiendo ">> PREPARING.."
-		o por otro lado, esta listo para ser enviado (ya se ha realizado el archivo wav con la modulacion) para que imprima ">> TRANSMITTING"
-		Hay que verificar como se haria esta condicion y aniadirla
-		*/
-//		bool isLineVisible = true;
-//		while (1)
-//		{
-//			isLineVisible = !isLineVisible;
-//			if (isLineVisible)
-//			{
-//				BSP_LCD_DisplayStringAtLine(4, (uint8_t *)">> PREPARING THE TRANSMISSION OF %s", (char*) FileList.file[file_idx].name);
-//			}
-//			else
-//			{
-//				BSP_LCD_ClearStringLine(4);
-//			}
-//		}
-
-		BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"    >> PREPARING THE TRANSMISSION...");
+		
+		BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"    >> PREPARING THE TRANSMISSION... CREATING .wav FILE FROM THE SELECTED FILE");
 		sprintf((char*) strFileName, "          / \\  `.  __..-,O  / \\_/ \\_/ %s", (char*) FileList.file[FilePos].name);
 
-		BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"           ,-.               _   _");
-		BSP_LCD_DisplayStringAtLine(6, strFileName);
-		BSP_LCD_DisplayStringAtLine(7, (uint8_t *)"         :   \\ --''_..-'.'");
-		BSP_LCD_DisplayStringAtLine(8, (uint8_t *)"         |    . .-' `. '.");
-		BSP_LCD_DisplayStringAtLine(9, (uint8_t *)"         :     .     .`.'");
-		BSP_LCD_DisplayStringAtLine(10, (uint8_t *)"          \\     `.  /  ..");
-		BSP_LCD_DisplayStringAtLine(11, (uint8_t *)"           \\      `.   ' .");
-		BSP_LCD_DisplayStringAtLine(12, (uint8_t *)"            `,       `.   \\");
-		//BSP_LCD_DisplayStringAtLine(13, (uint8_t *)"           ,|,`.        `-.\\");
-		BSP_LCD_DisplayStringAtLine(14, (uint8_t *)"          '.||  ``-...__..-`");
-		BSP_LCD_DisplayStringAtLine(15, (uint8_t *)"           |  |");
-		BSP_LCD_DisplayStringAtLine(16, (uint8_t *)"           |__|");
-		BSP_LCD_DisplayStringAtLine(17, (uint8_t *)"           /||\\");
-		BSP_LCD_DisplayStringAtLine(18, (uint8_t *)"          //||\\\\");
-		BSP_LCD_DisplayStringAtLine(19, (uint8_t *)"         // || \\\\");
-		//BSP_LCD_DisplayStringAtLine(20, (uint8_t *)"      __//__||__\\\\__");
-		//BSP_LCD_DisplayStringAtLine(21, (uint8_t *)"     '--------------' ");
+		BSP_LCD_DisplayStringAtLine(6, (uint8_t *)"           ,-.               _   _");
+		BSP_LCD_DisplayStringAtLine(7, strFileName);
+		BSP_LCD_DisplayStringAtLine(8, (uint8_t *)"         :   \\ --''_..-'.'");
+		BSP_LCD_DisplayStringAtLine(9, (uint8_t *)"         |    . .-' `. '.");
+		BSP_LCD_DisplayStringAtLine(10, (uint8_t *)"         :     .     .`.'");
+		BSP_LCD_DisplayStringAtLine(11, (uint8_t *)"          \\     `.  /  ..");
+		BSP_LCD_DisplayStringAtLine(12, (uint8_t *)"           \\      `.   ' .");
+		BSP_LCD_DisplayStringAtLine(13, (uint8_t *)"            `,       `.   \\");
+		BSP_LCD_DisplayStringAtLine(14, (uint8_t *)"           ,|,`.        `-.\\");
+		BSP_LCD_DisplayStringAtLine(15, (uint8_t *)"          '.||  ``-...__..-`");
+		BSP_LCD_DisplayStringAtLine(16, (uint8_t *)"           |  |");
+		BSP_LCD_DisplayStringAtLine(17, (uint8_t *)"           |__|");
+		BSP_LCD_DisplayStringAtLine(18, (uint8_t *)"           /||\\");
+		BSP_LCD_DisplayStringAtLine(19, (uint8_t *)"          //||\\\\");
+		BSP_LCD_DisplayStringAtLine(20, (uint8_t *)"         // || \\\\");
+		BSP_LCD_DisplayStringAtLine(21, (uint8_t *)"      __//__||__\\\\__");
+		// BSP_LCD_DisplayStringAtLine(21, (uint8_t *)"     '--------------' ");
 
 
 		/* Llenamos el buffer con el contenido del fichero del USB */
 		ReadFileIntoBuffer(FilePos);
 
-		/* Creamos la senal a transmitir y el archivo .wav */
-		// Tenemos que ir leyendo BufferFile.buff[i], donde estaran almacenados byte a byte los datos
-		// del fichero a transmitir.
+		/* 
+		PROCESO DE CREACION DEL ARCHIVO .wav
+		Tenemos que ir leyendo el buffer que se acaba de escribir con el contenido del archivo, donde estaran almacenados 
+		byte a byte los datos del fichero a transmitir, y haciendo uso de la funcion InsertarBit(), se iran insertando en 
+		WaveBuffer.pcm_buff. Una vez se haya leido el fichero completo, y se haya escrito el contenido del mismo en este 
+		buffer, se procede a la escritura del archivo .wav.
+		*/
 
 		// Creamos un nuevo fichero
-		uint8_t resultadoWrite = f_open(&MessageWavFile, (char*) "mensajeModulado.wav", FA_CREATE_ALWAYS | FA_WRITE);
-		if (resultadoWrite == FR_OK)
+		uint8_t fileCreation = f_open(&MessageWavFile, (char*) "mensajeModulado.wav", FA_CREATE_ALWAYS | FA_WRITE);
+		if(fileCreation == FR_OK)
 		{
-			BSP_LCD_DisplayStringAtLine(20, (uint8_t *)"Se ha creado correctamente el archivo");
-		} else {
-			sprintf((char*) strFileName, "%d", resultadoWrite);
-			BSP_LCD_DisplayStringAtLine(20, strFileName);
-		}
-		WavProcess_EncInit(I2S_AUDIOFREQ_44K, pMessageHeaderBuff);
+			// Inicializamos
+			WavProcess_EncInit(I2S_AUDIOFREQ_44K, pMessageHeaderBuff);
+			// Se escribe en esta funcion la cabecera por primera vez.
+			uint8_t headerWrite = f_write(&MessageWavFile, pMessageHeaderBuff, 44, (void*)&byteswritten);
+			if(headerWrite == FR_OK)
+			{
+				//Reseteo de los valores de los campos de WaveBuffer
+				WaveBuffer.fptr = byteswritten;
+				WaveBuffer.pcm_ptr = 0;
+				WaveBuffer.offset = 0;
+				WaveBuffer.wr_state = BUFFER_EMPTY;
 
-		resultadoWrite = f_write(&MessageWavFile, pMessageHeaderBuff, 44, (void*)&byteswritten);
-		if(resultadoWrite == FR_OK)
+			}else
+			{
+				BSP_LCD_SetTextColor(LCD_COLOR_RED);
+				BSP_LCD_ClearStringLine(4);
+				sprintf((char*) strFileName,"    >>  ERROR WRITING THE .wav HEADER. ERROR CODE: %d", headerWrite);
+				BSP_LCD_DisplayStringAtLine(4, strFileName);
+			}
+
+		}else
 		{
-			//BSP_LCD_DisplayStringAtLine(21, (uint8_t *)"La cabecera se ha escrito correctamente");
-		} else {
-			sprintf((char*) strFileName, "%d", resultadoWrite);
-			BSP_LCD_DisplayStringAtLine(21, strFileName);
+			BSP_LCD_SetTextColor(LCD_COLOR_RED);
+			BSP_LCD_ClearStringLine(4);
+			sprintf((char*) strFileName,"    >>  ERROR CREATING THE .wav FILE. ERROR CODE: %d", fileCreation);
+			BSP_LCD_DisplayStringAtLine(4, strFileName);
 		}
 
-		WaveBuffer.fptr = byteswritten;
-		WaveBuffer.pcm_ptr = 0;
-		WaveBuffer.offset = 0;
-		WaveBuffer.wr_state = BUFFER_EMPTY;
-
-//		sprintf((char*) strFileName, "%d", BufferFile.buff[0]);
-//		BSP_LCD_DisplayStringAtLine(10, strFileName);
+		// En este buffer, vamos recorriendo la informacion del fichero a transmitir, cuya longitud viene 
+		// dada por BufferFile.fptr.
 		for (uint8_t i = 0; i < BufferFile.fptr; i++)
 		{
+			// Se lee un byte de datos del buffer que contiene el fichero a transmitir.
 			byteLeido = BufferFile.buff[i];
 
+			// Se insertan el bit de start y el bit de stop de la transmision en el archivo .wav haciendo
+			// uso de la funcion InsertarBit().
 			InsertarBit(1); // BIT STOP
 			InsertarBit(0); // BIT START
 
-			// BITS DE DATOS (8 bits)
+			// Se va recorriendo el byteLeido bit a bit, comenzando desde el bit mas significativo. Los
+			// bits leiidos se van insertando en el archivo .wav haciendo uso de la funcion InsertarBit().
 			for (int8_t j = 7; j >= 0; j--)
 			{
 				InsertarBit((byteLeido >> j) & 1);
 			}
-
 			// Se calcula la paridad (par) del byte leido
 			// El bit de paridad es 0 si el numero de unos es par, y 1 si es impar
 			parity = 0;
@@ -530,26 +556,66 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 			}
 			InsertarBit(parity);
 		}
-
+		 
+		// Una vez se ha reccorrido completament el buffer asociado al archvo y se ha escrito completamente, 
+		// se insertan el bit de stop y el bit de finalizacion, que no son mas que dos bits de 1s.
+		
 		InsertarBit(1); // BIT STOP
 		InsertarBit(1); // BIT FINALIZACION
 
-		// Se termina de generar el archivo .wav
-		f_write(&MessageWavFile, (uint16_t*)WaveBuffer.pcm_buff, WaveBuffer.pcm_ptr, (void*)&byteswritten);
-		WaveBuffer.fptr += byteswritten;
+		// Una vez relleno el buffer, se procede a realizar la escritura del .wav
+		uint8_t fileWriting = f_write(&MessageWavFile, (uint16_t*)WaveBuffer.pcm_buff, WaveBuffer.pcm_ptr, (void*)&byteswritten);
+		if(fileWriting == FR_OK)
+		{
+			WaveBuffer.fptr += byteswritten;
 
-		/* Update the wav file header save it into wav file */
+			// Se actualiza la cabecera del fichero .wav con el tamao total
+			uint8_t seeker = f_lseek(&MessageWavFile, 0);
+			if(seeker == FR_OK)
+			{
+				WavProcess_HeaderUpdate(pMessageHeaderBuff, &MessageWaveFormat);
+				uint8_t updateHeader = f_write(&MessageWavFile, pMessageHeaderBuff, sizeof(WAVE_FormatTypeDef), (void*)&byteswritten);
+				if(updateHeader == FR_OK)
+				{
+					WaveBuffer.fptr += byteswritten;
+					// Se cierra el fichero wav
+					f_close(&MessageWavFile);
+					BSP_LCD_ClearStringLine(4);
+					BSP_LCD_DisplayStringAtLine(4, (uint8_t *)"    >>  .wav FILE CREATED. READY TO TRANSMIT!");
 
-		f_lseek(&MessageWavFile, 0);
+					// Aqui deberia ir al estado de transmitir, pero mientras lo dejamos en este estado hasta que
+					// decidamos que hacer.
+					// Podriamos poner unos botones para volver al menu principal del estado INIT
+					BSP_LCD_ClearStringLine(9);
+					BSP_LCD_ClearStringLine(11);
+					BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
+					BSP_LCD_SetFont(&LCD_LOG_TEXT_FONT);
+					AudioState = AUDIO_STATE_WAV_CREATED;
 
-		WavProcess_HeaderUpdate(pMessageHeaderBuff, &MessageWaveFormat);
+				}else
+				{
+					BSP_LCD_SetTextColor(LCD_COLOR_RED);
+					BSP_LCD_ClearStringLine(4);
+					sprintf((char*) strFileName,"    >>  ERROR UPDATING THE .wav FILE HEADER. ERROR CODE: %d", updateHeader);
+					BSP_LCD_DisplayStringAtLine(4, strFileName);
+				}
 
-		f_write(&MessageWavFile, pMessageHeaderBuff, sizeof(WAVE_FormatTypeDef), (void*)&byteswritten);
-		WaveBuffer.fptr += byteswritten;
+			}else
+			{
+				BSP_LCD_SetTextColor(LCD_COLOR_RED);
+				BSP_LCD_ClearStringLine(4);
+				sprintf((char*) strFileName,"    >>  ERROR SEEKING THE .wav FILE. ERROR CODE: %d", seeker);
+				BSP_LCD_DisplayStringAtLine(4, strFileName);
+			}
 
-		/* Close file */
-		f_close(&MessageWavFile);
-		BSP_LCD_DisplayStringAtLine(13, (uint8_t *)"Se ha almacenado el wav.");
+		}else
+		{
+			BSP_LCD_SetTextColor(LCD_COLOR_RED);
+			BSP_LCD_ClearStringLine(4);
+			sprintf((char*) strFileName,"    >>  ERROR WRITING THE .wav FILE. ERROR CODE: %d", fileWriting);
+			BSP_LCD_DisplayStringAtLine(4, strFileName);
+		}
+
 		/* MAX Recording time reached, so stop audio interface and close file */
 //		if(WaveBuffer.fptr >= REC_SAMPLE_LENGTH)
 //		{
@@ -557,21 +623,37 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 //		  AudioState = AUDIO_STATE_STOP;
 //		  break;
 //		}
+		// Se me ocurren dos ideas: poner un boton transmit que sera el que nos llevara al estado de
+		// reproducir el audio generado. La otra, limpiar la pantalla y volver al menu de transmitir
 
-		/*
-		Mirar que cosas nos sirven del estado de PLAY de la maquina de estados original
-		Cuanro el archivo .wav se cree, estará listo para la transmisión, entonces se limpia la linea
-		4 y se escribe en ella >> TRANSMITTING.
-		BSP_LCD_DisplayStringAtLine(3, (uint8_t *)">> TRANSMITTING");
-		*/
+		// Otra opcion, aniadir un boton y que al pulsarlo nos lleve de vuelte al menu principal de
+		// transmision. Voy a implementar esta ultima
+		//BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
+		//AudioState = AUDIO_STATE_INIT;
+		break;
+
+	case AUDIO_STATE_WAV_CREATED:
+		// Ya se ha creado el fichero .wav a partir del fichero de de texto, por lo que ahora
+		// se procede a pintar los botones y esperar a que sean pulsados.
+		BSP_LCD_DisplayStringAtLine(9, (uint8_t *)"         |    . .-' `. '.       >>    (BACK TO TX MENU)");
+		BSP_LCD_DisplayStringAtLine(11, (uint8_t *)"          \\     `.  /  ..     >>    (START TRANSMISSION)");
 
 
-		// Volvemos al estado de INIT
-		AudioState = AUDIO_STATE_WAIT;
+		AudioState = AUDIO_STATE_WAIT_FOR_TRANSMISSION;
 
 		break;
 
+	case AUDIO_STATE_WAIT_FOR_TRANSMISSION:
+		// LLamada a una funcion para adquirir la informacion de los toques de la pantalla.
+		// No se puede usar la que ya tenemos por si se lian a tocar ahi random en la pantalla
+		// Pintamos los rectangulos para aproximar el espacio que queremos
+		BSP_LCD_FillPolygon(puntos_BTM, 4);
+		BSP_LCD_FillPolygon(puntos_START, 4);
+		TRANSMITTER_AcquireTouchButtons_TX();
+		break;
+
 	case AUDIO_STATE_IDLE:
+	case AUDIO_STATE_TRANSMISSION:
 	default:
 		/* Update audio state machine according to touch acquisition */
 		AUDIO_AcquireTouchButtons();
@@ -636,25 +718,36 @@ static void InsertarBit(uint8_t bit)
 
 	if (bit == 1)
 	{
+		// Si el bit leido es igual a 1, se transmiten unicamente las muestras del seno correspondientes 
+		// a una señal de 11025 Hz, que serían el 0, 2, 4, 6
 		for (uint8_t periodo = 0; periodo < 4; periodo++)
 		{
+			// Se configura el número de periodos a transmitir, en este caso serian 4 periodos por cada bit.
 			for (uint8_t j = 0; j < 8; j += 2)
 			{
+				// Por ultimo, se sinsertan las muestras del seno en el buffer, dos veces, ya que la donfiguracion
+				// que permite el STM32 es estereo.
 				WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr] = sineSamples[j];
 				WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr+1] = sineSamples[j];
 
+				// Por ultimo se incrementa el puntero del buffer en 2 debido a las dos posiciones escritas.
 				WaveBuffer.pcm_ptr += 2;
 			}
 		}
-
-	} else {
+	} else 
+	{
+		// En este caso, el bit leido es un cero, por lo que la seal a transmitir es la correspondiente a 5512.5 Hz, y
+		// se transmiten todas las muestras del seno. 
 		for (uint8_t periodo = 0; periodo < 2; periodo++)
 		{
+			// Se configura el número de periodos a transmitir, en este caso serian 2 periodos por cada bit.
 			for (uint8_t j = 0; j < 8; j++)
 			{
+				// De igual forma qque anteriormente, se insertan las muestras en el bufferm dos veces.
 				WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr] = sineSamples[j];
 				WaveBuffer.pcm_buff[WaveBuffer.pcm_ptr+1] = sineSamples[j];
-
+				
+				// Se actualiza el puntero del buffer.
 				WaveBuffer.pcm_ptr += 2;
 			}
 		}
@@ -798,49 +891,76 @@ static void TRANSMITTER_AcquireTouchButtons(void) {
 	static TS_StateTypeDef TS_State = { 0 };
 
 	if (TS_State.touchDetected == 1) /* If previous touch has not been released, we don't proceed any touch command */
+	{
+		BSP_TS_GetState(&TS_State);
+	} else {
+		// Se ha soltado el toque previo
+		BSP_TS_GetState(&TS_State);
+		if (TS_State.touchDetected == 1) {
+			if ((TS_State.touchX[0] > TOUCH_PREVIOUS_XMIN) &&
+				(TS_State.touchX[0] < TOUCH_PREVIOUS_XMAX) &&
+				(TS_State.touchY[0] > TOUCH_PREVIOUS_YMIN) &&
+				(TS_State.touchY[0] < TOUCH_PREVIOUS_YMAX))
+			{
+				AudioState = AUDIO_STATE_PREVIOUS;
+
+			}else if ((TS_State.touchX[0] > TOUCH_NEXT_XMIN) &&
+					  (TS_State.touchX[0] < TOUCH_NEXT_XMAX) &&
+					  (TS_State.touchY[0] > TOUCH_NEXT_YMIN) &&
+					  (TS_State.touchY[0] < TOUCH_NEXT_YMAX))
+			{
+				AudioState = AUDIO_STATE_NEXT;
+
+			}else if ((TS_State.touchX[0] > TOUCH_RETURN_XMIN) &&
+					  (TS_State.touchX[0] < TOUCH_RETURN_XMAX) &&
+					  (TS_State.touchY[0] > TOUCH_RETURN_YMIN) &&
+					  (TS_State.touchY[0] < TOUCH_RETURN_YMAX))
+			{
+				AudioState = AUDIO_STATE_BACKWARD;
+
+			}else if((TS_State.touchX[0] > TOUCH_BEGIN_TRANSMISSION_XMIN) &&
+					 (TS_State.touchX[0] < TOUCH_BEGIN_TRANSMISSION_XMAX) &&
+					 (TS_State.touchY[0] > TOUCH_BEGIN_TRANSMISSION_YMIN) &&
+					 (TS_State.touchY[0] < TOUCH_BEGIN_TRANSMISSION_YMAX))
+			{
+				BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
+				BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
+				BSP_LCD_SetFont(&LCD_LOG_TEXT_FONT);
+
+				AudioState = AUDIO_STATE_BEGING_TRANSMISSION;
+			}
+		}
+	}
+}
+
+static void TRANSMITTER_AcquireTouchButtons_TX(void) {
+	static TS_StateTypeDef TS_State = { 0 };
+	if (TS_State.touchDetected == 1) /* If previous touch has not been released, we don't proceed any touch command */
+	{
+		BSP_TS_GetState(&TS_State);
+	} else {
+		if (TS_State.touchDetected == 1)
 		{
-			BSP_TS_GetState(&TS_State);
-		} else {
-			// Se ha soltado el toque previo
-			BSP_TS_GetState(&TS_State);
-			if (TS_State.touchDetected == 1) {
-				if ((TS_State.touchX[0] > TOUCH_PREVIOUS_XMIN) &&
-					(TS_State.touchX[0] < TOUCH_PREVIOUS_XMAX) &&
-					(TS_State.touchY[0] > TOUCH_PREVIOUS_YMIN) &&
-					(TS_State.touchY[0] < TOUCH_PREVIOUS_YMAX))
-				{
-					AudioState = AUDIO_STATE_PREVIOUS;
+			if ((TS_State.touchX[0] > TOUCH_BTM_XMIN) &&
+				(TS_State.touchX[0] < TOUCH_BTM_XMAX) &&
+				(TS_State.touchY[0] > TOUCH_BTM_YMIN) &&
+				(TS_State.touchY[0] < TOUCH_BTM_YMAX))
+			{
+				AudioState = AUDIO_STATE_INIT;
 
-				}else if ((TS_State.touchX[0] > TOUCH_NEXT_XMIN) &&
-					      (TS_State.touchX[0] < TOUCH_NEXT_XMAX) &&
-					      (TS_State.touchY[0] > TOUCH_NEXT_YMIN) &&
-					      (TS_State.touchY[0] < TOUCH_NEXT_YMAX))
+			}else
+			{
+				if ((TS_State.touchX[0] > TOUCH_START_TX_XMIN) &&
+					(TS_State.touchX[0] < TOUCH_START_TX_XMAX) &&
+					(TS_State.touchY[0] > TOUCH_START_TX_YMIN) &&
+					(TS_State.touchY[0] < TOUCH_START_TX_YMAX))
 				{
-					AudioState = AUDIO_STATE_NEXT;
-
-				}else if ((TS_State.touchX[0] > TOUCH_RETURN_XMIN) &&
-					      (TS_State.touchX[0] < TOUCH_RETURN_XMAX) &&
-					      (TS_State.touchY[0] > TOUCH_RETURN_YMIN) &&
-					      (TS_State.touchY[0] < TOUCH_RETURN_YMAX))
-				{
-					AudioState = AUDIO_STATE_BACKWARD;
-
-				}else if((TS_State.touchX[0] > TOUCH_BEGIN_TRANSMISSION_XMIN) &&
-					     (TS_State.touchX[0] < TOUCH_BEGIN_TRANSMISSION_XMAX) &&
-					     (TS_State.touchY[0] > TOUCH_BEGIN_TRANSMISSION_YMIN) &&
-					     (TS_State.touchY[0] < TOUCH_BEGIN_TRANSMISSION_YMAX))
-				{
-					BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
-					BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
-					BSP_LCD_SetFont(&LCD_LOG_TEXT_FONT);
-
-					AudioState = AUDIO_STATE_BEGING_TRANSMISSION;
+					AudioState = AUDIO_STATE_TRANSMISSION;
 				}
 			}
 		}
+	}
 }
-
-
 
 
 
