@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import wave
 
 # Abrimos el archivo de audio
-audio = wave.open("mensajeRecibidoConFrecBuena.wav", "r")
+audio = wave.open("Wave_dobleSync.wav", "r")
 
 # Obtenemos los datos del audio
 frames = audio.readframes(-1)
@@ -29,14 +29,15 @@ time = np.linspace(0, len(signal)/fs, num=len(signal))
 audio.close()
 
 # Graficamos la señal de audio
-# plt.figure()
-# plt.title("Señal de audio")
-# plt.xlabel("Tiempo [s]")
-# plt.ylabel("Amplitud")
-# plt.plot(time, signal)
-# plt.show()
+plt.figure()
+plt.title("Señal de audio")
+plt.xlabel("Tiempo [s]")
+plt.ylabel("Amplitud")
+plt.plot(time, signal)
+plt.show()
 
-# Coeficientes del filtro con frecuencia central f0 y ancho de banda 4 kHz
+# Coeficientes del filtro con frecuencia central f0 y ancho de banda 3 kHz, con
+# una caída de 2 kHz (Gmax = 1.035)
 h0 = [
     -0.000311341691536864,
     -0.000314904795981970,
@@ -82,6 +83,7 @@ h0 = [
 ]
 
 # Coeficientes del filtro con frecuencia central f1 y ancho de banda 4 kHz
+# (Gmax = 1.156)
 h1 = [
     0.000748334746194504,
     -0.000000000000000003,
@@ -226,9 +228,36 @@ class EnvelopeDetector:
         
         self.out = self.LP_fir_filter.out
         
+class EnvelopeDetectorAlternativo:
+    def __init__(self,coef,fall,tol):
         
+        self.LP_fir_filter = FIR_Filter(coef)
+        
+        self.out = 0
+        self.fall = fall
+        self.tol = tol
+    
+    def clear(self):
+        self.LP_fir_filter.FIRFilterClear()
+        
+        self.out = 0
+    
+    def update(self,envelopeInput):
+        
+        # Tomamos valor absoluto a la muestra recibida
+        sample = np.abs(envelopeInput)
+        
+        if self.out < sample:
+            self.out = sample
+        else:
+            if self.out > self.tol:
+                self.out /= self.fall
+        
+      
 env0 = EnvelopeDetector(h_env)
 env1 = EnvelopeDetector(h_env)
+# env0 = EnvelopeDetectorAlternativo(h_env,1.15,3)
+# env1 = EnvelopeDetectorAlternativo(h_env,1.15,3)
 
 salida_env0 = np.array([])
 salida_env1 = np.array([])
@@ -241,60 +270,62 @@ for sampleIndex in range(np.size(signal)):
     salida_env0 = np.append(salida_env0,env0.out)
     salida_env1 = np.append(salida_env1,env1.out)
     
-# fig, axes = plt.subplots(3,1,figsize=(30,16))
-# axes[0].set_title("ENV0 OUTPUT (tx a 5kHz)")
-# axes[0].plot(time,salida_fir0,time,salida_env0)
-# axes[1].set_title("ENV1 OUTPUT (tx a 10kHz)")
-# axes[1].plot(time,salida_fir1,time,salida_env1)
-# axes[2].set_title("ENV0 y ENV1 outputs")
-# axes[2].plot(time,salida_env0,time,salida_env1)
+fig, axes = plt.subplots(3,1,figsize=(30,16))
+axes[0].set_title("ENV0 OUTPUT (tx a 5kHz)")
+axes[0].plot(time,salida_fir0,time,salida_env0)
+axes[1].set_title("ENV1 OUTPUT (tx a 10kHz)")
+axes[1].plot(time,salida_fir1,time,salida_env1)
+axes[2].set_title("ENV0 y ENV1 outputs")
+axes[2].plot(time,salida_env0,time,salida_env1)
 
 # Se lleva a cabo la demodulación de la señal
-#state => ["START","STOP","DATA","PARITY"]
+#state => ["START","STOP","DATA"]
 state = "SILENCE"
-samplesPerBit = 16
+samplesPerBit = 32
+
 currentBit = 0
 diff = 0
-bytesMostrados = 2
 
-for sampleIndex in range(len(salida_fir0)):
+# Se escriben los resultados en un fichero
+file = open('mensajeDemodulado.txt','w')
+
+for sampleIndex in range(len(salida_env0)):
     if state == "SILENCE":
-        if salida_fir1[sampleIndex] > 6000:
+        if salida_env1[sampleIndex] > 8000:
             state = "STOP"
-    if state == "STOP":
-        if salida_fir1[sampleIndex] < salida_fir0[sampleIndex]:
+    elif state == "STOP":
+        if salida_env1[sampleIndex] < salida_env0[sampleIndex]:
             state = "START"
             # Se lleva a cabo el sincronismo
             lastBit = sampleIndex
-    if state == "START":
+        elif salida_env1[sampleIndex] < 100:
+            state = "SILENCE"
+    elif state == "START":
         diff = (sampleIndex - lastBit)
         if diff == samplesPerBit:
             state = "DATA"
             lastBit = sampleIndex
-    if state == "DATA":
+    elif state == "DATA":
         diff = (sampleIndex - lastBit)
         if currentBit == 0:
             if diff == samplesPerBit/2:
                 lastBit = sampleIndex
-                print("Bit"+str(currentBit)+" -> "+str(1 if salida_fir1[sampleIndex] < salida_fir0[sampleIndex] else 0))
+                file.write(str(1 if salida_env1[sampleIndex] > salida_env0[sampleIndex] else 0))
                 currentBit += 1
         else:
             if diff == samplesPerBit:
                 if currentBit == 8:
                     # Recibimos la paridad
                     lastBit = sampleIndex
-                    print("Parity -> "+str(1 if salida_fir1[sampleIndex] < salida_fir0[sampleIndex] else 0))
+                    #file.write(" Parity -> "+str(1 if salida_env1[sampleIndex] > salida_env0[sampleIndex] else 0)+'\n')
+                    file.write("\n")
                     currentBit += 1
                 elif currentBit == 9:
                     currentBit = 0
-                    state = "START"
-                    bytesMostrados -= 1
-                    if bytesMostrados == 0:
-                        break
+                    state = "STOP"
                 else:
                     lastBit = sampleIndex
-                    print("Bit"+str(currentBit)+" -> "+str(1 if salida_fir1[sampleIndex] < salida_fir0[sampleIndex] else 0))
+                    file.write(str(1 if salida_env1[sampleIndex] > salida_env0[sampleIndex] else 0))
                     currentBit += 1
-                    
 
-
+file.close()
