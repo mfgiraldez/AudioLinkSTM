@@ -466,7 +466,6 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 	*/
 	case AUDIO_STATE_WAIT:
 		TRANSMITTER_AcquireTouchButtons();
-		BSP_LCD_DisplayStringAtLine(14, (uint8_t*) "DEMOSTRACION PARA LOS VIEJITOS");
 		break;
 
 	/*
