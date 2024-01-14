@@ -126,6 +126,13 @@ typedef enum {
 }AUDIO_PLAYBACK_StateTypeDef;
 
 typedef enum {
+  SILENCE = 0,
+  STOP,
+  START,
+  DATA
+}RECEIVER_StateTypeDef;
+
+typedef enum {
   AUDIO_SELECT_MENU = 0,
   AUDIO_PLAYBACK_CONTROL,  
 }AUDIO_DEMO_SelectMode;

@@ -13,12 +13,12 @@ C_SRCS += \
 ../Src/explorer.c \
 ../Src/main.c \
 ../Src/menu.c \
+../Src/receiver.c \
 ../Src/stm32f7xx_it.c \
 ../Src/system_stm32f7xx.c \
 ../Src/transmitter.c \
 ../Src/usbh_conf.c \
-../Src/usbh_diskio.c \
-../Src/waverecorder.c 
+../Src/usbh_diskio.c 
 
 OBJS += \
 ./Src/EnvDetector.o \
@@ -26,13 +26,13 @@ OBJS += \
 ./Src/explorer.o \
 ./Src/main.o \
 ./Src/menu.o \
+./Src/receiver.o \
 ./Src/startup_stm32f750xx.o \
 ./Src/stm32f7xx_it.o \
 ./Src/system_stm32f7xx.o \
 ./Src/transmitter.o \
 ./Src/usbh_conf.o \
-./Src/usbh_diskio.o \
-./Src/waverecorder.o 
+./Src/usbh_diskio.o 
 
 S_DEPS += \
 ./Src/startup_stm32f750xx.d 
@@ -43,12 +43,12 @@ C_DEPS += \
 ./Src/explorer.d \
 ./Src/main.d \
 ./Src/menu.d \
+./Src/receiver.d \
 ./Src/stm32f7xx_it.d \
 ./Src/system_stm32f7xx.d \
 ./Src/transmitter.d \
 ./Src/usbh_conf.d \
-./Src/usbh_diskio.d \
-./Src/waverecorder.d 
+./Src/usbh_diskio.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -60,7 +60,7 @@ Src/%.o: ../Src/%.s Src/subdir.mk
 clean: clean-Src
 
 clean-Src:
-	-$(RM) ./Src/EnvDetector.cyclo ./Src/EnvDetector.d ./Src/EnvDetector.o ./Src/EnvDetector.su ./Src/FirFilter.cyclo ./Src/FirFilter.d ./Src/FirFilter.o ./Src/FirFilter.su ./Src/explorer.cyclo ./Src/explorer.d ./Src/explorer.o ./Src/explorer.su ./Src/main.cyclo ./Src/main.d ./Src/main.o ./Src/main.su ./Src/menu.cyclo ./Src/menu.d ./Src/menu.o ./Src/menu.su ./Src/startup_stm32f750xx.d ./Src/startup_stm32f750xx.o ./Src/stm32f7xx_it.cyclo ./Src/stm32f7xx_it.d ./Src/stm32f7xx_it.o ./Src/stm32f7xx_it.su ./Src/system_stm32f7xx.cyclo ./Src/system_stm32f7xx.d ./Src/system_stm32f7xx.o ./Src/system_stm32f7xx.su ./Src/transmitter.cyclo ./Src/transmitter.d ./Src/transmitter.o ./Src/transmitter.su ./Src/usbh_conf.cyclo ./Src/usbh_conf.d ./Src/usbh_conf.o ./Src/usbh_conf.su ./Src/usbh_diskio.cyclo ./Src/usbh_diskio.d ./Src/usbh_diskio.o ./Src/usbh_diskio.su ./Src/waverecorder.cyclo ./Src/waverecorder.d ./Src/waverecorder.o ./Src/waverecorder.su
+	-$(RM) ./Src/EnvDetector.cyclo ./Src/EnvDetector.d ./Src/EnvDetector.o ./Src/EnvDetector.su ./Src/FirFilter.cyclo ./Src/FirFilter.d ./Src/FirFilter.o ./Src/FirFilter.su ./Src/explorer.cyclo ./Src/explorer.d ./Src/explorer.o ./Src/explorer.su ./Src/main.cyclo ./Src/main.d ./Src/main.o ./Src/main.su ./Src/menu.cyclo ./Src/menu.d ./Src/menu.o ./Src/menu.su ./Src/receiver.cyclo ./Src/receiver.d ./Src/receiver.o ./Src/receiver.su ./Src/startup_stm32f750xx.d ./Src/startup_stm32f750xx.o ./Src/stm32f7xx_it.cyclo ./Src/stm32f7xx_it.d ./Src/stm32f7xx_it.o ./Src/stm32f7xx_it.su ./Src/system_stm32f7xx.cyclo ./Src/system_stm32f7xx.d ./Src/system_stm32f7xx.o ./Src/system_stm32f7xx.su ./Src/transmitter.cyclo ./Src/transmitter.d ./Src/transmitter.o ./Src/transmitter.su ./Src/usbh_conf.cyclo ./Src/usbh_conf.d ./Src/usbh_conf.o ./Src/usbh_conf.su ./Src/usbh_diskio.cyclo ./Src/usbh_diskio.d ./Src/usbh_diskio.o ./Src/usbh_diskio.su
 
 .PHONY: clean-Src
 

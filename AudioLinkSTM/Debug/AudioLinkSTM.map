@@ -19,7 +19,7 @@ C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.external
 C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-puts.o)
                               ./Src/explorer.o (puts)
 C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-sprintf.o)
-                              ./Src/transmitter.o (sprintf)
+                              ./Src/receiver.o (sprintf)
 C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-stdio.o)
                               C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-findfp.o) (__sread)
 C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-wbuf.o)
@@ -49,7 +49,7 @@ C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.external
 C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-lock.o)
                               C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-findfp.o) (__retarget_lock_init_recursive)
 C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-strcpy.o)
-                              ./Src/waverecorder.o (strcpy)
+                              ./Src/receiver.o (strcpy)
 C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-freer.o)
                               C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-malloc.o) (_free_r)
 C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-svfprintf.o)
@@ -6772,7 +6772,216 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0xeb ./Src/menu.o
  .debug_macro   0x0000000000000000       0x34 ./Src/menu.o
  .debug_macro   0x0000000000000000       0x3a ./Src/menu.o
- .debug_macro   0x0000000000000000       0x1c ./Src/menu.o
+ .debug_macro   0x0000000000000000       0x16 ./Src/menu.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .group         0x0000000000000000        0xc ./Src/receiver.o
+ .text          0x0000000000000000        0x0 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0xaba ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x22 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x5b ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x2a ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x94 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x43 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x34 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x16 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x57 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x97 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x369 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0xfd ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x10 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x16 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x43 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x34 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x10 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x58 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x8e ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x1c ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x177 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x16 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x16 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x147 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x2e ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x3b ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x103 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x6a ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x1df ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x1c ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x22 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0xd9 ./Src/receiver.o
+ .debug_macro   0x0000000000000000     0x12cd ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x11f ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x19 ./Src/receiver.o
+ .debug_macro   0x0000000000000000    0x19864 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x6d ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x2c9 ./Src/receiver.o
+ .debug_macro   0x0000000000000000     0x36b4 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x5b ./Src/receiver.o
+ .debug_macro   0x0000000000000000     0x1939 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x6c4 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x117 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x1fe ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x27 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x24f ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x41 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x58 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x236 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x20f ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x125 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x231 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x12 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x514 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x11 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x22c ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x61 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0xa5 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x1ca ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x198 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0xd6 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x12f ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x108 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x35 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x447 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0xa2f ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x59 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x53c ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x44 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x233 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x68 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x14e ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x16 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x35 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x16 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x29 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x16 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x20 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x64 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x218 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x2e ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x2e ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x28 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x260 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x16 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0xbe ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x177 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x10 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x39e ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x2e ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x40 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0xa0 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x10 ./Src/receiver.o
+ .debug_macro   0x0000000000000000      0x119 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x4c ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x1c ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0xed ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0xdb ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x8e ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x65 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0xeb ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x34 ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x3a ./Src/receiver.o
+ .debug_macro   0x0000000000000000       0x16 ./Src/receiver.o
  .text          0x0000000000000000       0x14 ./Src/startup_stm32f750xx.o
  .data          0x0000000000000000        0x0 ./Src/startup_stm32f750xx.o
  .bss           0x0000000000000000        0x0 ./Src/startup_stm32f750xx.o
@@ -7665,214 +7874,6 @@ Discarded input sections
  .debug_macro   0x0000000000000000       0x65 ./Src/usbh_diskio.o
  .debug_macro   0x0000000000000000       0xeb ./Src/usbh_diskio.o
  .debug_macro   0x0000000000000000       0x34 ./Src/usbh_diskio.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .group         0x0000000000000000        0xc ./Src/waverecorder.o
- .text          0x0000000000000000        0x0 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0xaba ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x22 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x5b ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x2a ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x94 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x43 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x34 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x16 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x57 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x97 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x369 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0xfd ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x10 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x16 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x43 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x34 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x10 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x58 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x8e ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x1c ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x177 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x16 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x16 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x147 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x2e ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x3b ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x103 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x6a ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x1df ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x1c ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x22 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0xd9 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000     0x12cd ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x11f ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x19 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000    0x19864 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x6d ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x2c9 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000     0x36b4 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x5b ./Src/waverecorder.o
- .debug_macro   0x0000000000000000     0x1939 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x6c4 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x117 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x1fe ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x27 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x24f ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x41 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x58 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x236 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x20f ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x125 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x231 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x12 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x514 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x11 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x22c ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x61 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0xa5 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x1ca ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x198 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0xd6 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x12f ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x108 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x35 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x447 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0xa2f ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x59 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x53c ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x44 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x233 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x68 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x14e ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x16 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x35 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x16 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x29 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x16 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x20 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x64 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x218 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x2e ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x2e ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x28 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x260 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x16 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0xbe ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x177 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x10 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x39e ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x2e ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x40 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0xa0 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x10 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000      0x119 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x4c ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x1c ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0xed ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0xdb ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x8e ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x65 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0xeb ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x34 ./Src/waverecorder.o
- .debug_macro   0x0000000000000000       0x3a ./Src/waverecorder.o
  .group         0x0000000000000000        0xc ./Utilities/Log/lcd_log.o
  .group         0x0000000000000000        0xc ./Utilities/Log/lcd_log.o
  .group         0x0000000000000000        0xc ./Utilities/Log/lcd_log.o
@@ -8353,13 +8354,13 @@ LOAD ./Src/FirFilter.o
 LOAD ./Src/explorer.o
 LOAD ./Src/main.o
 LOAD ./Src/menu.o
+LOAD ./Src/receiver.o
 LOAD ./Src/startup_stm32f750xx.o
 LOAD ./Src/stm32f7xx_it.o
 LOAD ./Src/system_stm32f7xx.o
 LOAD ./Src/transmitter.o
 LOAD ./Src/usbh_conf.o
 LOAD ./Src/usbh_diskio.o
-LOAD ./Src/waverecorder.o
 LOAD ./Utilities/Log/lcd_log.o
 START GROUP
 LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a
@@ -9295,251 +9296,251 @@ LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .text.AUDIO_MenuProcess
                 0x00000000900096a8      0x1a0 ./Src/menu.o
                 0x00000000900096a8                AUDIO_MenuProcess
- .text.Reset_Handler
-                0x0000000090009848       0x50 ./Src/startup_stm32f750xx.o
-                0x0000000090009848                Reset_Handler
- .text.Default_Handler
-                0x0000000090009898        0x2 ./Src/startup_stm32f750xx.o
-                0x0000000090009898                RTC_Alarm_IRQHandler
-                0x0000000090009898                HASH_RNG_IRQHandler
-                0x0000000090009898                EXTI2_IRQHandler
-                0x0000000090009898                TIM8_CC_IRQHandler
-                0x0000000090009898                UART8_IRQHandler
-                0x0000000090009898                SPI4_IRQHandler
-                0x0000000090009898                TIM1_CC_IRQHandler
-                0x0000000090009898                DMA2_Stream5_IRQHandler
-                0x0000000090009898                DMA1_Stream5_IRQHandler
-                0x0000000090009898                PVD_IRQHandler
-                0x0000000090009898                TAMP_STAMP_IRQHandler
-                0x0000000090009898                CAN2_RX1_IRQHandler
-                0x0000000090009898                EXTI3_IRQHandler
-                0x0000000090009898                TIM8_TRG_COM_TIM14_IRQHandler
-                0x0000000090009898                TIM1_UP_TIM10_IRQHandler
-                0x0000000090009898                TIM8_UP_TIM13_IRQHandler
-                0x0000000090009898                I2C3_ER_IRQHandler
-                0x0000000090009898                EXTI0_IRQHandler
-                0x0000000090009898                I2C2_EV_IRQHandler
-                0x0000000090009898                DMA1_Stream2_IRQHandler
-                0x0000000090009898                CAN1_RX0_IRQHandler
-                0x0000000090009898                FPU_IRQHandler
-                0x0000000090009898                OTG_HS_WKUP_IRQHandler
-                0x0000000090009898                LTDC_ER_IRQHandler
-                0x0000000090009898                CAN2_SCE_IRQHandler
-                0x0000000090009898                DMA2_Stream2_IRQHandler
-                0x0000000090009898                SPI1_IRQHandler
-                0x0000000090009898                TIM6_DAC_IRQHandler
-                0x0000000090009898                TIM1_BRK_TIM9_IRQHandler
-                0x0000000090009898                DCMI_IRQHandler
-                0x0000000090009898                CAN2_RX0_IRQHandler
-                0x0000000090009898                DMA2_Stream3_IRQHandler
-                0x0000000090009898                SAI2_IRQHandler
-                0x0000000090009898                USART6_IRQHandler
-                0x0000000090009898                USART3_IRQHandler
-                0x0000000090009898                CRYP_IRQHandler
-                0x0000000090009898                CAN1_RX1_IRQHandler
-                0x0000000090009898                UART5_IRQHandler
-                0x0000000090009898                DMA2_Stream0_IRQHandler
-                0x0000000090009898                TIM4_IRQHandler
-                0x0000000090009898                QUADSPI_IRQHandler
-                0x0000000090009898                I2C1_EV_IRQHandler
-                0x0000000090009898                DMA1_Stream6_IRQHandler
-                0x0000000090009898                DMA1_Stream1_IRQHandler
-                0x0000000090009898                UART4_IRQHandler
-                0x0000000090009898                TIM3_IRQHandler
-                0x0000000090009898                RCC_IRQHandler
-                0x0000000090009898                TIM8_BRK_TIM12_IRQHandler
-                0x0000000090009898                Default_Handler
-                0x0000000090009898                CEC_IRQHandler
-                0x0000000090009898                EXTI15_10_IRQHandler
-                0x0000000090009898                ADC_IRQHandler
-                0x0000000090009898                DMA1_Stream7_IRQHandler
-                0x0000000090009898                SPI5_IRQHandler
-                0x0000000090009898                TIM7_IRQHandler
-                0x0000000090009898                SDMMC1_IRQHandler
-                0x0000000090009898                CAN2_TX_IRQHandler
-                0x0000000090009898                TIM5_IRQHandler
-                0x0000000090009898                I2C3_EV_IRQHandler
-                0x0000000090009898                EXTI9_5_IRQHandler
-                0x0000000090009898                RTC_WKUP_IRQHandler
-                0x0000000090009898                LTDC_IRQHandler
-                0x0000000090009898                ETH_WKUP_IRQHandler
-                0x0000000090009898                SPDIF_RX_IRQHandler
-                0x0000000090009898                SPI2_IRQHandler
-                0x0000000090009898                OTG_HS_EP1_IN_IRQHandler
-                0x0000000090009898                DMA1_Stream0_IRQHandler
-                0x0000000090009898                CAN1_TX_IRQHandler
-                0x0000000090009898                EXTI4_IRQHandler
-                0x0000000090009898                ETH_IRQHandler
-                0x0000000090009898                OTG_HS_EP1_OUT_IRQHandler
-                0x0000000090009898                WWDG_IRQHandler
-                0x0000000090009898                SPI6_IRQHandler
-                0x0000000090009898                I2C4_EV_IRQHandler
-                0x0000000090009898                TIM2_IRQHandler
-                0x0000000090009898                OTG_FS_WKUP_IRQHandler
-                0x0000000090009898                TIM1_TRG_COM_TIM11_IRQHandler
-                0x0000000090009898                OTG_HS_IRQHandler
-                0x0000000090009898                DMA2D_IRQHandler
-                0x0000000090009898                EXTI1_IRQHandler
-                0x0000000090009898                UART7_IRQHandler
-                0x0000000090009898                USART2_IRQHandler
-                0x0000000090009898                I2C2_ER_IRQHandler
-                0x0000000090009898                DMA2_Stream1_IRQHandler
-                0x0000000090009898                CAN1_SCE_IRQHandler
-                0x0000000090009898                FLASH_IRQHandler
-                0x0000000090009898                USART1_IRQHandler
-                0x0000000090009898                SPI3_IRQHandler
-                0x0000000090009898                DMA1_Stream4_IRQHandler
-                0x0000000090009898                I2C1_ER_IRQHandler
-                0x0000000090009898                FMC_IRQHandler
-                0x0000000090009898                LPTIM1_IRQHandler
-                0x0000000090009898                I2C4_ER_IRQHandler
-                0x0000000090009898                DMA2_Stream6_IRQHandler
-                0x0000000090009898                SAI1_IRQHandler
-                0x0000000090009898                DMA1_Stream3_IRQHandler
- .text.NMI_Handler
-                0x000000009000989a        0x2 ./Src/stm32f7xx_it.o
-                0x000000009000989a                NMI_Handler
- .text.HardFault_Handler
-                0x000000009000989c        0x2 ./Src/stm32f7xx_it.o
-                0x000000009000989c                HardFault_Handler
- .text.MemManage_Handler
-                0x000000009000989e        0x2 ./Src/stm32f7xx_it.o
-                0x000000009000989e                MemManage_Handler
- .text.BusFault_Handler
-                0x00000000900098a0        0x2 ./Src/stm32f7xx_it.o
-                0x00000000900098a0                BusFault_Handler
- .text.UsageFault_Handler
-                0x00000000900098a2        0x2 ./Src/stm32f7xx_it.o
-                0x00000000900098a2                UsageFault_Handler
- .text.SVC_Handler
-                0x00000000900098a4        0x2 ./Src/stm32f7xx_it.o
-                0x00000000900098a4                SVC_Handler
- .text.DebugMon_Handler
-                0x00000000900098a6        0x2 ./Src/stm32f7xx_it.o
-                0x00000000900098a6                DebugMon_Handler
- .text.PendSV_Handler
-                0x00000000900098a8        0x2 ./Src/stm32f7xx_it.o
-                0x00000000900098a8                PendSV_Handler
- .text.SysTick_Handler
-                0x00000000900098aa        0x4 ./Src/stm32f7xx_it.o
-                0x00000000900098aa                SysTick_Handler
- *fill*         0x00000000900098ae        0x2 
- .text.OTG_FS_IRQHandler
-                0x00000000900098b0        0xc ./Src/stm32f7xx_it.o
-                0x00000000900098b0                OTG_FS_IRQHandler
- .text.DMA2_Stream4_IRQHandler
-                0x00000000900098bc        0xc ./Src/stm32f7xx_it.o
-                0x00000000900098bc                DMA2_Stream4_IRQHandler
- .text.DMA2_Stream7_IRQHandler
-                0x00000000900098c8        0xc ./Src/stm32f7xx_it.o
-                0x00000000900098c8                DMA2_Stream7_IRQHandler
- .text.SystemInit
-                0x00000000900098d4       0x4c ./Src/system_stm32f7xx.o
-                0x00000000900098d4                SystemInit
- .text.InsertarBit
-                0x0000000090009920       0xb4 ./Src/transmitter.o
- .text.AUDIO_AcquireTouchButtons
-                0x00000000900099d4       0xdc ./Src/transmitter.o
- .text.AUDIO_PLAYER_Init
-                0x0000000090009ab0       0x20 ./Src/transmitter.o
-                0x0000000090009ab0                AUDIO_PLAYER_Init
- .text.ReadFileIntoBuffer
-                0x0000000090009ad0       0x8c ./Src/transmitter.o
-                0x0000000090009ad0                ReadFileIntoBuffer
- .text.TRANSMITTER_Process
-                0x0000000090009b5c      0x7f8 ./Src/transmitter.o
-                0x0000000090009b5c                TRANSMITTER_Process
- .text.HAL_HCD_MspInit
-                0x000000009000a354      0x1b8 ./Src/usbh_conf.o
-                0x000000009000a354                HAL_HCD_MspInit
- .text.HAL_HCD_SOF_Callback
-                0x000000009000a50c        0x8 ./Src/usbh_conf.o
-                0x000000009000a50c                HAL_HCD_SOF_Callback
- .text.HAL_HCD_Connect_Callback
-                0x000000009000a514        0x8 ./Src/usbh_conf.o
-                0x000000009000a514                HAL_HCD_Connect_Callback
- .text.HAL_HCD_Disconnect_Callback
-                0x000000009000a51c        0x8 ./Src/usbh_conf.o
-                0x000000009000a51c                HAL_HCD_Disconnect_Callback
- .text.HAL_HCD_PortEnabled_Callback
-                0x000000009000a524        0x8 ./Src/usbh_conf.o
-                0x000000009000a524                HAL_HCD_PortEnabled_Callback
- .text.HAL_HCD_PortDisabled_Callback
-                0x000000009000a52c        0x8 ./Src/usbh_conf.o
-                0x000000009000a52c                HAL_HCD_PortDisabled_Callback
- .text.HAL_HCD_HC_NotifyURBChange_Callback
-                0x000000009000a534        0x2 ./Src/usbh_conf.o
-                0x000000009000a534                HAL_HCD_HC_NotifyURBChange_Callback
- *fill*         0x000000009000a536        0x2 
- .text.USBH_LL_Init
-                0x000000009000a538       0x48 ./Src/usbh_conf.o
-                0x000000009000a538                USBH_LL_Init
- .text.USBH_LL_Start
-                0x000000009000a580        0xe ./Src/usbh_conf.o
-                0x000000009000a580                USBH_LL_Start
- .text.USBH_LL_Stop
-                0x000000009000a58e        0xe ./Src/usbh_conf.o
-                0x000000009000a58e                USBH_LL_Stop
- .text.USBH_LL_GetSpeed
-                0x000000009000a59c       0x14 ./Src/usbh_conf.o
-                0x000000009000a59c                USBH_LL_GetSpeed
- .text.USBH_LL_ResetPort
-                0x000000009000a5b0        0xe ./Src/usbh_conf.o
-                0x000000009000a5b0                USBH_LL_ResetPort
- .text.USBH_LL_GetLastXferSize
-                0x000000009000a5be        0x8 ./Src/usbh_conf.o
-                0x000000009000a5be                USBH_LL_GetLastXferSize
- .text.USBH_LL_OpenPipe
-                0x000000009000a5c6       0x22 ./Src/usbh_conf.o
-                0x000000009000a5c6                USBH_LL_OpenPipe
- .text.USBH_LL_ClosePipe
-                0x000000009000a5e8        0xe ./Src/usbh_conf.o
-                0x000000009000a5e8                USBH_LL_ClosePipe
- .text.USBH_LL_SubmitURB
-                0x000000009000a5f6       0x26 ./Src/usbh_conf.o
-                0x000000009000a5f6                USBH_LL_SubmitURB
- .text.USBH_LL_GetURBState
-                0x000000009000a61c        0x8 ./Src/usbh_conf.o
-                0x000000009000a61c                USBH_LL_GetURBState
- .text.USBH_LL_DriverVBUS
-                0x000000009000a624       0x20 ./Src/usbh_conf.o
-                0x000000009000a624                USBH_LL_DriverVBUS
- .text.USBH_LL_SetToggle
-                0x000000009000a644       0x20 ./Src/usbh_conf.o
-                0x000000009000a644                USBH_LL_SetToggle
- .text.USBH_LL_GetToggle
-                0x000000009000a664       0x20 ./Src/usbh_conf.o
-                0x000000009000a664                USBH_LL_GetToggle
- .text.USBH_Delay
-                0x000000009000a684        0x4 ./Src/usbh_conf.o
-                0x000000009000a684                USBH_Delay
- .text.USBH_initialize
-                0x000000009000a688        0x4 ./Src/usbh_diskio.o
-                0x000000009000a688                USBH_initialize
- .text.USBH_status
-                0x000000009000a68c       0x18 ./Src/usbh_diskio.o
-                0x000000009000a68c                USBH_status
- .text.USBH_ioctl
-                0x000000009000a6a4       0x60 ./Src/usbh_diskio.o
-                0x000000009000a6a4                USBH_ioctl
- .text.USBH_read
-                0x000000009000a704       0x58 ./Src/usbh_diskio.o
-                0x000000009000a704                USBH_read
- .text.USBH_write
-                0x000000009000a75c       0x78 ./Src/usbh_diskio.o
-                0x000000009000a75c                USBH_write
  .text.AUDIO_REC_Start
-                0x000000009000a7d4      0x304 ./Src/waverecorder.o
-                0x000000009000a7d4                AUDIO_REC_Start
+                0x0000000090009848      0x304 ./Src/receiver.o
+                0x0000000090009848                AUDIO_REC_Start
  .text.AUDIO_REC_Process
-                0x000000009000aad8      0x4d0 ./Src/waverecorder.o
-                0x000000009000aad8                AUDIO_REC_Process
+                0x0000000090009b4c      0x4d0 ./Src/receiver.o
+                0x0000000090009b4c                AUDIO_REC_Process
  .text.BSP_AUDIO_IN_TransferComplete_CallBack
-                0x000000009000afa8       0x44 ./Src/waverecorder.o
-                0x000000009000afa8                BSP_AUDIO_IN_TransferComplete_CallBack
+                0x000000009000a01c       0x44 ./Src/receiver.o
+                0x000000009000a01c                BSP_AUDIO_IN_TransferComplete_CallBack
  .text.BSP_AUDIO_IN_HalfTransfer_CallBack
-                0x000000009000afec        0x4 ./Src/waverecorder.o
-                0x000000009000afec                BSP_AUDIO_IN_HalfTransfer_CallBack
+                0x000000009000a060        0x4 ./Src/receiver.o
+                0x000000009000a060                BSP_AUDIO_IN_HalfTransfer_CallBack
+ .text.Reset_Handler
+                0x000000009000a064       0x50 ./Src/startup_stm32f750xx.o
+                0x000000009000a064                Reset_Handler
+ .text.Default_Handler
+                0x000000009000a0b4        0x2 ./Src/startup_stm32f750xx.o
+                0x000000009000a0b4                RTC_Alarm_IRQHandler
+                0x000000009000a0b4                HASH_RNG_IRQHandler
+                0x000000009000a0b4                EXTI2_IRQHandler
+                0x000000009000a0b4                TIM8_CC_IRQHandler
+                0x000000009000a0b4                UART8_IRQHandler
+                0x000000009000a0b4                SPI4_IRQHandler
+                0x000000009000a0b4                TIM1_CC_IRQHandler
+                0x000000009000a0b4                DMA2_Stream5_IRQHandler
+                0x000000009000a0b4                DMA1_Stream5_IRQHandler
+                0x000000009000a0b4                PVD_IRQHandler
+                0x000000009000a0b4                TAMP_STAMP_IRQHandler
+                0x000000009000a0b4                CAN2_RX1_IRQHandler
+                0x000000009000a0b4                EXTI3_IRQHandler
+                0x000000009000a0b4                TIM8_TRG_COM_TIM14_IRQHandler
+                0x000000009000a0b4                TIM1_UP_TIM10_IRQHandler
+                0x000000009000a0b4                TIM8_UP_TIM13_IRQHandler
+                0x000000009000a0b4                I2C3_ER_IRQHandler
+                0x000000009000a0b4                EXTI0_IRQHandler
+                0x000000009000a0b4                I2C2_EV_IRQHandler
+                0x000000009000a0b4                DMA1_Stream2_IRQHandler
+                0x000000009000a0b4                CAN1_RX0_IRQHandler
+                0x000000009000a0b4                FPU_IRQHandler
+                0x000000009000a0b4                OTG_HS_WKUP_IRQHandler
+                0x000000009000a0b4                LTDC_ER_IRQHandler
+                0x000000009000a0b4                CAN2_SCE_IRQHandler
+                0x000000009000a0b4                DMA2_Stream2_IRQHandler
+                0x000000009000a0b4                SPI1_IRQHandler
+                0x000000009000a0b4                TIM6_DAC_IRQHandler
+                0x000000009000a0b4                TIM1_BRK_TIM9_IRQHandler
+                0x000000009000a0b4                DCMI_IRQHandler
+                0x000000009000a0b4                CAN2_RX0_IRQHandler
+                0x000000009000a0b4                DMA2_Stream3_IRQHandler
+                0x000000009000a0b4                SAI2_IRQHandler
+                0x000000009000a0b4                USART6_IRQHandler
+                0x000000009000a0b4                USART3_IRQHandler
+                0x000000009000a0b4                CRYP_IRQHandler
+                0x000000009000a0b4                CAN1_RX1_IRQHandler
+                0x000000009000a0b4                UART5_IRQHandler
+                0x000000009000a0b4                DMA2_Stream0_IRQHandler
+                0x000000009000a0b4                TIM4_IRQHandler
+                0x000000009000a0b4                QUADSPI_IRQHandler
+                0x000000009000a0b4                I2C1_EV_IRQHandler
+                0x000000009000a0b4                DMA1_Stream6_IRQHandler
+                0x000000009000a0b4                DMA1_Stream1_IRQHandler
+                0x000000009000a0b4                UART4_IRQHandler
+                0x000000009000a0b4                TIM3_IRQHandler
+                0x000000009000a0b4                RCC_IRQHandler
+                0x000000009000a0b4                TIM8_BRK_TIM12_IRQHandler
+                0x000000009000a0b4                Default_Handler
+                0x000000009000a0b4                CEC_IRQHandler
+                0x000000009000a0b4                EXTI15_10_IRQHandler
+                0x000000009000a0b4                ADC_IRQHandler
+                0x000000009000a0b4                DMA1_Stream7_IRQHandler
+                0x000000009000a0b4                SPI5_IRQHandler
+                0x000000009000a0b4                TIM7_IRQHandler
+                0x000000009000a0b4                SDMMC1_IRQHandler
+                0x000000009000a0b4                CAN2_TX_IRQHandler
+                0x000000009000a0b4                TIM5_IRQHandler
+                0x000000009000a0b4                I2C3_EV_IRQHandler
+                0x000000009000a0b4                EXTI9_5_IRQHandler
+                0x000000009000a0b4                RTC_WKUP_IRQHandler
+                0x000000009000a0b4                LTDC_IRQHandler
+                0x000000009000a0b4                ETH_WKUP_IRQHandler
+                0x000000009000a0b4                SPDIF_RX_IRQHandler
+                0x000000009000a0b4                SPI2_IRQHandler
+                0x000000009000a0b4                OTG_HS_EP1_IN_IRQHandler
+                0x000000009000a0b4                DMA1_Stream0_IRQHandler
+                0x000000009000a0b4                CAN1_TX_IRQHandler
+                0x000000009000a0b4                EXTI4_IRQHandler
+                0x000000009000a0b4                ETH_IRQHandler
+                0x000000009000a0b4                OTG_HS_EP1_OUT_IRQHandler
+                0x000000009000a0b4                WWDG_IRQHandler
+                0x000000009000a0b4                SPI6_IRQHandler
+                0x000000009000a0b4                I2C4_EV_IRQHandler
+                0x000000009000a0b4                TIM2_IRQHandler
+                0x000000009000a0b4                OTG_FS_WKUP_IRQHandler
+                0x000000009000a0b4                TIM1_TRG_COM_TIM11_IRQHandler
+                0x000000009000a0b4                OTG_HS_IRQHandler
+                0x000000009000a0b4                DMA2D_IRQHandler
+                0x000000009000a0b4                EXTI1_IRQHandler
+                0x000000009000a0b4                UART7_IRQHandler
+                0x000000009000a0b4                USART2_IRQHandler
+                0x000000009000a0b4                I2C2_ER_IRQHandler
+                0x000000009000a0b4                DMA2_Stream1_IRQHandler
+                0x000000009000a0b4                CAN1_SCE_IRQHandler
+                0x000000009000a0b4                FLASH_IRQHandler
+                0x000000009000a0b4                USART1_IRQHandler
+                0x000000009000a0b4                SPI3_IRQHandler
+                0x000000009000a0b4                DMA1_Stream4_IRQHandler
+                0x000000009000a0b4                I2C1_ER_IRQHandler
+                0x000000009000a0b4                FMC_IRQHandler
+                0x000000009000a0b4                LPTIM1_IRQHandler
+                0x000000009000a0b4                I2C4_ER_IRQHandler
+                0x000000009000a0b4                DMA2_Stream6_IRQHandler
+                0x000000009000a0b4                SAI1_IRQHandler
+                0x000000009000a0b4                DMA1_Stream3_IRQHandler
+ .text.NMI_Handler
+                0x000000009000a0b6        0x2 ./Src/stm32f7xx_it.o
+                0x000000009000a0b6                NMI_Handler
+ .text.HardFault_Handler
+                0x000000009000a0b8        0x2 ./Src/stm32f7xx_it.o
+                0x000000009000a0b8                HardFault_Handler
+ .text.MemManage_Handler
+                0x000000009000a0ba        0x2 ./Src/stm32f7xx_it.o
+                0x000000009000a0ba                MemManage_Handler
+ .text.BusFault_Handler
+                0x000000009000a0bc        0x2 ./Src/stm32f7xx_it.o
+                0x000000009000a0bc                BusFault_Handler
+ .text.UsageFault_Handler
+                0x000000009000a0be        0x2 ./Src/stm32f7xx_it.o
+                0x000000009000a0be                UsageFault_Handler
+ .text.SVC_Handler
+                0x000000009000a0c0        0x2 ./Src/stm32f7xx_it.o
+                0x000000009000a0c0                SVC_Handler
+ .text.DebugMon_Handler
+                0x000000009000a0c2        0x2 ./Src/stm32f7xx_it.o
+                0x000000009000a0c2                DebugMon_Handler
+ .text.PendSV_Handler
+                0x000000009000a0c4        0x2 ./Src/stm32f7xx_it.o
+                0x000000009000a0c4                PendSV_Handler
+ .text.SysTick_Handler
+                0x000000009000a0c6        0x4 ./Src/stm32f7xx_it.o
+                0x000000009000a0c6                SysTick_Handler
+ *fill*         0x000000009000a0ca        0x2 
+ .text.OTG_FS_IRQHandler
+                0x000000009000a0cc        0xc ./Src/stm32f7xx_it.o
+                0x000000009000a0cc                OTG_FS_IRQHandler
+ .text.DMA2_Stream4_IRQHandler
+                0x000000009000a0d8        0xc ./Src/stm32f7xx_it.o
+                0x000000009000a0d8                DMA2_Stream4_IRQHandler
+ .text.DMA2_Stream7_IRQHandler
+                0x000000009000a0e4        0xc ./Src/stm32f7xx_it.o
+                0x000000009000a0e4                DMA2_Stream7_IRQHandler
+ .text.SystemInit
+                0x000000009000a0f0       0x4c ./Src/system_stm32f7xx.o
+                0x000000009000a0f0                SystemInit
+ .text.InsertarBit
+                0x000000009000a13c       0xb4 ./Src/transmitter.o
+ .text.AUDIO_AcquireTouchButtons
+                0x000000009000a1f0       0xdc ./Src/transmitter.o
+ .text.AUDIO_PLAYER_Init
+                0x000000009000a2cc       0x20 ./Src/transmitter.o
+                0x000000009000a2cc                AUDIO_PLAYER_Init
+ .text.ReadFileIntoBuffer
+                0x000000009000a2ec       0x8c ./Src/transmitter.o
+                0x000000009000a2ec                ReadFileIntoBuffer
+ .text.TRANSMITTER_Process
+                0x000000009000a378      0x7f8 ./Src/transmitter.o
+                0x000000009000a378                TRANSMITTER_Process
+ .text.HAL_HCD_MspInit
+                0x000000009000ab70      0x1b8 ./Src/usbh_conf.o
+                0x000000009000ab70                HAL_HCD_MspInit
+ .text.HAL_HCD_SOF_Callback
+                0x000000009000ad28        0x8 ./Src/usbh_conf.o
+                0x000000009000ad28                HAL_HCD_SOF_Callback
+ .text.HAL_HCD_Connect_Callback
+                0x000000009000ad30        0x8 ./Src/usbh_conf.o
+                0x000000009000ad30                HAL_HCD_Connect_Callback
+ .text.HAL_HCD_Disconnect_Callback
+                0x000000009000ad38        0x8 ./Src/usbh_conf.o
+                0x000000009000ad38                HAL_HCD_Disconnect_Callback
+ .text.HAL_HCD_PortEnabled_Callback
+                0x000000009000ad40        0x8 ./Src/usbh_conf.o
+                0x000000009000ad40                HAL_HCD_PortEnabled_Callback
+ .text.HAL_HCD_PortDisabled_Callback
+                0x000000009000ad48        0x8 ./Src/usbh_conf.o
+                0x000000009000ad48                HAL_HCD_PortDisabled_Callback
+ .text.HAL_HCD_HC_NotifyURBChange_Callback
+                0x000000009000ad50        0x2 ./Src/usbh_conf.o
+                0x000000009000ad50                HAL_HCD_HC_NotifyURBChange_Callback
+ *fill*         0x000000009000ad52        0x2 
+ .text.USBH_LL_Init
+                0x000000009000ad54       0x48 ./Src/usbh_conf.o
+                0x000000009000ad54                USBH_LL_Init
+ .text.USBH_LL_Start
+                0x000000009000ad9c        0xe ./Src/usbh_conf.o
+                0x000000009000ad9c                USBH_LL_Start
+ .text.USBH_LL_Stop
+                0x000000009000adaa        0xe ./Src/usbh_conf.o
+                0x000000009000adaa                USBH_LL_Stop
+ .text.USBH_LL_GetSpeed
+                0x000000009000adb8       0x14 ./Src/usbh_conf.o
+                0x000000009000adb8                USBH_LL_GetSpeed
+ .text.USBH_LL_ResetPort
+                0x000000009000adcc        0xe ./Src/usbh_conf.o
+                0x000000009000adcc                USBH_LL_ResetPort
+ .text.USBH_LL_GetLastXferSize
+                0x000000009000adda        0x8 ./Src/usbh_conf.o
+                0x000000009000adda                USBH_LL_GetLastXferSize
+ .text.USBH_LL_OpenPipe
+                0x000000009000ade2       0x22 ./Src/usbh_conf.o
+                0x000000009000ade2                USBH_LL_OpenPipe
+ .text.USBH_LL_ClosePipe
+                0x000000009000ae04        0xe ./Src/usbh_conf.o
+                0x000000009000ae04                USBH_LL_ClosePipe
+ .text.USBH_LL_SubmitURB
+                0x000000009000ae12       0x26 ./Src/usbh_conf.o
+                0x000000009000ae12                USBH_LL_SubmitURB
+ .text.USBH_LL_GetURBState
+                0x000000009000ae38        0x8 ./Src/usbh_conf.o
+                0x000000009000ae38                USBH_LL_GetURBState
+ .text.USBH_LL_DriverVBUS
+                0x000000009000ae40       0x20 ./Src/usbh_conf.o
+                0x000000009000ae40                USBH_LL_DriverVBUS
+ .text.USBH_LL_SetToggle
+                0x000000009000ae60       0x20 ./Src/usbh_conf.o
+                0x000000009000ae60                USBH_LL_SetToggle
+ .text.USBH_LL_GetToggle
+                0x000000009000ae80       0x20 ./Src/usbh_conf.o
+                0x000000009000ae80                USBH_LL_GetToggle
+ .text.USBH_Delay
+                0x000000009000aea0        0x4 ./Src/usbh_conf.o
+                0x000000009000aea0                USBH_Delay
+ .text.USBH_initialize
+                0x000000009000aea4        0x4 ./Src/usbh_diskio.o
+                0x000000009000aea4                USBH_initialize
+ .text.USBH_status
+                0x000000009000aea8       0x18 ./Src/usbh_diskio.o
+                0x000000009000aea8                USBH_status
+ .text.USBH_ioctl
+                0x000000009000aec0       0x60 ./Src/usbh_diskio.o
+                0x000000009000aec0                USBH_ioctl
+ .text.USBH_read
+                0x000000009000af20       0x58 ./Src/usbh_diskio.o
+                0x000000009000af20                USBH_read
+ .text.USBH_write
+                0x000000009000af78       0x78 ./Src/usbh_diskio.o
+                0x000000009000af78                USBH_write
  .text.LCD_LOG_DeInit
                 0x000000009000aff0       0x28 ./Utilities/Log/lcd_log.o
                 0x000000009000aff0                LCD_LOG_DeInit
@@ -9778,14 +9779,14 @@ LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .rodata.str1.1
                 0x0000000090010c63      0x16d ./Src/menu.o
  .rodata.str1.1
-                0x0000000090010dd0      0x563 ./Src/transmitter.o
+                0x0000000090010dd0       0xcb ./Src/receiver.o
+                                         0xd7 (size before relaxing)
+ .rodata.str1.1
+                0x0000000090010e9b      0x530 ./Src/transmitter.o
                                         0x56f (size before relaxing)
  .rodata.str1.1
-                0x0000000090011333       0x34 ./Src/usbh_diskio.o
+                0x00000000900113cb       0x34 ./Src/usbh_diskio.o
                                          0x3c (size before relaxing)
- .rodata.str1.1
-                0x0000000090011367       0x98 ./Src/waverecorder.o
-                                         0xd7 (size before relaxing)
  .rodata._svfprintf_r.str1.1
                 0x00000000900113ff       0x11 C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-nano-svfprintf.o)
  .rodata._vfprintf_r.str1.1
@@ -9851,10 +9852,10 @@ LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
                 0x0000000020000090                uwTickPrio
  .data          0x0000000020000094       0x20 ./Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Src/usbh_msc.o
                 0x0000000020000094                USBH_msc
- .data          0x00000000200000b4        0x4 ./Src/system_stm32f7xx.o
-                0x00000000200000b4                SystemCoreClock
- .data          0x00000000200000b8       0x20 ./Src/transmitter.o
- .data          0x00000000200000d8        0xc ./Src/waverecorder.o
+ .data          0x00000000200000b4        0xc ./Src/receiver.o
+ .data          0x00000000200000c0        0x4 ./Src/system_stm32f7xx.o
+                0x00000000200000c0                SystemCoreClock
+ .data          0x00000000200000c4       0x20 ./Src/transmitter.o
  *(.data*)
  .data.__sglue  0x00000000200000e4        0xc C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-findfp.o)
                 0x00000000200000e4                __sglue
@@ -9909,17 +9910,17 @@ LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
                 0x00000000200012f0                AudioDemo
                 0x00000000200012f2                AudioState
  *fill*         0x00000000200012f3        0x1 
- .bss           0x00000000200012f4     0x73bc ./Src/transmitter.o
-                0x00000000200012f4                MessageWavFile
-                0x0000000020001550                FileHandler
-                0x0000000020001b88                WavFile
-                0x0000000020001db8                WaveFormat
-                0x0000000020001e14                MessageWaveFormat
-                0x0000000020001e40                pMessageHeaderBuff
- .bss           0x00000000200086b0      0x2c4 ./Src/usbh_conf.o
-                0x00000000200086b0                hhcd
- .bss           0x0000000020008974     0x4868 ./Src/waverecorder.o
-                0x0000000020008974                pHeaderBuff
+ .bss           0x00000000200012f4     0x4868 ./Src/receiver.o
+                0x00000000200012f4                pHeaderBuff
+ .bss           0x0000000020005b5c     0x73bc ./Src/transmitter.o
+                0x0000000020005b5c                MessageWavFile
+                0x0000000020005db8                FileHandler
+                0x00000000200063f0                WavFile
+                0x0000000020006620                WaveFormat
+                0x000000002000667c                MessageWaveFormat
+                0x00000000200066a8                pMessageHeaderBuff
+ .bss           0x000000002000cf18      0x2c4 ./Src/usbh_conf.o
+                0x000000002000cf18                hhcd
  .bss           0x000000002000d1dc     0x38cc ./Utilities/Log/lcd_log.o
                 0x000000002000d1dc                LCD_LineColor
                 0x000000002000d1e0                LCD_CacheBuffer_xptr
@@ -10059,19 +10060,19 @@ LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .ARM.attributes
                 0x00000000000007a2       0x34 ./Src/menu.o
  .ARM.attributes
-                0x00000000000007d6       0x21 ./Src/startup_stm32f750xx.o
+                0x00000000000007d6       0x34 ./Src/receiver.o
  .ARM.attributes
-                0x00000000000007f7       0x34 ./Src/stm32f7xx_it.o
+                0x000000000000080a       0x21 ./Src/startup_stm32f750xx.o
  .ARM.attributes
-                0x000000000000082b       0x34 ./Src/system_stm32f7xx.o
+                0x000000000000082b       0x34 ./Src/stm32f7xx_it.o
  .ARM.attributes
-                0x000000000000085f       0x34 ./Src/transmitter.o
+                0x000000000000085f       0x34 ./Src/system_stm32f7xx.o
  .ARM.attributes
-                0x0000000000000893       0x34 ./Src/usbh_conf.o
+                0x0000000000000893       0x34 ./Src/transmitter.o
  .ARM.attributes
-                0x00000000000008c7       0x34 ./Src/usbh_diskio.o
+                0x00000000000008c7       0x34 ./Src/usbh_conf.o
  .ARM.attributes
-                0x00000000000008fb       0x34 ./Src/waverecorder.o
+                0x00000000000008fb       0x34 ./Src/usbh_diskio.o
  .ARM.attributes
                 0x000000000000092f       0x34 ./Utilities/Log/lcd_log.o
  .ARM.attributes
@@ -10221,12 +10222,12 @@ LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .comment       0x0000000000000043       0x44 ./Src/explorer.o
  .comment       0x0000000000000043       0x44 ./Src/main.o
  .comment       0x0000000000000043       0x44 ./Src/menu.o
+ .comment       0x0000000000000043       0x44 ./Src/receiver.o
  .comment       0x0000000000000043       0x44 ./Src/stm32f7xx_it.o
  .comment       0x0000000000000043       0x44 ./Src/system_stm32f7xx.o
  .comment       0x0000000000000043       0x44 ./Src/transmitter.o
  .comment       0x0000000000000043       0x44 ./Src/usbh_conf.o
  .comment       0x0000000000000043       0x44 ./Src/usbh_diskio.o
- .comment       0x0000000000000043       0x44 ./Src/waverecorder.o
  .comment       0x0000000000000043       0x44 ./Utilities/Log/lcd_log.o
 
 .debug_info     0x0000000000000000    0x3a220
@@ -10267,13 +10268,13 @@ LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_info    0x000000000002dd9d     0x1044 ./Src/explorer.o
  .debug_info    0x000000000002ede1     0x25c0 ./Src/main.o
  .debug_info    0x00000000000313a1      0x88a ./Src/menu.o
- .debug_info    0x0000000000031c2b       0x23 ./Src/startup_stm32f750xx.o
- .debug_info    0x0000000000031c4e      0xc55 ./Src/stm32f7xx_it.o
- .debug_info    0x00000000000328a3      0x706 ./Src/system_stm32f7xx.o
- .debug_info    0x0000000000032fa9     0x239d ./Src/transmitter.o
- .debug_info    0x0000000000035346     0x1fd5 ./Src/usbh_conf.o
- .debug_info    0x000000000003731b     0x1164 ./Src/usbh_diskio.o
- .debug_info    0x000000000003847f     0x1641 ./Src/waverecorder.o
+ .debug_info    0x0000000000031c2b     0x1641 ./Src/receiver.o
+ .debug_info    0x000000000003326c       0x23 ./Src/startup_stm32f750xx.o
+ .debug_info    0x000000000003328f      0xc55 ./Src/stm32f7xx_it.o
+ .debug_info    0x0000000000033ee4      0x706 ./Src/system_stm32f7xx.o
+ .debug_info    0x00000000000345ea     0x239d ./Src/transmitter.o
+ .debug_info    0x0000000000036987     0x1fd5 ./Src/usbh_conf.o
+ .debug_info    0x000000000003895c     0x1164 ./Src/usbh_diskio.o
  .debug_info    0x0000000000039ac0      0x760 ./Utilities/Log/lcd_log.o
 
 .debug_abbrev   0x0000000000000000     0x81eb
@@ -10314,13 +10315,13 @@ LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_abbrev  0x00000000000063d3      0x31d ./Src/explorer.o
  .debug_abbrev  0x00000000000066f0      0x4b2 ./Src/main.o
  .debug_abbrev  0x0000000000006ba2      0x236 ./Src/menu.o
- .debug_abbrev  0x0000000000006dd8       0x12 ./Src/startup_stm32f750xx.o
- .debug_abbrev  0x0000000000006dea      0x234 ./Src/stm32f7xx_it.o
- .debug_abbrev  0x000000000000701e      0x141 ./Src/system_stm32f7xx.o
- .debug_abbrev  0x000000000000715f      0x3f7 ./Src/transmitter.o
- .debug_abbrev  0x0000000000007556      0x3e9 ./Src/usbh_conf.o
- .debug_abbrev  0x000000000000793f      0x36b ./Src/usbh_diskio.o
- .debug_abbrev  0x0000000000007caa      0x2d7 ./Src/waverecorder.o
+ .debug_abbrev  0x0000000000006dd8      0x2d7 ./Src/receiver.o
+ .debug_abbrev  0x00000000000070af       0x12 ./Src/startup_stm32f750xx.o
+ .debug_abbrev  0x00000000000070c1      0x234 ./Src/stm32f7xx_it.o
+ .debug_abbrev  0x00000000000072f5      0x141 ./Src/system_stm32f7xx.o
+ .debug_abbrev  0x0000000000007436      0x3f7 ./Src/transmitter.o
+ .debug_abbrev  0x000000000000782d      0x3e9 ./Src/usbh_conf.o
+ .debug_abbrev  0x0000000000007c16      0x36b ./Src/usbh_diskio.o
  .debug_abbrev  0x0000000000007f81      0x26a ./Utilities/Log/lcd_log.o
 
 .debug_loclists
@@ -10400,15 +10401,15 @@ LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_loclists
                 0x0000000000014fc4       0x46 ./Src/menu.o
  .debug_loclists
-                0x000000000001500a       0xc4 ./Src/system_stm32f7xx.o
+                0x000000000001500a       0xa3 ./Src/receiver.o
  .debug_loclists
-                0x00000000000150ce      0x309 ./Src/transmitter.o
+                0x00000000000150ad       0xc4 ./Src/system_stm32f7xx.o
  .debug_loclists
-                0x00000000000153d7      0x378 ./Src/usbh_conf.o
+                0x0000000000015171      0x309 ./Src/transmitter.o
  .debug_loclists
-                0x000000000001574f      0x2f8 ./Src/usbh_diskio.o
+                0x000000000001547a      0x378 ./Src/usbh_conf.o
  .debug_loclists
-                0x0000000000015a47       0xa3 ./Src/waverecorder.o
+                0x00000000000157f2      0x2f8 ./Src/usbh_diskio.o
  .debug_loclists
                 0x0000000000015aea      0x162 ./Utilities/Log/lcd_log.o
 
@@ -10488,19 +10489,19 @@ LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_aranges
                 0x0000000000001850       0x28 ./Src/menu.o
  .debug_aranges
-                0x0000000000001878       0x28 ./Src/startup_stm32f750xx.o
+                0x0000000000001878       0x30 ./Src/receiver.o
  .debug_aranges
-                0x00000000000018a0       0x60 ./Src/stm32f7xx_it.o
+                0x00000000000018a8       0x28 ./Src/startup_stm32f750xx.o
  .debug_aranges
-                0x0000000000001900       0x28 ./Src/system_stm32f7xx.o
+                0x00000000000018d0       0x60 ./Src/stm32f7xx_it.o
  .debug_aranges
-                0x0000000000001928       0x60 ./Src/transmitter.o
+                0x0000000000001930       0x28 ./Src/system_stm32f7xx.o
  .debug_aranges
-                0x0000000000001988       0xd0 ./Src/usbh_conf.o
+                0x0000000000001958       0x60 ./Src/transmitter.o
  .debug_aranges
-                0x0000000000001a58       0x40 ./Src/usbh_diskio.o
+                0x00000000000019b8       0xd0 ./Src/usbh_conf.o
  .debug_aranges
-                0x0000000000001a98       0x30 ./Src/waverecorder.o
+                0x0000000000001a88       0x40 ./Src/usbh_diskio.o
  .debug_aranges
                 0x0000000000001ac8       0x60 ./Utilities/Log/lcd_log.o
 
@@ -10581,23 +10582,23 @@ LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_rnglists
                 0x0000000000001a18       0x26 ./Src/menu.o
  .debug_rnglists
-                0x0000000000001a3e       0x19 ./Src/startup_stm32f750xx.o
+                0x0000000000001a3e       0x61 ./Src/receiver.o
  .debug_rnglists
-                0x0000000000001a57       0x43 ./Src/stm32f7xx_it.o
+                0x0000000000001a9f       0x19 ./Src/startup_stm32f750xx.o
  .debug_rnglists
-                0x0000000000001a9a       0x19 ./Src/system_stm32f7xx.o
+                0x0000000000001ab8       0x43 ./Src/stm32f7xx_it.o
  .debug_rnglists
-                0x0000000000001ab3      0x16b ./Src/transmitter.o
+                0x0000000000001afb       0x19 ./Src/system_stm32f7xx.o
  .debug_rnglists
-                0x0000000000001c1e       0xe0 ./Src/usbh_conf.o
+                0x0000000000001b14      0x16b ./Src/transmitter.o
  .debug_rnglists
-                0x0000000000001cfe       0x43 ./Src/usbh_diskio.o
+                0x0000000000001c7f       0xe0 ./Src/usbh_conf.o
  .debug_rnglists
-                0x0000000000001d41       0x61 ./Src/waverecorder.o
+                0x0000000000001d5f       0x43 ./Src/usbh_diskio.o
  .debug_rnglists
                 0x0000000000001da2       0x46 ./Utilities/Log/lcd_log.o
 
-.debug_macro    0x0000000000000000    0x2f9d5
+.debug_macro    0x0000000000000000    0x2f9c5
  .debug_macro   0x0000000000000000       0x7b ./Drivers/BSP/Components/ft5336/ft5336.o
  .debug_macro   0x000000000000007b      0xaba ./Drivers/BSP/Components/ft5336/ft5336.o
  .debug_macro   0x0000000000000b35       0x10 ./Drivers/BSP/Components/ft5336/ft5336.o
@@ -10753,21 +10754,20 @@ LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_macro   0x000000000002cee4       0xed ./Src/explorer.o
  .debug_macro   0x000000000002cfd1       0xdb ./Src/explorer.o
  .debug_macro   0x000000000002d0ac       0x3a ./Src/explorer.o
- .debug_macro   0x000000000002d0e6      0x500 ./Src/main.o
- .debug_macro   0x000000000002d5e6       0x1c ./Src/main.o
- .debug_macro   0x000000000002d602      0x52a ./Src/menu.o
- .debug_macro   0x000000000002db2c      0x4f5 ./Src/stm32f7xx_it.o
- .debug_macro   0x000000000002e021      0x254 ./Src/system_stm32f7xx.o
- .debug_macro   0x000000000002e275      0x611 ./Src/transmitter.o
- .debug_macro   0x000000000002e886      0x3e0 ./Src/usbh_conf.o
- .debug_macro   0x000000000002ec66      0x436 ./Src/usbh_diskio.o
- .debug_macro   0x000000000002f09c       0x1c ./Src/usbh_diskio.o
- .debug_macro   0x000000000002f0b8       0x1c ./Src/usbh_diskio.o
- .debug_macro   0x000000000002f0d4      0x56e ./Src/waverecorder.o
- .debug_macro   0x000000000002f642       0x16 ./Src/waverecorder.o
- .debug_macro   0x000000000002f658      0x37d ./Utilities/Log/lcd_log.o
+ .debug_macro   0x000000000002d0e6      0x506 ./Src/main.o
+ .debug_macro   0x000000000002d5ec       0x16 ./Src/main.o
+ .debug_macro   0x000000000002d602      0x530 ./Src/menu.o
+ .debug_macro   0x000000000002db32      0x56e ./Src/receiver.o
+ .debug_macro   0x000000000002e0a0      0x4f5 ./Src/stm32f7xx_it.o
+ .debug_macro   0x000000000002e595      0x254 ./Src/system_stm32f7xx.o
+ .debug_macro   0x000000000002e7e9      0x611 ./Src/transmitter.o
+ .debug_macro   0x000000000002edfa      0x3e0 ./Src/usbh_conf.o
+ .debug_macro   0x000000000002f1da      0x436 ./Src/usbh_diskio.o
+ .debug_macro   0x000000000002f610       0x1c ./Src/usbh_diskio.o
+ .debug_macro   0x000000000002f62c       0x1c ./Src/usbh_diskio.o
+ .debug_macro   0x000000000002f648      0x37d ./Utilities/Log/lcd_log.o
 
-.debug_line     0x0000000000000000    0x35589
+.debug_line     0x0000000000000000    0x35579
  .debug_line    0x0000000000000000      0x7bd ./Drivers/BSP/Components/ft5336/ft5336.o
  .debug_line    0x00000000000007bd     0x1529 ./Drivers/BSP/Components/wm8994/wm8994.o
  .debug_line    0x0000000000001ce6     0x14ac ./Drivers/BSP/STM32F7508-Discovery/stm32f7508_discovery_audio.o
@@ -10803,18 +10803,18 @@ LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_line    0x000000000002a648      0x5d0 ./Middlewares/Third_Party/FatFs/src/option/syscall.o
  .debug_line    0x000000000002ac18      0x717 ./Middlewares/Third_Party/FatFs/src/option/unicode.o
  .debug_line    0x000000000002b32f      0xf50 ./Src/explorer.o
- .debug_line    0x000000000002c27f     0x1201 ./Src/main.o
- .debug_line    0x000000000002d480      0xf6a ./Src/menu.o
- .debug_line    0x000000000002e3ea       0x77 ./Src/startup_stm32f750xx.o
- .debug_line    0x000000000002e461      0xeb0 ./Src/stm32f7xx_it.o
- .debug_line    0x000000000002f311      0x914 ./Src/system_stm32f7xx.o
- .debug_line    0x000000000002fc25     0x1933 ./Src/transmitter.o
- .debug_line    0x0000000000031558      0xf2a ./Src/usbh_conf.o
- .debug_line    0x0000000000032482      0xcd1 ./Src/usbh_diskio.o
- .debug_line    0x0000000000033153     0x142e ./Src/waverecorder.o
- .debug_line    0x0000000000034581     0x1008 ./Utilities/Log/lcd_log.o
+ .debug_line    0x000000000002c27f     0x11fd ./Src/main.o
+ .debug_line    0x000000000002d47c      0xf66 ./Src/menu.o
+ .debug_line    0x000000000002e3e2     0x1426 ./Src/receiver.o
+ .debug_line    0x000000000002f808       0x77 ./Src/startup_stm32f750xx.o
+ .debug_line    0x000000000002f87f      0xeb0 ./Src/stm32f7xx_it.o
+ .debug_line    0x000000000003072f      0x914 ./Src/system_stm32f7xx.o
+ .debug_line    0x0000000000031043     0x1933 ./Src/transmitter.o
+ .debug_line    0x0000000000032976      0xf2a ./Src/usbh_conf.o
+ .debug_line    0x00000000000338a0      0xcd1 ./Src/usbh_diskio.o
+ .debug_line    0x0000000000034571     0x1008 ./Utilities/Log/lcd_log.o
 
-.debug_str      0x0000000000000000   0x1072c9
+.debug_str      0x0000000000000000   0x1072c1
  .debug_str     0x0000000000000000     0x52ac ./Drivers/BSP/Components/ft5336/ft5336.o
                                        0x5472 (size before relaxing)
  .debug_str     0x00000000000052ac      0x69e ./Drivers/BSP/Components/wm8994/wm8994.o
@@ -10885,25 +10885,25 @@ LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
                                        0x6bb7 (size before relaxing)
  .debug_str     0x00000000001059ff      0x4f1 ./Src/explorer.o
                                       0xfd10e (size before relaxing)
- .debug_str     0x0000000000105ef0      0x28c ./Src/main.o
-                                      0xfe0b1 (size before relaxing)
- .debug_str     0x000000000010617c      0x433 ./Src/menu.o
-                                      0xfcdbc (size before relaxing)
- .debug_str     0x00000000001065af       0x29 ./Src/startup_stm32f750xx.o
+ .debug_str     0x0000000000105ef0      0x288 ./Src/main.o
+                                      0xfe0ad (size before relaxing)
+ .debug_str     0x0000000000106178      0x433 ./Src/menu.o
+                                      0xfcdb8 (size before relaxing)
+ .debug_str     0x00000000001065ab      0x3c2 ./Src/receiver.o
+                                      0xfd114 (size before relaxing)
+ .debug_str     0x000000000010696d       0x29 ./Src/startup_stm32f750xx.o
                                          0x7a (size before relaxing)
- .debug_str     0x00000000001065d8       0xca ./Src/stm32f7xx_it.o
+ .debug_str     0x0000000000106996       0xca ./Src/stm32f7xx_it.o
                                       0xfce63 (size before relaxing)
- .debug_str     0x00000000001066a2       0x5a ./Src/system_stm32f7xx.o
+ .debug_str     0x0000000000106a60       0x5a ./Src/system_stm32f7xx.o
                                       0xf2ad5 (size before relaxing)
- .debug_str     0x00000000001066fc      0x86a ./Src/transmitter.o
+ .debug_str     0x0000000000106aba      0x5b6 ./Src/transmitter.o
                                       0xfd62a (size before relaxing)
- .debug_str     0x0000000000106f66       0x22 ./Src/usbh_conf.o
+ .debug_str     0x0000000000107070       0x22 ./Src/usbh_conf.o
                                       0xf9b56 (size before relaxing)
- .debug_str     0x0000000000106f88       0x6c ./Src/usbh_diskio.o
+ .debug_str     0x0000000000107092       0x6c ./Src/usbh_diskio.o
                                       0xf8946 (size before relaxing)
- .debug_str     0x0000000000106ff4      0x112 ./Src/waverecorder.o
-                                      0xfd11c (size before relaxing)
- .debug_str     0x0000000000107106      0x1c3 ./Utilities/Log/lcd_log.o
+ .debug_str     0x00000000001070fe      0x1c3 ./Utilities/Log/lcd_log.o
                                       0xf8474 (size before relaxing)
 
 .debug_frame    0x0000000000000000     0x5b50
@@ -10944,12 +10944,12 @@ LOAD C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .debug_frame   0x0000000000004800       0x70 ./Src/explorer.o
  .debug_frame   0x0000000000004870       0x78 ./Src/main.o
  .debug_frame   0x00000000000048e8       0x50 ./Src/menu.o
- .debug_frame   0x0000000000004938       0xd0 ./Src/stm32f7xx_it.o
- .debug_frame   0x0000000000004a08       0x30 ./Src/system_stm32f7xx.o
- .debug_frame   0x0000000000004a38      0x120 ./Src/transmitter.o
- .debug_frame   0x0000000000004b58      0x1f8 ./Src/usbh_conf.o
- .debug_frame   0x0000000000004d50       0x98 ./Src/usbh_diskio.o
- .debug_frame   0x0000000000004de8       0x84 ./Src/waverecorder.o
+ .debug_frame   0x0000000000004938       0x84 ./Src/receiver.o
+ .debug_frame   0x00000000000049bc       0xd0 ./Src/stm32f7xx_it.o
+ .debug_frame   0x0000000000004a8c       0x30 ./Src/system_stm32f7xx.o
+ .debug_frame   0x0000000000004abc      0x120 ./Src/transmitter.o
+ .debug_frame   0x0000000000004bdc      0x1f8 ./Src/usbh_conf.o
+ .debug_frame   0x0000000000004dd4       0x98 ./Src/usbh_diskio.o
  .debug_frame   0x0000000000004e6c      0x128 ./Utilities/Log/lcd_log.o
  .debug_frame   0x0000000000004f94       0x30 C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-malloc.o)
  .debug_frame   0x0000000000004fc4       0x50 C:/ST/STM32CubeIDE_1.14.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.11.3.rel1.win32_1.1.100.202309141235/tools/bin/../lib/gcc/arm-none-eabi/11.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc_nano.a(libc_a-mallocr.o)

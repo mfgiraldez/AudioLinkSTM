@@ -44,8 +44,8 @@
   */
   
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __WAVERECORDER_H
-#define __WAVERECORDER_H
+#ifndef __RECEIVER_H
+#define __RECEIVER_H
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
@@ -62,6 +62,7 @@
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
+AUDIO_ErrorTypeDef receiver_INIT(void);
 AUDIO_ErrorTypeDef AUDIO_REC_Process(void);
 AUDIO_ErrorTypeDef AUDIO_REC_Start(void);
 AUDIO_ErrorTypeDef AUDIO_PLAYER_Init(void);

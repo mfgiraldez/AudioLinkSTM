@@ -44,8 +44,8 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
+#include "receiver.h"
 #include "transmitter.h"
-#include "waverecorder.h" 
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -176,6 +176,7 @@ void AUDIO_MenuProcess(void)
 					 (TS_State.touchY[0] < TOUCH_RECEIVER_YMAX))
     		{
     			AudioDemo.state = RECEIVER;
+    			receiver_INIT();
     		}
 
         /* Wait for touch released */

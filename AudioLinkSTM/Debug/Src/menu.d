@@ -1,4 +1,4 @@
-Src/menu.o: ../Src/menu.c ../Inc/transmitter.h ../Inc/main.h \
+Src/menu.o: ../Src/menu.c ../Inc/receiver.h ../Inc/main.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h \
  ../Inc/usbh_conf.h \
  ../Drivers/CMSIS/Device/ST/STM32F7xx/Include/stm32f7xx.h \
@@ -66,8 +66,8 @@ Src/menu.o: ../Src/menu.c ../Inc/transmitter.h ../Inc/main.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_bot.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_scsi.h \
- ../Inc/waverecorder.h
-../Inc/transmitter.h:
+ ../Inc/transmitter.h
+../Inc/receiver.h:
 ../Inc/main.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h:
 ../Inc/usbh_conf.h:
@@ -139,4 +139,4 @@ Src/menu.o: ../Src/menu.c ../Inc/transmitter.h ../Inc/main.h \
 ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_bot.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_scsi.h:
-../Inc/waverecorder.h:
+../Inc/transmitter.h:

@@ -44,7 +44,9 @@
   */  
 
 /* Includes ------------------------------------------------------------------*/
-#include "waverecorder.h" 
+#include "receiver.h"
+#include "FirFilter.h"
+#include "EnvDetector.h"
 
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
@@ -73,6 +75,11 @@
 #define TOUCH_VOL_PLUS_YMIN     212
 #define TOUCH_VOL_PLUS_YMAX     252
 
+// UMBRALES DE RECEPCIÓN
+#define RX_THRESHOLD 8000
+#define SILENCE_THRESHOLD 100
+#define SAMPLES_PER_BIT 32
+
 uint8_t pHeaderBuff[44];
 
 /* Private macro -------------------------------------------------------------*/
@@ -82,12 +89,17 @@ static __IO uint32_t uwVolume_rec = 100;
 extern WAVE_FormatTypeDef WaveFormat;
 extern FIL WavFile;
 static uint32_t  display_update = 1;
+static FirFilter filter_BP_5k;
+static FirFilter filter_BP_10k;
+static EnvDetector envDetector0;
+static EnvDetector envDetector1;
 
 /* Private function prototypes -----------------------------------------------*/
 static uint32_t WavProcess_EncInit(uint32_t Freq, uint8_t* pHeader);
 static uint32_t WavProcess_HeaderInit(uint8_t* pHeader, WAVE_FormatTypeDef* pWaveFormatStruct);
 static uint32_t WavProcess_HeaderUpdate(uint8_t* pHeader, WAVE_FormatTypeDef* pWaveFormatStruct);
 static void AUDIO_REC_DisplayButtons(void);
+
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -114,6 +126,29 @@ static void AUDIO_REC_DisplayButtons(void);
   - IT ISR priority must be set at a higher priority than USB, this priority 
     order must be respected when managing other interrupts; 
 */
+
+/**
+ * @brief Comienza a meter muestras de audio en el buffer
+ * @param None
+ * @retval Audio error
+ */
+AUDIO_ErrorTypeDef receiver_INIT(void) {
+	BSP_AUDIO_IN_Init(I2S_AUDIOFREQ_44K, DEFAULT_AUDIO_IN_BIT_RESOLUTION, DEFAULT_AUDIO_IN_CHANNEL_NBR);
+	BSP_AUDIO_IN_Record((uint16_t*)&BufferCtl.pcm_buff[0], AUDIO_IN_PCM_BUFFER_SIZE);
+	BufferCtl.fptr = byteswritten;
+	BufferCtl.pcm_ptr = 0;
+	BufferCtl.offset = 0;
+	BufferCtl.wr_state = BUFFER_EMPTY;
+
+	// Inicializamos los filtros y el detector de envolvente
+	FirFilter_Init(&filter_BP_5k);
+	FirFilter_Init(&filter_BP_10k);
+	EnvDetector_Init(&envDetector0);
+	EnvDetector_Init(&envDetector1);
+
+	return AUDIO_ERROR_NONE;
+}
+
 
 /**
   * @brief  Starts Audio streaming.    
@@ -180,6 +215,100 @@ AUDIO_ErrorTypeDef AUDIO_REC_Start(void)
   }
   return AUDIO_ERROR_IO; 
 }
+
+//if(f_write(&WavFile, (uint8_t*)(BufferCtl.pcm_buff + BufferCtl.offset),
+//                 AUDIO_IN_PCM_BUFFER_SIZE,
+//                 (void*)&byteswritten) != FR_OK)
+
+static AUDIO_ErrorTypeDef Read_Buffer(uint16_t * buff)
+{
+	// Actualizamos la máquina de estados del receptor para cada muestra
+	for (uint16_t i; i<AUDIO_IN_PCM_BUFFER_SIZE/2; i += 2)
+	{
+		update_RX(buff[i]);
+	}
+
+	return AUDIO_ERROR_NONE;
+}
+
+static AUDIO_ErrorTypeDef update_RX(uint16_t sample)
+{
+	static RECEIVER_StateTypeDef state;
+	static uint8_t cont;
+	static uint8_t currentBit = 0;
+
+
+	// Actualizamos los filtros y los detectores de envolvente
+	FirFilter_Update(&filter_BP_5k, (float)sample);
+	FirFilter_Update(&filter_BP_10k, (float)sample);
+	EnvDetector_Update(&envDetector0, filter_BP_5k.out);
+	EnvDetector_Update(&envDetector1, filter_BP_10k.out);
+
+	// Máquina de estados del receptor
+	switch(state){
+
+		case SILENCE:
+			if (envDetector1.out > RX_THRESHOLD)
+				state = STOP;
+			break;
+
+		case STOP:
+			if(envDetector1.out < envDetector0.out)
+			{
+				state = START;
+				cont = SAMPLES_PER_BIT;
+			} else if (envDetector1.out < 100)
+			{
+				state = SILENCE;
+			}
+			break;
+
+		case START:
+			cont--;
+			if (cont == 0)
+			{
+				state = DATA;
+				cont = SAMPLES_PER_BIT/2;
+			}
+			break;
+
+		case DATA:
+			cont--;
+			if (cont == 0)
+			{
+				if (currentBit == 8)
+				{
+					// Leemos el bit de paridad
+					// ........................
+					// ........................
+				} else if (currentBit == 9)
+				{
+					currentBit = 0;
+					state = STOP;
+				} else
+				{
+					cont = SAMPLES_PER_BIT;
+					// Leemos el bit
+					// .....................
+					// .....................
+					currentBit++;
+				}
+			}
+			break;
+	}
+
+
+
+
+
+}
+
+AUDIO_ErrorTypeDef Receiver_Process(void)
+{
+	AUDIO_ErrorTypeDef audio_error = AUDIO_ERROR_NONE;
+	// Máquina de estados general
+}
+
 
 /**
   * @brief  Manages Audio process. 

@@ -1,4 +1,0 @@
-../Src/waverecorder.c:123:20:AUDIO_REC_Start	96	static
-../Src/waverecorder.c:189:20:AUDIO_REC_Process	48	static
-../Src/waverecorder.c:473:6:BSP_AUDIO_IN_TransferComplete_CallBack	0	static
-../Src/waverecorder.c:495:6:BSP_AUDIO_IN_HalfTransfer_CallBack	0	static
