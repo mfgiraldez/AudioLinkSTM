@@ -41,6 +41,7 @@
 "./Middlewares/Third_Party/FatFs/src/ff_gen_drv.o"
 "./Middlewares/Third_Party/FatFs/src/option/syscall.o"
 "./Middlewares/Third_Party/FatFs/src/option/unicode.o"
+"./Src/EnvDetector.o"
 "./Src/FirFilter.o"
 "./Src/explorer.o"
 "./Src/main.o"

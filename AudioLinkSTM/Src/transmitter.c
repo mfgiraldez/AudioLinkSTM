@@ -93,26 +93,26 @@
 #define TOUCH_PREVIOUS_YMIN     135
 #define TOUCH_PREVIOUS_YMAX     170
 
-#define TOUCH_NEXT_XMIN     402
-#define TOUCH_NEXT_XMAX     452
-#define TOUCH_NEXT_YMIN     83
-#define TOUCH_NEXT_YMAX     126
+#define TOUCH_NEXT_XMIN     300
+#define TOUCH_NEXT_XMAX     493
+#define TOUCH_NEXT_YMIN     135
+#define TOUCH_NEXT_YMAX     170
 
-#define TOUCH_RETURN_XMIN     402
-#define TOUCH_RETURN_XMAX     452
-#define TOUCH_RETURN_YMIN     155
-#define TOUCH_RETURN_YMAX     179
+#define TOUCH_RETURN_XMIN     195
+#define TOUCH_RETURN_XMAX     476
+#define TOUCH_RETURN_YMIN     230
+#define TOUCH_RETURN_YMAX     260
 
 // Se definen los nuevos valores para los limites de los botones (BACK TO MENU) y (START TRANSISSION)
-#define TOUCH_BTM_XMIN     602
-#define TOUCH_BTM_XMAX     652
-#define TOUCH_BTM_YMIN     83
-#define TOUCH_BTM_YMAX     126
+#define TOUCH_BTM_XMIN     700
+#define TOUCH_BTM_XMAX     900
+#define TOUCH_BTM_YMIN     160
+#define TOUCH_BTM_YMAX     190
 
 #define TOUCH_START_TX_XMIN     700
-#define TOUCH_START_TX_XMAX     752
-#define TOUCH_START_TX_YMIN     155
-#define TOUCH_START_TX_YMAX     179
+#define TOUCH_START_TX_XMAX     900
+#define TOUCH_START_TX_YMIN     130
+#define TOUCH_START_TX_YMAX     100
 
 /* Private macro -------------------------------------------------------------*/
 /* Private typedef -----------------------------------------------------------*/
@@ -148,15 +148,31 @@ const int16_t sineSamples[] = {
     0b1010010101111111
 };
 
-static Point puntos_BTM[] = {{TOUCH_BTM_XMIN,TOUCH_BTM_YMIN},
-							 {TOUCH_BTM_XMIN, TOUCH_BTM_YMAX},
-							 {TOUCH_BTM_XMAX, TOUCH_BTM_YMIN},
-							 {TOUCH_BTM_XMAX, TOUCH_BTM_YMIN}};
+static Point ReturnButtonPoints[] = {{TOUCH_RETURN_XMIN, TOUCH_RETURN_YMIN},
+									 {TOUCH_RETURN_XMIN, TOUCH_RETURN_YMAX},
+									 {TOUCH_RETURN_XMAX, TOUCH_RETURN_YMIN},
+									 {TOUCH_RETURN_XMAX, TOUCH_RETURN_YMAX}};
 
-static Point puntos_START[] = {{TOUCH_START_TX_XMIN,TOUCH_START_TX_YMIN},
-							   {TOUCH_START_TX_XMIN, TOUCH_START_TX_YMAX},
-							   {TOUCH_START_TX_XMAX, TOUCH_START_TX_YMIN},
-							   {TOUCH_START_TX_XMAX, TOUCH_START_TX_YMIN}};
+//static Point puntos_BTM[] = {{TOUCH_BTM_XMIN,TOUCH_BTM_YMIN},
+//							 {TOUCH_BTM_XMIN, TOUCH_BTM_YMAX},
+//							 {TOUCH_BTM_XMAX, TOUCH_BTM_YMIN},
+//							 {TOUCH_BTM_XMAX, TOUCH_BTM_YMAX}};
+//
+//static Point puntos_START[] = {{TOUCH_START_TX_XMIN,TOUCH_START_TX_YMIN},
+//							   {TOUCH_START_TX_XMIN, TOUCH_START_TX_YMAX},
+//							   {TOUCH_START_TX_XMAX, TOUCH_START_TX_YMIN},
+//							   {TOUCH_START_TX_XMAX, TOUCH_START_TX_YMAX}};
+
+static Point puntos_NEXT[] = {{TOUCH_NEXT_XMIN,TOUCH_NEXT_YMIN},
+							   {TOUCH_NEXT_XMIN, TOUCH_NEXT_YMAX},
+							   {TOUCH_NEXT_XMAX, TOUCH_NEXT_YMIN},
+							   {TOUCH_NEXT_XMAX, TOUCH_NEXT_YMAX}};
+
+static Point puntos_PREVIOUS[] = {{TOUCH_PREVIOUS_XMIN,TOUCH_PREVIOUS_YMIN},
+							   {TOUCH_PREVIOUS_XMIN, TOUCH_PREVIOUS_YMAX},
+							   {TOUCH_PREVIOUS_XMAX, TOUCH_PREVIOUS_YMIN},
+							   {TOUCH_PREVIOUS_XMAX, TOUCH_PREVIOUS_YMAX}};
+
 
 /* Private function prototypes -----------------------------------------------*/
 static AUDIO_ErrorTypeDef GetFileInfo(uint16_t file_idx,
@@ -287,10 +303,11 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 //	                             {TOUCH_BEGIN_TRANSMISSION_XMAX, TOUCH_BEGIN_TRANSMISSION_YMIN},
 //	                             {TOUCH_BEGIN_TRANSMISSION_XMAX, TOUCH_BEGIN_TRANSMISSION_YMAX},
 //	    						  {TOUCH_BEGIN_TRANSMISSION_XMIN, TOUCH_BEGIN_TRANSMISSION_YMAX}};
-	Point PreviousButtonPoints[] = {{TOUCH_PREVIOUS_XMIN, TOUCH_PREVIOUS_YMIN},
-		                             {TOUCH_PREVIOUS_XMAX, TOUCH_PREVIOUS_YMIN},
-		                             {TOUCH_PREVIOUS_XMAX, TOUCH_PREVIOUS_YMAX},
-		    						  {TOUCH_PREVIOUS_XMIN, TOUCH_PREVIOUS_YMAX}};
+
+	//	Point PreviousButtonPoints[] = {{TOUCH_PREVIOUS_XMIN, TOUCH_PREVIOUS_YMIN},
+//		                             {TOUCH_PREVIOUS_XMAX, TOUCH_PREVIOUS_YMIN},
+//		                             {TOUCH_PREVIOUS_XMAX, TOUCH_PREVIOUS_YMAX},
+//		    						  {TOUCH_PREVIOUS_XMIN, TOUCH_PREVIOUS_YMAX}};
 
 	switch (AudioState) {
 
@@ -342,36 +359,30 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		AUDIO_AcquireTouchButtons();
 		break;
 
-	case AUDIO_STATE_STOP:
-		BSP_LCD_SetTextColor(LCD_COLOR_RED);
-		BSP_LCD_FillRect(TOUCH_STOP_XMIN, TOUCH_STOP_YMIN, /* Stop rectangle */
-		TOUCH_STOP_XMAX - TOUCH_STOP_XMIN,
-		TOUCH_STOP_YMAX - TOUCH_STOP_YMIN);
-		BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
-		AudioState = AUDIO_STATE_IDLE;
-		audio_error = AUDIO_ERROR_IO;
-		break;
-
 	case AUDIO_STATE_NEXT:
 		if (++FilePos >= AUDIO_GetWavObjectNumber()) {
 			FilePos = 0;
 		}
-		BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
-		AUDIO_PLAYER_Start(FilePos);
-		if (uwVolume == 0) {
-			BSP_AUDIO_OUT_SetVolume(uwVolume);
-		}
+
+		AudioState = AUDIO_STATE_INIT;
+//		BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
+//		AUDIO_PLAYER_Start(FilePos);
+//		if (uwVolume == 0) {
+//			BSP_AUDIO_OUT_SetVolume(uwVolume);
+//		}
 		break;
 
 	case AUDIO_STATE_PREVIOUS:
 		if (--FilePos < 0) {
 			FilePos = AUDIO_GetWavObjectNumber() - 1;
 		}
-		BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
-		AUDIO_PLAYER_Start(FilePos);
-		if (uwVolume == 0) {
-			BSP_AUDIO_OUT_SetVolume(uwVolume);
-		}
+
+		AudioState = AUDIO_STATE_INIT;
+//		BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
+//		AUDIO_PLAYER_Start(FilePos);
+//		if (uwVolume == 0) {
+//			BSP_AUDIO_OUT_SetVolume(uwVolume);
+//		}
 		break;
 
 	case AUDIO_STATE_PAUSE:
@@ -438,11 +449,12 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		BSP_LCD_ClearStringLine(7);
 		BSP_LCD_DisplayStringAtLine(7, strFileName);
 
-		BSP_LCD_DisplayStringAtLine(9, (uint8_t*) "       (PREVIOUS)  (NEXT)  (RETURN)");
+		BSP_LCD_DisplayStringAtLine(9, (uint8_t*) "   >>  PREVIOUS FILE         NEXT FILE");
 		BSP_LCD_DisplayStringAtLine(12, (uint8_t*) "                >>  BEGING TRANSMISSION");
+		BSP_LCD_DisplayStringAtLine(15, (uint8_t*) "                >>  BACK TO MAIN MENU");
 
 		// Poligono de prueba
-		BSP_LCD_FillPolygon(PreviousButtonPoints, 4);
+		//BSP_LCD_FillPolygon(ReturnButtonPoints, 4);
 		AudioState = AUDIO_STATE_WAIT;
 		break;
 
@@ -454,6 +466,7 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 	*/
 	case AUDIO_STATE_WAIT:
 		TRANSMITTER_AcquireTouchButtons();
+		BSP_LCD_DisplayStringAtLine(14, (uint8_t*) "DEMOSTRACION PARA LOS VIEJITOS");
 		break;
 
 	/*
@@ -589,7 +602,7 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 					// decidamos que hacer.
 					// Podriamos poner unos botones para volver al menu principal del estado INIT
 					BSP_LCD_ClearStringLine(9);
-					BSP_LCD_ClearStringLine(11);
+					BSP_LCD_ClearStringLine(14);
 					BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
 					BSP_LCD_SetFont(&LCD_LOG_TEXT_FONT);
 					AudioState = AUDIO_STATE_WAV_CREATED;
@@ -637,10 +650,8 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 	case AUDIO_STATE_WAV_CREATED:
 		// Ya se ha creado el fichero .wav a partir del fichero de de texto, por lo que ahora
 		// se procede a pintar los botones y esperar a que sean pulsados.
-		BSP_LCD_DisplayStringAtLine(9, (uint8_t *)"         |    . .-' `. '.       >>    (BACK TO TX MENU)");
-		BSP_LCD_DisplayStringAtLine(11, (uint8_t *)"          \\     `.  /  ..     >>    (START TRANSMISSION)");
-
-
+		BSP_LCD_DisplayStringAtLine(9, (uint8_t *)"         |    . .-' `. '.       >>    START TRANSMISSION");
+		BSP_LCD_DisplayStringAtLine(14, (uint8_t *)"           ,|,`.        `-.\\    >>    BACK TO MENU");
 		AudioState = AUDIO_STATE_WAIT_FOR_TRANSMISSION;
 
 		break;
@@ -649,9 +660,17 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		// LLamada a una funcion para adquirir la informacion de los toques de la pantalla.
 		// No se puede usar la que ya tenemos por si se lian a tocar ahi random en la pantalla
 		// Pintamos los rectangulos para aproximar el espacio que queremos
-		BSP_LCD_FillPolygon(puntos_BTM, 4);
-		BSP_LCD_FillPolygon(puntos_START, 4);
+		//BSP_LCD_FillPolygon(puntos_BTM, 4);
+		//BSP_LCD_FillPolygon(puntos_START, 4);
+		BSP_LCD_DisplayStringAtLine(20,(uint8_t *) "Estoy en el estado AUDIO_STATE_WAIT_FOR_TRANSMISSION");
 		TRANSMITTER_AcquireTouchButtons_TX();
+		break;
+
+	case AUDIO_STATE_RETURN:
+		// Se fuerza el error para ser detectado en la maquina de estados de menu y poder usarlo
+		// para volver al menu principal
+		AudioState = AUDIO_STATE_IDLE;
+		audio_error = AUDIO_ERROR_IO;
 		break;
 
 	case AUDIO_STATE_IDLE:
@@ -918,7 +937,11 @@ static void TRANSMITTER_AcquireTouchButtons(void) {
 					  (TS_State.touchY[0] > TOUCH_RETURN_YMIN) &&
 					  (TS_State.touchY[0] < TOUCH_RETURN_YMAX))
 			{
-				AudioState = AUDIO_STATE_BACKWARD;
+				BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
+				BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
+				BSP_LCD_SetFont(&LCD_LOG_TEXT_FONT);
+
+				AudioState = AUDIO_STATE_RETURN;
 
 			}else if((TS_State.touchX[0] > TOUCH_BEGIN_TRANSMISSION_XMIN) &&
 					 (TS_State.touchX[0] < TOUCH_BEGIN_TRANSMISSION_XMAX) &&
@@ -937,28 +960,31 @@ static void TRANSMITTER_AcquireTouchButtons(void) {
 
 static void TRANSMITTER_AcquireTouchButtons_TX(void) {
 	static TS_StateTypeDef TS_State = { 0 };
+
 	if (TS_State.touchDetected == 1) /* If previous touch has not been released, we don't proceed any touch command */
 	{
 		BSP_TS_GetState(&TS_State);
 	} else {
-		if (TS_State.touchDetected == 1)
-		{
-			if ((TS_State.touchX[0] > TOUCH_BTM_XMIN) &&
-				(TS_State.touchX[0] < TOUCH_BTM_XMAX) &&
-				(TS_State.touchY[0] > TOUCH_BTM_YMIN) &&
-				(TS_State.touchY[0] < TOUCH_BTM_YMAX))
+		// Se ha soltado el toque previo
+		BSP_TS_GetState(&TS_State);
+		if (TS_State.touchDetected == 1) {
+			if ((TS_State.touchX[0] > TOUCH_START_TX_XMIN) &&
+				(TS_State.touchX[0] < TOUCH_START_TX_XMAX) &&
+				(TS_State.touchY[0] > TOUCH_START_TX_YMIN) &&
+				(TS_State.touchY[0] < TOUCH_START_TX_YMAX))
 			{
-				AudioState = AUDIO_STATE_INIT;
+				AudioState = AUDIO_STATE_TRANSMISSION;
 
-			}else
+			}else if ((TS_State.touchX[0] > TOUCH_BTM_XMIN) &&
+					  (TS_State.touchX[0] < TOUCH_BTM_XMAX) &&
+					  (TS_State.touchY[0] > TOUCH_BTM_YMIN) &&
+					  (TS_State.touchY[0] < TOUCH_BTM_YMAX))
 			{
-				if ((TS_State.touchX[0] > TOUCH_START_TX_XMIN) &&
-					(TS_State.touchX[0] < TOUCH_START_TX_XMAX) &&
-					(TS_State.touchY[0] > TOUCH_START_TX_YMIN) &&
-					(TS_State.touchY[0] < TOUCH_START_TX_YMAX))
-				{
-					AudioState = AUDIO_STATE_TRANSMISSION;
-				}
+				BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
+				BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
+				BSP_LCD_SetFont(&LCD_LOG_TEXT_FONT);
+
+				AudioState = AUDIO_STATE_RETURN;
 			}
 		}
 	}

@@ -1,2 +1,2 @@
-Src/FirFilter.o: ../Src/FirFilter.c ../Src/FirFilter.h
-../Src/FirFilter.h:
+Src/FirFilter.o: ../Src/FirFilter.c ../Inc/FirFilter.h
+../Inc/FirFilter.h:

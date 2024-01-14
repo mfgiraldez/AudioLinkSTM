@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import wave
 
 # Abrimos el archivo de audio
-audio = wave.open("Wave_dobleSync.wav", "r")
+audio = wave.open("Wave_dobleSync_definitivo.wav", "r")
 
 # Obtenemos los datos del audio
 frames = audio.readframes(-1)

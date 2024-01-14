@@ -199,7 +199,13 @@ void AUDIO_MenuProcess(void)
     	}
     	else
     	{
-    		TRANSMITTER_Process();
+    		// Si el estado NO era idle, se pasa del menu principal y se procede a entrar a la maquina de estados directamente
+    		if(TRANSMITTER_Process() == AUDIO_ERROR_IO)
+			{
+				/* Clear the LCD */
+				AudioDemo.state = IDLE;
+			}
+
     	}
     	break;
 
