@@ -63,6 +63,7 @@
 #define AUDIO_OUT_BUFFER_SIZE                      8192
 #define DATA_FILE_BUFFER_SIZE					   1024
 #define AUDIO_IN_PCM_BUFFER_SIZE                   4*2304 /* buffer size in half-word */
+#define MAX_RX_BUFFER_SIZE                         8192
 
 #define FILEMGR_LIST_DEPDTH                        24
 #define FILEMGR_FILE_NAME_SIZE                     40
@@ -99,7 +100,7 @@ typedef struct _DemoStateMachine {
   __IO uint8_t select;  
 }AUDIO_DEMO_StateMachine;
 
-/* Para la maquina de estados del transmisor. Se ha aniadido el estado "AUDIO_STATE_BEGING_TRANSMISSION */
+/* Para la maquina de estados del transmisor/receptor, las que se usan internamente en "transmitter.c" y "receiver.c". */
 typedef enum {
   AUDIO_STATE_IDLE = 0,
   AUDIO_STATE_WAIT,    
@@ -169,6 +170,11 @@ typedef struct {
   uint32_t offset;  
   uint32_t fptr;
 }AUDIO_IN_BufferTypeDef;
+
+typedef struct {
+	uint8_t buff[MAX_RX_BUFFER_SIZE];
+	uint16_t index;
+}RX_BUFFER_TypeDef;
 
 typedef struct {
   uint32_t ChunkID;       /* 0 */ 

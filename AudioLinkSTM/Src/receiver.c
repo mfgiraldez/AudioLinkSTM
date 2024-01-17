@@ -93,13 +93,16 @@ static FirFilter filter_BP_5k;
 static FirFilter filter_BP_10k;
 static EnvDetector envDetector0;
 static EnvDetector envDetector1;
+static RX_BUFFER_TypeDef BufferRx;
+static FIL RxFileHandler;
 
 /* Private function prototypes -----------------------------------------------*/
 static uint32_t WavProcess_EncInit(uint32_t Freq, uint8_t* pHeader);
 static uint32_t WavProcess_HeaderInit(uint8_t* pHeader, WAVE_FormatTypeDef* pWaveFormatStruct);
 static uint32_t WavProcess_HeaderUpdate(uint8_t* pHeader, WAVE_FormatTypeDef* pWaveFormatStruct);
+static AUDIO_ErrorTypeDef update_RX(uint16_t sample);
+static AUDIO_ErrorTypeDef Read_Buffer(uint16_t * buff);
 static void AUDIO_REC_DisplayButtons(void);
-
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -135,10 +138,11 @@ static void AUDIO_REC_DisplayButtons(void);
 AUDIO_ErrorTypeDef receiver_INIT(void) {
 	BSP_AUDIO_IN_Init(I2S_AUDIOFREQ_44K, DEFAULT_AUDIO_IN_BIT_RESOLUTION, DEFAULT_AUDIO_IN_CHANNEL_NBR);
 	BSP_AUDIO_IN_Record((uint16_t*)&BufferCtl.pcm_buff[0], AUDIO_IN_PCM_BUFFER_SIZE);
-	BufferCtl.fptr = byteswritten;
+	//BufferCtl.fptr = byteswritten;
 	BufferCtl.pcm_ptr = 0;
 	BufferCtl.offset = 0;
 	BufferCtl.wr_state = BUFFER_EMPTY;
+	BufferRx.index = 0;
 
 	// Inicializamos los filtros y el detector de envolvente
 	FirFilter_Init(&filter_BP_5k);
@@ -236,7 +240,14 @@ static AUDIO_ErrorTypeDef update_RX(uint16_t sample)
 	static RECEIVER_StateTypeDef state;
 	static uint8_t cont;
 	static uint8_t currentBit = 0;
+	static uint8_t byteRecibido = 0;
+	static uint8_t parityCalc = 0;
+	static uint16_t bytesCorrectos = 0;
+	static uint16_t bytesErroneos = 0;
+	static uint8_t fileIndex = 1;
+	static uint8_t strFileName[FILEMGR_FILE_NAME_SIZE + 20];
 
+	uint32_t byteswritten = 0;
 
 	// Actualizamos los filtros y los detectores de envolvente
 	FirFilter_Update(&filter_BP_5k, (float)sample);
@@ -248,8 +259,10 @@ static AUDIO_ErrorTypeDef update_RX(uint16_t sample)
 	switch(state){
 
 		case SILENCE:
-			if (envDetector1.out > RX_THRESHOLD)
+			if(envDetector1.out > RX_THRESHOLD){
+				BSP_LCD_DisplayStringAtLine(6, (uint8_t*)">>   Ha comenzado la recepcion del mensaje");
 				state = STOP;
+			}
 			break;
 
 		case STOP:
@@ -259,6 +272,31 @@ static AUDIO_ErrorTypeDef update_RX(uint16_t sample)
 				cont = SAMPLES_PER_BIT;
 			} else if (envDetector1.out < 100)
 			{
+				// Se pinta en pantalla el porcentaje de error
+				//...........................................
+
+				BSP_LCD_DisplayStringAtLine(8, (uint8_t*)">>   Ha terminado la recepcion!");
+				bytesCorrectos = 0;
+				bytesErroneos = 0;
+
+				// Abrimos el fichero para almacenar los datos recibidos
+				sprintf((char*) strFileName, "RX_message_%d.txt", (uint8_t) fileIndex);
+				if (f_open(&RxFileHandler, (char*) strFileName, FA_CREATE_ALWAYS | FA_WRITE) == FR_OK)
+				{
+					if(f_write(&RxFileHandler, BufferRx.buff, BufferRx.index, (void*)&byteswritten) == FR_OK)
+					{
+						BufferRx.index = 0;
+					} else
+					{
+						// IMPRIMIR MENSAJES DE ERROR
+					}
+				} else
+				{
+					// IMPRIMIR MENSAJES DE ERROR
+				}
+
+				f_close(&RxFileHandler);
+				fileIndex++;
 				state = SILENCE;
 			}
 			break;
@@ -278,35 +316,74 @@ static AUDIO_ErrorTypeDef update_RX(uint16_t sample)
 			{
 				if (currentBit == 8)
 				{
-					// Leemos el bit de paridad
-					// ........................
-					// ........................
+					// Se calcula la paridad (par) del byte leido
+					// El bit de paridad es 0 si el numero de unos es par, y 1 si es impar
+					parityCalc = 0;
+					for (uint8_t i = 0; i < 8; i++) {
+						parityCalc ^= (byteRecibido >> i) & 1;
+					}
+
+					if (parityCalc == (uint8_t)(envDetector1.out > envDetector0.out))
+						bytesCorrectos++;
+					else
+						bytesErroneos++;
+
+
 				} else if (currentBit == 9)
 				{
 					currentBit = 0;
+					// Se almacena el byte en el buffer
+					BufferRx.buff[BufferRx.index] = byteRecibido;
+
+					// Se reinicia el byteRecibido
+					byteRecibido = 0;
 					state = STOP;
 				} else
 				{
 					cont = SAMPLES_PER_BIT;
 					// Leemos el bit
-					// .....................
-					// .....................
+					byteRecibido |= (uint8_t)(envDetector1.out > envDetector0.out) << (7-currentBit);
+
 					currentBit++;
 				}
 			}
 			break;
 	}
 
-
-
-
-
+	return AUDIO_ERROR_NONE;
 }
 
 AUDIO_ErrorTypeDef Receiver_Process(void)
 {
 	AUDIO_ErrorTypeDef audio_error = AUDIO_ERROR_NONE;
 	// Máquina de estados general
+	switch(AudioState){
+
+	case AUDIO_STATE_RECORD:
+
+		/* Check if there are Data to write to USB Key */
+		if(BufferCtl.wr_state == BUFFER_FULL)
+		{
+		  /* write buffer in file */
+		  Read_Buffer((uint16_t*)(BufferCtl.pcm_buff + BufferCtl.offset));
+
+		  BufferCtl.wr_state =  BUFFER_EMPTY;
+		}
+
+
+		break;
+    case AUDIO_STATE_INIT:
+    	AudioState = AUDIO_STATE_RECORD;
+    	receiver_INIT();
+
+    	break;
+    case AUDIO_STATE_IDLE:
+    default:
+		/* Do Nothing */
+		break;
+	}
+
+	return audio_error;
 }
 
 

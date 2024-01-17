@@ -477,7 +477,7 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 	*/
 	case AUDIO_STATE_BEGING_TRANSMISSION:
 		
-		BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"    >> PREPARING THE TRANSMISSION... CREATING .wav FILE FROM THE SELECTED FILE");
+		BSP_LCD_DisplayStringAtLine(2, (uint8_t *)"    >> PREPARING THE TRANSMISSION... CREATING .wav");
 		sprintf((char*) strFileName, "          / \\  `.  __..-,O  / \\_/ \\_/ %s", (char*) FileList.file[FilePos].name);
 
 		BSP_LCD_DisplayStringAtLine(6, (uint8_t *)"           ,-.               _   _");
@@ -661,7 +661,7 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		// Pintamos los rectangulos para aproximar el espacio que queremos
 		//BSP_LCD_FillPolygon(puntos_BTM, 4);
 		//BSP_LCD_FillPolygon(puntos_START, 4);
-		BSP_LCD_DisplayStringAtLine(20,(uint8_t *) "Estoy en el estado AUDIO_STATE_WAIT_FOR_TRANSMISSION");
+		//BSP_LCD_DisplayStringAtLine(20,(uint8_t *) "Estoy en el estado AUDIO_STATE_WAIT_FOR_TRANSMISSION");
 		TRANSMITTER_AcquireTouchButtons_TX();
 		break;
 

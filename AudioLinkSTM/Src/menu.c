@@ -211,13 +211,27 @@ void AUDIO_MenuProcess(void)
     	break;
 
     case RECEIVER:
-        /* Clear the LCD */
-		LCD_ClearTextZone();
-		BSP_LCD_SetFont(&LCD_LOG_HEADER_FONT);
-		BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
-		BSP_LCD_DisplayStringAtLine(4, (uint8_t *)"    >> --RECEIVER--");
-		BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"    >> Ready to receive...");
+    	if(AudioState == AUDIO_STATE_IDLE)
+		{
+			BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
+			BSP_LCD_SetFont(&LCD_LOG_HEADER_FONT);
+			BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
+			BSP_LCD_DisplayStringAtLine(4, (uint8_t *)"    >> --RECEIVER--");
+			BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"    >> Ready to receive...");
 
+			// Ponemos en funcionamiento la máquina de estados del transmisor
+			AudioState = AUDIO_STATE_INIT;
+		}
+		else
+		{
+			// Si el estado NO era idle, se pasa del menu principal y se procede a entrar a la maquina de estados directamente
+			if(Receiver_Process()== AUDIO_ERROR_IO)
+			{
+				/* Clear the LCD */
+				AudioDemo.state = IDLE;
+			}
+
+		}
 		break;
       
     case AUDIO_DEMO_IN:

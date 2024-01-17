@@ -65,7 +65,8 @@ Src/receiver.o: ../Src/receiver.c ../Inc/receiver.h ../Inc/main.h \
  ../Middlewares/Third_Party/FatFs/src/ff.h ../Inc/usbh_diskio.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc.h \
  ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_bot.h \
- ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_scsi.h
+ ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_scsi.h \
+ ../Inc/FirFilter.h ../Inc/EnvDetector.h ../Inc/FirFilter.h
 ../Inc/receiver.h:
 ../Inc/main.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Core/Inc/usbh_core.h:
@@ -138,3 +139,6 @@ Src/receiver.o: ../Src/receiver.c ../Inc/receiver.h ../Inc/main.h \
 ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_bot.h:
 ../Middlewares/ST/STM32_USB_Host_Library/Class/MSC/Inc/usbh_msc_scsi.h:
+../Inc/FirFilter.h:
+../Inc/EnvDetector.h:
+../Inc/FirFilter.h:
