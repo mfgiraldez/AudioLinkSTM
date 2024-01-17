@@ -77,7 +77,7 @@
 
 // UMBRALES DE RECEPCIÓN
 #define RX_THRESHOLD 8000
-#define SILENCE_THRESHOLD 100
+#define SILENCE_THRESHOLD 2000
 #define SAMPLES_PER_BIT 32
 
 uint8_t pHeaderBuff[44];
@@ -100,7 +100,7 @@ static FIL RxFileHandler;
 static uint32_t WavProcess_EncInit(uint32_t Freq, uint8_t* pHeader);
 static uint32_t WavProcess_HeaderInit(uint8_t* pHeader, WAVE_FormatTypeDef* pWaveFormatStruct);
 static uint32_t WavProcess_HeaderUpdate(uint8_t* pHeader, WAVE_FormatTypeDef* pWaveFormatStruct);
-static AUDIO_ErrorTypeDef update_RX(uint16_t sample);
+static AUDIO_ErrorTypeDef update_RX(int16_t sample);
 static AUDIO_ErrorTypeDef Read_Buffer(uint16_t * buff);
 static void AUDIO_REC_DisplayButtons(void);
 
@@ -145,8 +145,8 @@ AUDIO_ErrorTypeDef receiver_INIT(void) {
 	BufferRx.index = 0;
 
 	// Inicializamos los filtros y el detector de envolvente
-	FirFilter_Init(&filter_BP_5k);
-	FirFilter_Init(&filter_BP_10k);
+	FirFilter_Init(&filter_BP_5k, (uint8_t) BAND_PASS_5K);
+	FirFilter_Init(&filter_BP_10k, (uint8_t) BAND_PASS_10K);
 	EnvDetector_Init(&envDetector0);
 	EnvDetector_Init(&envDetector1);
 
@@ -235,7 +235,7 @@ static AUDIO_ErrorTypeDef Read_Buffer(uint16_t * buff)
 	return AUDIO_ERROR_NONE;
 }
 
-static AUDIO_ErrorTypeDef update_RX(uint16_t sample)
+static AUDIO_ErrorTypeDef update_RX(int16_t sample)
 {
 	static RECEIVER_StateTypeDef state;
 	static uint8_t cont;
@@ -260,22 +260,18 @@ static AUDIO_ErrorTypeDef update_RX(uint16_t sample)
 
 		case SILENCE:
 			if(envDetector1.out > RX_THRESHOLD){
-				BSP_LCD_DisplayStringAtLine(6, (uint8_t*)">>   Ha comenzado la recepcion del mensaje");
+				BSP_LCD_DisplayStringAtLine(6, (uint8_t*)"    >> Ha comenzado la recepcion del mensaje");
 				state = STOP;
 			}
 			break;
 
 		case STOP:
-			if(envDetector1.out < envDetector0.out)
-			{
-				state = START;
-				cont = SAMPLES_PER_BIT;
-			} else if (envDetector1.out < 100)
+			if (envDetector1.out < SILENCE_THRESHOLD)
 			{
 				// Se pinta en pantalla el porcentaje de error
 				//...........................................
 
-				BSP_LCD_DisplayStringAtLine(8, (uint8_t*)">>   Ha terminado la recepcion!");
+				BSP_LCD_DisplayStringAtLine(8, (uint8_t*)"    >> Ha terminado la recepcion!");
 				bytesCorrectos = 0;
 				bytesErroneos = 0;
 
@@ -298,6 +294,10 @@ static AUDIO_ErrorTypeDef update_RX(uint16_t sample)
 				f_close(&RxFileHandler);
 				fileIndex++;
 				state = SILENCE;
+			} else if(envDetector1.out < envDetector0.out)
+			{
+				state = START;
+				cont = SAMPLES_PER_BIT;
 			}
 			break;
 
@@ -316,6 +316,9 @@ static AUDIO_ErrorTypeDef update_RX(uint16_t sample)
 			{
 				if (currentBit == 8)
 				{
+					cont = SAMPLES_PER_BIT;
+					currentBit++;
+
 					// Se calcula la paridad (par) del byte leido
 					// El bit de paridad es 0 si el numero de unos es par, y 1 si es impar
 					parityCalc = 0;
@@ -334,6 +337,7 @@ static AUDIO_ErrorTypeDef update_RX(uint16_t sample)
 					currentBit = 0;
 					// Se almacena el byte en el buffer
 					BufferRx.buff[BufferRx.index] = byteRecibido;
+					BufferRx.index++;
 
 					// Se reinicia el byteRecibido
 					byteRecibido = 0;

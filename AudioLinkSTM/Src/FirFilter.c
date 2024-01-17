@@ -116,9 +116,10 @@ static float FIR_IMPULSE_RESPONSE_BAND_PASS_10K[] =
 	0.000748334746194465,
 };
 
-void FirFilter_Init(FirFilter *fir)
+void FirFilter_Init(FirFilter *fir, uint8_t type)
 {
-    
+    fir -> type=type;
+
     /*Limpiar el buffer del filtro*/
 	for (uint8_t n = 0; n < ((fir -> type == LOW_PASS) ? LOW_PASS_LENGTH : BAND_PASS_LENGHT); n++) {
         fir->buf[n] = 0;
@@ -139,7 +140,7 @@ float FirFilter_Update(FirFilter *fir, float inp)
     /* Se guarda laultima muestra en el buffer */
     fir->buf[fir->bufIndex] = inp;
 
-    /* Incremento el indice dle buffer */
+    /* Incremento el indice del buffer */
     fir->bufIndex++;
 
     /* Se compruba que el tamaño es menor que el tamaño maximo */

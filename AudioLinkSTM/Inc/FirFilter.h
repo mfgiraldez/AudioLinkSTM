@@ -17,7 +17,7 @@ typedef struct {
     uint8_t type;
 } FirFilter;
 
-void FirFilter_Init(FirFilter *fir);
+void FirFilter_Init(FirFilter *fir, uint8_t type);
 float FirFilter_Update(FirFilter *fir, float inp);
 
 #endif // FIR_FILTER_H

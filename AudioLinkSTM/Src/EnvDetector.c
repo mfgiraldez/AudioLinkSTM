@@ -3,7 +3,7 @@
 
 void EnvDetector_Init(EnvDetector *env)
 {
-	FirFilter_Init(&(env -> envLPFilter));
+	FirFilter_Init(&(env -> envLPFilter), (uint8_t)LOW_PASS);
 
 	//Inicializacion de los parametros de env
 	env -> out = 0.0f;

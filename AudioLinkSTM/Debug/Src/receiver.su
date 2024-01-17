@@ -1,6 +1,6 @@
 ../Src/receiver.c:138:20:receiver_INIT	16	static
 ../Src/receiver.c:162:20:AUDIO_REC_Start	96	static
-../Src/receiver.c:356:20:Receiver_Process	56	static
-../Src/receiver.c:395:20:AUDIO_REC_Process	48	static
-../Src/receiver.c:679:6:BSP_AUDIO_IN_TransferComplete_CallBack	0	static
-../Src/receiver.c:701:6:BSP_AUDIO_IN_HalfTransfer_CallBack	0	static
+../Src/receiver.c:360:20:Receiver_Process	56	static
+../Src/receiver.c:399:20:AUDIO_REC_Process	48	static
+../Src/receiver.c:683:6:BSP_AUDIO_IN_TransferComplete_CallBack	0	static
+../Src/receiver.c:705:6:BSP_AUDIO_IN_HalfTransfer_CallBack	0	static
