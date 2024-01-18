@@ -43,6 +43,7 @@
 "./Middlewares/Third_Party/FatFs/src/option/unicode.o"
 "./Src/EnvDetector.o"
 "./Src/FirFilter.o"
+"./Src/cryptography.o"
 "./Src/explorer.o"
 "./Src/main.o"
 "./Src/menu.o"

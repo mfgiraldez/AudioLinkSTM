@@ -15,8 +15,8 @@ void SeqGenerator_Update(PsRandomSeqGenerator *seqGen)
 	// el bit más significativo es el resultado de la xor entre el
 	// bit 4 y el 2.
 	seqGen -> reg = (seqGen -> reg) >> 1;
-
 	uint8_t segundoBit = ((seqGen -> reg) >> 1) & 0b00000001;
+
 	uint8_t cuartoBit = ((seqGen -> reg) >> 3) & 0b00000001;
 	seqGen -> reg |= cuartoBit^segundoBit;
 

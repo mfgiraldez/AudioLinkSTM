@@ -64,6 +64,7 @@
 /* Exported functions ------------------------------------------------------- */
 AUDIO_ErrorTypeDef receiver_INIT(void);
 AUDIO_ErrorTypeDef AUDIO_REC_Process(void);
+AUDIO_ErrorTypeDef Receiver_Process(void);
 AUDIO_ErrorTypeDef AUDIO_REC_Start(void);
 AUDIO_ErrorTypeDef AUDIO_PLAYER_Init(void);
 

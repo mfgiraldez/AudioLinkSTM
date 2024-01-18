@@ -10,6 +10,7 @@ S_SRCS += \
 C_SRCS += \
 ../Src/EnvDetector.c \
 ../Src/FirFilter.c \
+../Src/cryptography.c \
 ../Src/explorer.c \
 ../Src/main.c \
 ../Src/menu.c \
@@ -23,6 +24,7 @@ C_SRCS += \
 OBJS += \
 ./Src/EnvDetector.o \
 ./Src/FirFilter.o \
+./Src/cryptography.o \
 ./Src/explorer.o \
 ./Src/main.o \
 ./Src/menu.o \
@@ -40,6 +42,7 @@ S_DEPS += \
 C_DEPS += \
 ./Src/EnvDetector.d \
 ./Src/FirFilter.d \
+./Src/cryptography.d \
 ./Src/explorer.d \
 ./Src/main.d \
 ./Src/menu.d \
@@ -60,7 +63,7 @@ Src/%.o: ../Src/%.s Src/subdir.mk
 clean: clean-Src
 
 clean-Src:
-	-$(RM) ./Src/EnvDetector.cyclo ./Src/EnvDetector.d ./Src/EnvDetector.o ./Src/EnvDetector.su ./Src/FirFilter.cyclo ./Src/FirFilter.d ./Src/FirFilter.o ./Src/FirFilter.su ./Src/explorer.cyclo ./Src/explorer.d ./Src/explorer.o ./Src/explorer.su ./Src/main.cyclo ./Src/main.d ./Src/main.o ./Src/main.su ./Src/menu.cyclo ./Src/menu.d ./Src/menu.o ./Src/menu.su ./Src/receiver.cyclo ./Src/receiver.d ./Src/receiver.o ./Src/receiver.su ./Src/startup_stm32f750xx.d ./Src/startup_stm32f750xx.o ./Src/stm32f7xx_it.cyclo ./Src/stm32f7xx_it.d ./Src/stm32f7xx_it.o ./Src/stm32f7xx_it.su ./Src/system_stm32f7xx.cyclo ./Src/system_stm32f7xx.d ./Src/system_stm32f7xx.o ./Src/system_stm32f7xx.su ./Src/transmitter.cyclo ./Src/transmitter.d ./Src/transmitter.o ./Src/transmitter.su ./Src/usbh_conf.cyclo ./Src/usbh_conf.d ./Src/usbh_conf.o ./Src/usbh_conf.su ./Src/usbh_diskio.cyclo ./Src/usbh_diskio.d ./Src/usbh_diskio.o ./Src/usbh_diskio.su
+	-$(RM) ./Src/EnvDetector.cyclo ./Src/EnvDetector.d ./Src/EnvDetector.o ./Src/EnvDetector.su ./Src/FirFilter.cyclo ./Src/FirFilter.d ./Src/FirFilter.o ./Src/FirFilter.su ./Src/cryptography.cyclo ./Src/cryptography.d ./Src/cryptography.o ./Src/cryptography.su ./Src/explorer.cyclo ./Src/explorer.d ./Src/explorer.o ./Src/explorer.su ./Src/main.cyclo ./Src/main.d ./Src/main.o ./Src/main.su ./Src/menu.cyclo ./Src/menu.d ./Src/menu.o ./Src/menu.su ./Src/receiver.cyclo ./Src/receiver.d ./Src/receiver.o ./Src/receiver.su ./Src/startup_stm32f750xx.d ./Src/startup_stm32f750xx.o ./Src/stm32f7xx_it.cyclo ./Src/stm32f7xx_it.d ./Src/stm32f7xx_it.o ./Src/stm32f7xx_it.su ./Src/system_stm32f7xx.cyclo ./Src/system_stm32f7xx.d ./Src/system_stm32f7xx.o ./Src/system_stm32f7xx.su ./Src/transmitter.cyclo ./Src/transmitter.d ./Src/transmitter.o ./Src/transmitter.su ./Src/usbh_conf.cyclo ./Src/usbh_conf.d ./Src/usbh_conf.o ./Src/usbh_conf.su ./Src/usbh_diskio.cyclo ./Src/usbh_diskio.d ./Src/usbh_diskio.o ./Src/usbh_diskio.su
 
 .PHONY: clean-Src
 

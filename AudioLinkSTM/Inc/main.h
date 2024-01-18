@@ -61,7 +61,7 @@
 
 /* Exported Defines ----------------------------------------------------------*/
 #define AUDIO_OUT_BUFFER_SIZE                      8192
-#define DATA_FILE_BUFFER_SIZE					   1024
+#define DATA_FILE_BUFFER_SIZE					   8192
 #define AUDIO_IN_PCM_BUFFER_SIZE                   4*2304 /* buffer size in half-word */
 #define MAX_RX_BUFFER_SIZE                         8192
 

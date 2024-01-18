@@ -1,6 +1,8 @@
 #ifndef INC_CRIPTOGRAPHY_H_
 #define INC_CRIPTOGRAPHY_H_
 
+#include <stdint.h>
+
 /*
  * Se define una estructura que utiliza un registro de 8 bits, que
  * inicialmente será definido al mismo valor inicial en transmisor

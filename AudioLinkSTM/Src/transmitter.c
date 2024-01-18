@@ -185,7 +185,6 @@ static void TRANSMITTER_AcquireTouchButtons(void);
 static uint32_t WavProcess_EncInit(uint32_t Freq, uint8_t* pHeader);
 static uint32_t WavProcess_HeaderInit(uint8_t* pHeader, WAVE_FormatTypeDef* pWaveFormatStruct);
 static uint32_t WavProcess_HeaderUpdate(uint8_t* pHeader, WAVE_FormatTypeDef* pWaveFormatStruct);
-void InsertarBit(uint8_t byteLeido);
 static void TRANSMITTER_AcquireTouchButtons_TX();
 
 
@@ -496,7 +495,7 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		BSP_LCD_DisplayStringAtLine(19, (uint8_t *)"          //||\\\\");
 		BSP_LCD_DisplayStringAtLine(20, (uint8_t *)"         // || \\\\");
 		BSP_LCD_DisplayStringAtLine(21, (uint8_t *)"      __//__||__\\\\__");
-		// BSP_LCD_DisplayStringAtLine(21, (uint8_t *)"     '--------------' ");
+		BSP_LCD_DisplayStringAtLine(21, (uint8_t *)"     '--------------' ");
 
 
 		/* Llenamos el buffer con el contenido del fichero del USB */
@@ -544,7 +543,7 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 
 		// En este buffer, vamos recorriendo la informacion del fichero a transmitir, cuya longitud viene 
 		// dada por BufferFile.fptr.
-		for (uint8_t i = 0; i < BufferFile.fptr; i++)
+		for (uint32_t i = 0; i < BufferFile.fptr; i++)
 		{
 			// Se lee un byte de datos del buffer que contiene el fichero a transmitir.
 			byteLeido = BufferFile.buff[i];
@@ -578,6 +577,7 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		InsertarBit(1); // BIT FINALIZACION
 
 		// Una vez relleno el buffer, se procede a realizar la escritura del .wav
+		BSP_LCD_DisplayStringAtLine(14, (uint8_t *)"Se va a escribir el fichero");
 		uint8_t fileWriting = f_write(&MessageWavFile, (uint8_t*)WaveBuffer.pcm_buff, 2*WaveBuffer.pcm_ptr, (void*)&byteswritten);
 		if(fileWriting == FR_OK)
 		{
@@ -728,7 +728,7 @@ static void InsertarBit(uint8_t bit)
 {
 	uint32_t byteswritten = 0;
 
-	if (WaveBuffer.pcm_ptr == AUDIO_IN_PCM_BUFFER_SIZE)
+	if (WaveBuffer.pcm_ptr >= AUDIO_IN_PCM_BUFFER_SIZE-64)
 	{
 		// Si se ha llenado el buffer se escribe el buffer en el fichero
 		f_write(&MessageWavFile, (uint8_t*)WaveBuffer.pcm_buff, 2*WaveBuffer.pcm_ptr, (void*)&byteswritten);
@@ -740,7 +740,7 @@ static void InsertarBit(uint8_t bit)
 	{
 		// Si el bit leido es igual a 1, se transmiten unicamente las muestras del seno correspondientes 
 		// a una señal de 11025 Hz, que serían el 0, 2, 4, 6
-		for (uint8_t periodo = 0; periodo < 8; periodo++)
+		for (uint8_t periodo = 0; periodo < 16; periodo++)
 		{
 			// Se configura el número de periodos a transmitir, en este caso serian 4 periodos por cada bit.
 			for (uint8_t j = 0; j < 8; j += 2)
@@ -758,7 +758,7 @@ static void InsertarBit(uint8_t bit)
 	{
 		// En este caso, el bit leido es un cero, por lo que la seal a transmitir es la correspondiente a 5512.5 Hz, y
 		// se transmiten todas las muestras del seno. 
-		for (uint8_t periodo = 0; periodo < 4; periodo++)
+		for (uint8_t periodo = 0; periodo < 8; periodo++)
 		{
 			// Se configura el número de periodos a transmitir, en este caso serian 2 periodos por cada bit.
 			for (uint8_t j = 0; j < 8; j++)

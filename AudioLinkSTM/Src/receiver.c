@@ -77,8 +77,8 @@
 
 // UMBRALES DE RECEPCIÓN
 #define RX_THRESHOLD 8000
-#define SILENCE_THRESHOLD 2000
-#define SAMPLES_PER_BIT 32
+#define SILENCE_THRESHOLD 500
+#define SAMPLES_PER_BIT 64
 
 uint8_t pHeaderBuff[44];
 
@@ -227,7 +227,7 @@ AUDIO_ErrorTypeDef AUDIO_REC_Start(void)
 static AUDIO_ErrorTypeDef Read_Buffer(uint16_t * buff)
 {
 	// Actualizamos la máquina de estados del receptor para cada muestra
-	for (uint16_t i; i<AUDIO_IN_PCM_BUFFER_SIZE/2; i += 2)
+	for (uint16_t i = 0; i<AUDIO_IN_PCM_BUFFER_SIZE/2; i += 2)
 	{
 		update_RX(buff[i]);
 	}
@@ -260,7 +260,12 @@ static AUDIO_ErrorTypeDef update_RX(int16_t sample)
 
 		case SILENCE:
 			if(envDetector1.out > RX_THRESHOLD){
-				BSP_LCD_DisplayStringAtLine(6, (uint8_t*)"    >> Ha comenzado la recepcion del mensaje");
+				BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
+				BSP_LCD_SetFont(&LCD_LOG_HEADER_FONT);
+				BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
+				BSP_LCD_DisplayStringAtLine(4, (uint8_t *)"    >> --RECEIVER--");
+				BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"    >> Ready to receive...");
+				BSP_LCD_DisplayStringAtLine(6, (uint8_t*)"    >> Receiving...");
 				state = STOP;
 			}
 			break;
@@ -269,9 +274,13 @@ static AUDIO_ErrorTypeDef update_RX(int16_t sample)
 			if (envDetector1.out < SILENCE_THRESHOLD)
 			{
 				// Se pinta en pantalla el porcentaje de error
-				//...........................................
+				sprintf((char*) strFileName, "    >> Bytes correctos: %d", bytesCorrectos);
+				BSP_LCD_DisplayStringAtLine(7, (uint8_t*)strFileName);
 
-				BSP_LCD_DisplayStringAtLine(8, (uint8_t*)"    >> Ha terminado la recepcion!");
+				sprintf((char*) strFileName, "    >> Bytes incorrectos: %d", bytesErroneos);
+				BSP_LCD_DisplayStringAtLine(8, (uint8_t*)strFileName);
+
+				BSP_LCD_DisplayStringAtLine(9, (uint8_t*)"    >> Message saved!");
 				bytesCorrectos = 0;
 				bytesErroneos = 0;
 
