@@ -118,6 +118,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 static AUDIO_OUT_BufferTypeDef BufferCtl;
+static AUDIO_OUT_BufferTypeDef BufferWaveOut;
 static DATA_FILE_BufferTypeDef BufferFile; // En este buffer se almacena el archivo a transmitir.
 static AUDIO_IN_BufferTypeDef  WaveBuffer;
 static int16_t FilePos = 0;
@@ -148,30 +149,30 @@ const int16_t sineSamples[] = {
     0b1010010101111111
 };
 
-static Point ReturnButtonPoints[] = {{TOUCH_RETURN_XMIN, TOUCH_RETURN_YMIN},
-									 {TOUCH_RETURN_XMIN, TOUCH_RETURN_YMAX},
-									 {TOUCH_RETURN_XMAX, TOUCH_RETURN_YMIN},
-									 {TOUCH_RETURN_XMAX, TOUCH_RETURN_YMAX}};
-
-//static Point puntos_BTM[] = {{TOUCH_BTM_XMIN,TOUCH_BTM_YMIN},
-//							 {TOUCH_BTM_XMIN, TOUCH_BTM_YMAX},
-//							 {TOUCH_BTM_XMAX, TOUCH_BTM_YMIN},
-//							 {TOUCH_BTM_XMAX, TOUCH_BTM_YMAX}};
+//static Point ReturnButtonPoints[] = {{TOUCH_RETURN_XMIN, TOUCH_RETURN_YMIN},
+//									 {TOUCH_RETURN_XMIN, TOUCH_RETURN_YMAX},
+//									 {TOUCH_RETURN_XMAX, TOUCH_RETURN_YMIN},
+//									 {TOUCH_RETURN_XMAX, TOUCH_RETURN_YMAX}};
 //
-//static Point puntos_START[] = {{TOUCH_START_TX_XMIN,TOUCH_START_TX_YMIN},
-//							   {TOUCH_START_TX_XMIN, TOUCH_START_TX_YMAX},
-//							   {TOUCH_START_TX_XMAX, TOUCH_START_TX_YMIN},
-//							   {TOUCH_START_TX_XMAX, TOUCH_START_TX_YMAX}};
-
-static Point puntos_NEXT[] = {{TOUCH_NEXT_XMIN,TOUCH_NEXT_YMIN},
-							   {TOUCH_NEXT_XMIN, TOUCH_NEXT_YMAX},
-							   {TOUCH_NEXT_XMAX, TOUCH_NEXT_YMIN},
-							   {TOUCH_NEXT_XMAX, TOUCH_NEXT_YMAX}};
-
-static Point puntos_PREVIOUS[] = {{TOUCH_PREVIOUS_XMIN,TOUCH_PREVIOUS_YMIN},
-							   {TOUCH_PREVIOUS_XMIN, TOUCH_PREVIOUS_YMAX},
-							   {TOUCH_PREVIOUS_XMAX, TOUCH_PREVIOUS_YMIN},
-							   {TOUCH_PREVIOUS_XMAX, TOUCH_PREVIOUS_YMAX}};
+////static Point puntos_BTM[] = {{TOUCH_BTM_XMIN,TOUCH_BTM_YMIN},
+////							 {TOUCH_BTM_XMIN, TOUCH_BTM_YMAX},
+////							 {TOUCH_BTM_XMAX, TOUCH_BTM_YMIN},
+////							 {TOUCH_BTM_XMAX, TOUCH_BTM_YMAX}};
+////
+////static Point puntos_START[] = {{TOUCH_START_TX_XMIN,TOUCH_START_TX_YMIN},
+////							   {TOUCH_START_TX_XMIN, TOUCH_START_TX_YMAX},
+////							   {TOUCH_START_TX_XMAX, TOUCH_START_TX_YMIN},
+////							   {TOUCH_START_TX_XMAX, TOUCH_START_TX_YMAX}};
+//
+//static Point puntos_NEXT[] = {{TOUCH_NEXT_XMIN,TOUCH_NEXT_YMIN},
+//							   {TOUCH_NEXT_XMIN, TOUCH_NEXT_YMAX},
+//							   {TOUCH_NEXT_XMAX, TOUCH_NEXT_YMIN},
+//							   {TOUCH_NEXT_XMAX, TOUCH_NEXT_YMAX}};
+//
+//static Point puntos_PREVIOUS[] = {{TOUCH_PREVIOUS_XMIN,TOUCH_PREVIOUS_YMIN},
+//							   {TOUCH_PREVIOUS_XMIN, TOUCH_PREVIOUS_YMAX},
+//							   {TOUCH_PREVIOUS_XMAX, TOUCH_PREVIOUS_YMIN},
+//							   {TOUCH_PREVIOUS_XMAX, TOUCH_PREVIOUS_YMAX}};
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -252,28 +253,25 @@ AUDIO_ErrorTypeDef ReadFileIntoBuffer(uint8_t idx) {
 AUDIO_ErrorTypeDef AUDIO_PLAYER_Start(uint8_t idx) {
 	uint32_t bytesread;
 
-	f_close(&WavFile);
+	f_close(&MessageWavFile);
 	if (AUDIO_GetWavObjectNumber() > idx) {
-		GetFileInfo(idx, &WaveFormat);
-
 		/*Adjust the Audio frequency */
-		PlayerInit(WaveFormat.SampleRate);
+		PlayerInit(MessageWaveFormat.SampleRate);
 
-		BufferCtl.state = BUFFER_OFFSET_NONE;
+		BufferWaveOut.state = BUFFER_OFFSET_NONE;
 
 		/* Get Data from USB Flash Disk */
-		f_lseek(&WavFile, 0);
+		f_lseek(&MessageWavFile, 0);
 
 		/* Fill whole buffer at first time */
-		if (f_read(&WavFile, &BufferCtl.buff[0],
+		if (f_read(&MessageWavFile, &BufferWaveOut.buff[0],
 		AUDIO_OUT_BUFFER_SIZE, (void*) &bytesread) == FR_OK) {
 			AudioState = AUDIO_STATE_PLAY;
-			AUDIO_PlaybackDisplayButtons();
 			BSP_LCD_DisplayStringAt(250, LINE(9), (uint8_t*) "  [PLAY ]",
 					LEFT_MODE);
 			{
 				if (bytesread != 0) {
-					BSP_AUDIO_OUT_Play((uint16_t*) &BufferCtl.buff[0],
+					BSP_AUDIO_OUT_Play((uint16_t*) &BufferWaveOut.buff[0],
 							AUDIO_OUT_BUFFER_SIZE);
 					BufferCtl.fptr = bytesread;
 					return AUDIO_ERROR_NONE;
@@ -316,47 +314,60 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 	 * incrementa BufferCtl.fptr en la cantidad de bytes leídos. Esto permite avanzar en el archivo de audio a medida que se reproduce.
 	 *
 	 * */
-	case AUDIO_STATE_PLAY:
-		if (BufferCtl.fptr >= WaveFormat.FileSize) {
-			BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
-			AudioState = AUDIO_STATE_NEXT;
-		}
 
-		if (BufferCtl.state == BUFFER_OFFSET_HALF) {
-			if (f_read(&WavFile, &BufferCtl.buff[0],
-			AUDIO_OUT_BUFFER_SIZE / 2, (void*) &bytesread) != FR_OK) {
-				BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
-				return AUDIO_ERROR_IO;
-			}
-			BufferCtl.state = BUFFER_OFFSET_NONE;
-			BufferCtl.fptr += bytesread;
-		}
+//	case AUDIO_STATE_PREPARING_TRANSMISSION:
+//
+//
+//		BSP_LCD_DisplayStringAtLine(6,  (uint8_t *)"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ⠀⣠⣾⠀⠀⠀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀");
+//		BSP_LCD_DisplayStringAtLine(7,  (uint8_t *)"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ⠀⣠⣾⣿⣿⠀⠀⠀⠉⠛⢷⣄⠀⠀⠀⠀⠀⠀⠀");
+//		BSP_LCD_DisplayStringAtLine(8,  (uint8_t *)"⠀⠀⠀⠀⠀⣀⣀⣀⣀⣀⣠⣾⣿⣿⣿⣿⠀⠀⠘⢶⣤⠀⠙⢷⡀⠀⠀⠀⠀⠀");
+//		BSP_LCD_DisplayStringAtLine(9,  (uint8_t *)"⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠠⣄⠀⠙⣷⠀⠈⣷⠀⠀⠀⠀⠀");
+//		BSP_LCD_DisplayStringAtLine(10, (uint8_t *)"⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⢸⠆⠀⣿⠆⠀⣿⠀⠀⠀⠀⠀     TRANSMITTING");
+//		BSP_LCD_DisplayStringAtLine(11, (uint8_t *)"⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠐⠋⠀⣠⡿⠀⢀⡿⠀⠀⠀⠀⠀");
+//		BSP_LCD_DisplayStringAtLine(12, (uint8_t *)"⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠙⢿⣿⣿⣿⣿⠀⠀⢠⠾⠛⠀⣠⡾⠁⠀⠀⠀⠀⠀");
+//		BSP_LCD_DisplayStringAtLine(13, (uint8_t *)"⠀⠀⠀⠀⠀⠀⠀⠀⠀  ⠀⠀⠙⢿⣿⣿⠀⠀⠀⣀⣤⡾⠋⠀⠀⠀⠀⠀⠀⠀");
+//		BSP_LCD_DisplayStringAtLine(14, (uint8_t *)"⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ⠙⢿⠀⠀⠀⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀");
+//
+//		AudioState = AUDIO_STATE_TRANSMISSION;
+//		break;
 
-		if (BufferCtl.state == BUFFER_OFFSET_FULL) {
-			if (f_read(&WavFile, &BufferCtl.buff[AUDIO_OUT_BUFFER_SIZE / 2],
-			AUDIO_OUT_BUFFER_SIZE / 2, (void*) &bytesread) != FR_OK) {
-				BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
-				return AUDIO_ERROR_IO;
-			}
 
-			BufferCtl.state = BUFFER_OFFSET_NONE;
-			BufferCtl.fptr += bytesread;
-		}
 
-		/* Display elapsed time */
-		elapsed_time = BufferCtl.fptr / WaveFormat.ByteRate;
-		if (prev_elapsed_time != elapsed_time) {
-			prev_elapsed_time = elapsed_time;
-			sprintf((char*) str, "[%02d:%02d]", (int) (elapsed_time / 60),
-					(int) (elapsed_time % 60));
-			BSP_LCD_SetTextColor(LCD_COLOR_CYAN);
-			BSP_LCD_DisplayStringAt(263, LINE(8), str, LEFT_MODE);
-			BSP_LCD_SetTextColor(LCD_COLOR_WHITE);
-		}
-
-		/* Update audio state machine according to touch acquisition */
-		AUDIO_AcquireTouchButtons();
-		break;
+//	case AUDIO_STATE_TRANSMISSION:
+//
+//		if (BufferWaveOut.fptr >= MessageWaveFormat.FileSize) {
+//			//BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
+//			//AudioState = AUDIO_STATE_NEXT;
+//			BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
+//			AUDIO_PLAYER_Start(FilePos);
+//			if (uwVolume == 0)
+//			{
+//				BSP_AUDIO_OUT_SetVolume(uwVolume);
+//			}
+//		}
+//
+//		if (BufferWaveOut.state == BUFFER_OFFSET_HALF)
+//		{
+//			if (f_read(&MessageWavFile, &BufferWaveOut.buff[0], AUDIO_OUT_BUFFER_SIZE / 2, (void*) &bytesread) != FR_OK)
+//			{
+//				BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
+//				return AUDIO_ERROR_IO;
+//			}
+//			BufferWaveOut.state = BUFFER_OFFSET_NONE;
+//			BufferWaveOut.fptr += bytesread;
+//		}
+//
+//		if (BufferWaveOut.state == BUFFER_OFFSET_FULL)
+//		{
+//			if (f_read(&MessageWavFile, &BufferWaveOut.buff[AUDIO_OUT_BUFFER_SIZE / 2], AUDIO_OUT_BUFFER_SIZE / 2, (void*) &bytesread) != FR_OK)
+//			{
+//				BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
+//				return AUDIO_ERROR_IO;
+//			}
+//
+//			BufferWaveOut.state = BUFFER_OFFSET_NONE;
+//			BufferWaveOut.fptr += bytesread;
+//		}
 
 	case AUDIO_STATE_NEXT:
 		if (++FilePos >= AUDIO_GetWavObjectNumber()) {
@@ -364,11 +375,6 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		}
 
 		AudioState = AUDIO_STATE_INIT;
-//		BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
-//		AUDIO_PLAYER_Start(FilePos);
-//		if (uwVolume == 0) {
-//			BSP_AUDIO_OUT_SetVolume(uwVolume);
-//		}
 		break;
 
 	case AUDIO_STATE_PREVIOUS:
@@ -377,63 +383,8 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		}
 
 		AudioState = AUDIO_STATE_INIT;
-//		BSP_AUDIO_OUT_Stop(CODEC_PDWN_SW);
-//		AUDIO_PLAYER_Start(FilePos);
-//		if (uwVolume == 0) {
-//			BSP_AUDIO_OUT_SetVolume(uwVolume);
-//		}
 		break;
 
-	case AUDIO_STATE_PAUSE:
-		BSP_LCD_SetTextColor(LCD_COLOR_CYAN);
-		BSP_LCD_DisplayStringAt(250, LINE(9), (uint8_t*) "  [PAUSE]",
-				LEFT_MODE);
-		BSP_LCD_SetTextColor(LCD_COLOR_RED); /* Display red pause rectangles */
-		BSP_LCD_FillRect(TOUCH_PAUSE_XMIN, TOUCH_PAUSE_YMIN, 15,
-				TOUCH_PAUSE_YMAX - TOUCH_PAUSE_YMIN);
-		BSP_LCD_FillRect(TOUCH_PAUSE_XMIN + 20, TOUCH_PAUSE_YMIN, 15,
-				TOUCH_PAUSE_YMAX - TOUCH_PAUSE_YMIN);
-		BSP_AUDIO_OUT_Pause();
-		AudioState = AUDIO_STATE_WAIT;
-		break;
-
-	case AUDIO_STATE_RESUME:
-		BSP_LCD_SetTextColor(LCD_COLOR_CYAN);
-		BSP_LCD_DisplayStringAt(250, LINE(9), (uint8_t*) "  [PLAY ]",
-				LEFT_MODE);
-		/* Display blue cyan pause rectangles */
-		BSP_LCD_FillRect(TOUCH_PAUSE_XMIN, TOUCH_PAUSE_YMIN, 15,
-				TOUCH_PAUSE_YMAX - TOUCH_PAUSE_YMIN);
-		BSP_LCD_FillRect(TOUCH_PAUSE_XMIN + 20, TOUCH_PAUSE_YMIN, 15,
-				TOUCH_PAUSE_YMAX - TOUCH_PAUSE_YMIN);
-		BSP_AUDIO_OUT_Resume();
-		if (uwVolume == 0) {
-			BSP_AUDIO_OUT_SetVolume(uwVolume);
-		}
-		AudioState = AUDIO_STATE_PLAY;
-		break;
-
-	case AUDIO_STATE_VOLUME_UP:
-		if (uwVolume <= 90) {
-			uwVolume += 10;
-		}
-		BSP_AUDIO_OUT_SetVolume(uwVolume);
-		BSP_LCD_SetTextColor(LCD_COLOR_WHITE);
-		sprintf((char*) str, "Volume : %lu ", uwVolume);
-		BSP_LCD_DisplayStringAtLine(9, str);
-		AudioState = AUDIO_STATE_PLAY;
-		break;
-
-	case AUDIO_STATE_VOLUME_DOWN:
-		if (uwVolume >= 10) {
-			uwVolume -= 10;
-		}
-		BSP_AUDIO_OUT_SetVolume(uwVolume);
-		BSP_LCD_SetTextColor(LCD_COLOR_WHITE);
-		sprintf((char*) str, "Volume : %lu ", uwVolume);
-		BSP_LCD_DisplayStringAtLine(9, str);
-		AudioState = AUDIO_STATE_PLAY;
-		break;
 
 	case AUDIO_STATE_INIT:
 		/* Pintamos todos los botones */
@@ -495,7 +446,7 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		BSP_LCD_DisplayStringAtLine(19, (uint8_t *)"          //||\\\\");
 		BSP_LCD_DisplayStringAtLine(20, (uint8_t *)"         // || \\\\");
 		BSP_LCD_DisplayStringAtLine(21, (uint8_t *)"      __//__||__\\\\__");
-		BSP_LCD_DisplayStringAtLine(21, (uint8_t *)"     '--------------' ");
+		BSP_LCD_DisplayStringAtLine(22, (uint8_t *)"     '--------------' ");
 
 
 		/* Llenamos el buffer con el contenido del fichero del USB */
@@ -577,7 +528,7 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		InsertarBit(1); // BIT FINALIZACION
 
 		// Una vez relleno el buffer, se procede a realizar la escritura del .wav
-		BSP_LCD_DisplayStringAtLine(14, (uint8_t *)"Se va a escribir el fichero");
+		//BSP_LCD_DisplayStringAtLine(14, (uint8_t *)"Se va a escribir el fichero");
 		uint8_t fileWriting = f_write(&MessageWavFile, (uint8_t*)WaveBuffer.pcm_buff, 2*WaveBuffer.pcm_ptr, (void*)&byteswritten);
 		if(fileWriting == FR_OK)
 		{
@@ -629,41 +580,26 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 			sprintf((char*) strFileName,"    >>  ERROR WRITING THE .wav FILE. ERROR CODE: %d", fileWriting);
 			BSP_LCD_DisplayStringAtLine(4, strFileName);
 		}
-
-		/* MAX Recording time reached, so stop audio interface and close file */
-//		if(WaveBuffer.fptr >= REC_SAMPLE_LENGTH)
-//		{
-//		  display_update = 1;
-//		  AudioState = AUDIO_STATE_STOP;
-//		  break;
-//		}
-		// Se me ocurren dos ideas: poner un boton transmit que sera el que nos llevara al estado de
-		// reproducir el audio generado. La otra, limpiar la pantalla y volver al menu de transmitir
-
-		// Otra opcion, aniadir un boton y que al pulsarlo nos lleve de vuelte al menu principal de
-		// transmision. Voy a implementar esta ultima
-		//BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
-		//AudioState = AUDIO_STATE_INIT;
 		break;
 
 	case AUDIO_STATE_WAV_CREATED:
 		// Ya se ha creado el fichero .wav a partir del fichero de de texto, por lo que ahora
 		// se procede a pintar los botones y esperar a que sean pulsados.
-		BSP_LCD_DisplayStringAtLine(9, (uint8_t *)"         |    . .-' `. '.       >>    START TRANSMISSION");
-		BSP_LCD_DisplayStringAtLine(14, (uint8_t *)"           ,|,`.        `-.\\    >>    BACK TO MENU");
-		AudioState = AUDIO_STATE_WAIT_FOR_TRANSMISSION;
+		BSP_LCD_DisplayStringAtLine(9, (uint8_t *)"         |    . .-' `. '.       >>    .wav SUCCESFULLY CREATED!");
+//		BSP_LCD_DisplayStringAtLine(14, (uint8_t *)"           ,|,`.        `-.\\    >>    BACK TO MENU");
+		//AudioState = AUDIO_STATE_WAIT_FOR_TRANSMISSION;
 
 		break;
 
-	case AUDIO_STATE_WAIT_FOR_TRANSMISSION:
-		// LLamada a una funcion para adquirir la informacion de los toques de la pantalla.
-		// No se puede usar la que ya tenemos por si se lian a tocar ahi random en la pantalla
-		// Pintamos los rectangulos para aproximar el espacio que queremos
-		//BSP_LCD_FillPolygon(puntos_BTM, 4);
-		//BSP_LCD_FillPolygon(puntos_START, 4);
-		//BSP_LCD_DisplayStringAtLine(20,(uint8_t *) "Estoy en el estado AUDIO_STATE_WAIT_FOR_TRANSMISSION");
-		TRANSMITTER_AcquireTouchButtons_TX();
-		break;
+//	case AUDIO_STATE_WAIT_FOR_TRANSMISSION:
+//		// LLamada a una funcion para adquirir la informacion de los toques de la pantalla.
+//		// No se puede usar la que ya tenemos por si se lian a tocar ahi random en la pantalla
+//		// Pintamos los rectangulos para aproximar el espacio que queremos
+//		//BSP_LCD_FillPolygon(puntos_BTM, 4);
+//		//BSP_LCD_FillPolygon(puntos_START, 4);
+//		//BSP_LCD_DisplayStringAtLine(20,(uint8_t *) "Estoy en el estado AUDIO_STATE_WAIT_FOR_TRANSMISSION");
+//		TRANSMITTER_AcquireTouchButtons_TX();
+//		break;
 
 	case AUDIO_STATE_RETURN:
 		// Se fuerza el error para ser detectado en la maquina de estados de menu y poder usarlo
@@ -673,10 +609,10 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 		break;
 
 	case AUDIO_STATE_IDLE:
-	case AUDIO_STATE_TRANSMISSION:
+	//case AUDIO_STATE_TRANSMISSION:
 	default:
 		/* Update audio state machine according to touch acquisition */
-		AUDIO_AcquireTouchButtons();
+		//AUDIO_AcquireTouchButtons();
 		break;
 	}
 	return audio_error;
@@ -774,58 +710,6 @@ static void InsertarBit(uint8_t bit)
 	}
 }
 
-/**
- * @brief  Gets the file info.
- * @param  file_idx: File index
- * @param  info: Pointer to WAV file info
- * @retval Audio error
- */
-static AUDIO_ErrorTypeDef GetFileInfo(uint16_t file_idx,
-		WAVE_FormatTypeDef *info) {
-	uint32_t bytesread;
-	uint32_t duration;
-	uint8_t str[FILEMGR_FILE_NAME_SIZE + 20];
-
-	if (f_open(&WavFile, (char*) FileList.file[file_idx].name,
-			FA_OPEN_EXISTING | FA_READ) == FR_OK) {
-		/* Fill the buffer to Send */
-		if (f_read(&WavFile, info, sizeof(WaveFormat), (void*) &bytesread)
-				== FR_OK) {
-			BSP_LCD_SetTextColor(LCD_COLOR_WHITE);
-			sprintf((char*) str, "Playing file (%d/%d): %s", file_idx + 1,
-					FileList.ptr, (char*) FileList.file[file_idx].name);
-			BSP_LCD_ClearStringLine(4);
-			BSP_LCD_DisplayStringAtLine(4, str);
-
-			BSP_LCD_SetTextColor(LCD_COLOR_CYAN);
-			sprintf((char*) str, "Sample rate : %d Hz",
-					(int) (info->SampleRate));
-			BSP_LCD_ClearStringLine(6);
-			BSP_LCD_DisplayStringAtLine(6, str);
-
-			sprintf((char*) str, "Channels number : %d", info->NbrChannels);
-			BSP_LCD_ClearStringLine(7);
-			BSP_LCD_DisplayStringAtLine(7, str);
-
-			duration = info->FileSize / info->ByteRate;
-			sprintf((char*) str, "File Size : %d KB [%02d:%02d]",
-					(int) (info->FileSize / 1024), (int) (duration / 60),
-					(int) (duration % 60));
-			BSP_LCD_ClearStringLine(8);
-			BSP_LCD_DisplayStringAtLine(8, str);
-			BSP_LCD_DisplayStringAt(263, LINE(8), (uint8_t*) "[00:00]",
-					LEFT_MODE);
-
-			BSP_LCD_SetTextColor(LCD_COLOR_WHITE);
-			sprintf((char*) str, "Volume : %lu", uwVolume);
-			BSP_LCD_ClearStringLine(9);
-			BSP_LCD_DisplayStringAtLine(9, str);
-			return AUDIO_ERROR_NONE;
-		}
-		f_close(&WavFile);
-	}
-	return AUDIO_ERROR_IO;
-}
 
 /**
  * @brief  Initializes the Wave player.
@@ -841,66 +725,6 @@ static uint8_t PlayerInit(uint32_t AudioFreq) {
 		return 0;
 	}
 }
-
-/**
- * @brief  Display interface touch screen buttons
- * @param  None
- * @retval None
- */
-static void AUDIO_PlaybackDisplayButtons(void) {
-	BSP_LCD_SetFont(&LCD_LOG_HEADER_FONT);
-	BSP_LCD_ClearStringLine(13); /* Clear dedicated zone */
-	BSP_LCD_ClearStringLine(14);
-	BSP_LCD_ClearStringLine(15);
-
-	BSP_LCD_SetTextColor(LCD_COLOR_CYAN);
-	BSP_LCD_FillPolygon(PreviousPoints, 3); /* Previous track icon */
-	BSP_LCD_FillRect(TOUCH_PREVIOUS_XMIN, TOUCH_PREVIOUS_YMIN, 10,
-			TOUCH_PREVIOUS_YMAX - TOUCH_PREVIOUS_YMIN);
-	BSP_LCD_FillPolygon(NextPoints, 3); /* Next track icon */
-	BSP_LCD_FillRect(TOUCH_NEXT_XMAX - 9, TOUCH_NEXT_YMIN, 10,
-			TOUCH_NEXT_YMAX - TOUCH_NEXT_YMIN);
-	BSP_LCD_FillRect(TOUCH_PAUSE_XMIN, TOUCH_PAUSE_YMIN, 15,
-			TOUCH_PAUSE_YMAX - TOUCH_PAUSE_YMIN); /* Pause rectangles */
-	BSP_LCD_FillRect(TOUCH_PAUSE_XMIN + 20, TOUCH_PAUSE_YMIN, 15,
-			TOUCH_PAUSE_YMAX - TOUCH_PAUSE_YMIN);
-	BSP_LCD_FillRect(TOUCH_STOP_XMIN, TOUCH_STOP_YMIN, /* Stop rectangle */
-	TOUCH_STOP_XMAX - TOUCH_STOP_XMIN,
-	TOUCH_STOP_YMAX - TOUCH_STOP_YMIN);
-	BSP_LCD_DrawRect(TOUCH_VOL_MINUS_XMIN, TOUCH_VOL_MINUS_YMIN, /* VOl- rectangle */
-	TOUCH_VOL_MINUS_XMAX - TOUCH_VOL_MINUS_XMIN,
-	TOUCH_VOL_MINUS_YMAX - TOUCH_VOL_MINUS_YMIN);
-	BSP_LCD_DisplayStringAt(24, LINE(14), (uint8_t*) "VOl-", LEFT_MODE);
-	BSP_LCD_DrawRect(TOUCH_VOL_PLUS_XMIN, TOUCH_VOL_PLUS_YMIN, /* VOl+ rectangle */
-	TOUCH_VOL_PLUS_XMAX - TOUCH_VOL_PLUS_XMIN,
-	TOUCH_VOL_PLUS_YMAX - TOUCH_VOL_PLUS_YMIN);
-	BSP_LCD_DisplayStringAt(24, LINE(14), (uint8_t*) "VOl+", RIGHT_MODE);
-
-	// ------------------------------------------------------------------------------------------
-	// Modified 2019/10/19, Jose A. Tarifa Galisteo
-	// Boton MUTE (silencio)
-//	BSP_LCD_SetTextColor(LCD_COLOR_YELLOW);
-//	BSP_LCD_DrawRect(TOUCH_MUTE_XMIN, TOUCH_MUTE_YMIN, /* Mute rectangle */
-//	TOUCH_MUTE_XMAX - TOUCH_MUTE_XMIN,
-//	TOUCH_MUTE_YMAX - TOUCH_MUTE_YMIN);
-//	BSP_LCD_DisplayStringAt(24, LINE(10), (uint8_t *) "mute", RIGHT_MODE);
-	// ------------------------------------------------------------------------------------------
-	// ------------------------------------------------------------------------------------------
-	// Boton para EFECTOS
-//		BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
-//		BSP_LCD_DrawRect(TOUCH_FX_XMIN,  TOUCH_FX_YMIN , /* Mute rectangle */
-//	                   TOUCH_FX_XMAX - TOUCH_FX_XMIN,
-//	                   TOUCH_FX_YMAX - TOUCH_FX_YMIN);
-//		BSP_LCD_DisplayStringAt(26, LINE(6), (uint8_t *)"F X", RIGHT_MODE);
-	// ------------------------------------------------------------------------------------------
-
-	BSP_LCD_SetTextColor(LCD_COLOR_GREEN);
-	BSP_LCD_SetFont(&LCD_LOG_TEXT_FONT);
-	BSP_LCD_ClearStringLine(15);
-	BSP_LCD_DisplayStringAtLine(15, (uint8_t*) "Use stop button to exit");
-	BSP_LCD_SetTextColor(LCD_COLOR_CYAN);
-}
-
 
 /**
  * @brief  Aduiere la informacion de tocar los botones del transmisor
@@ -972,7 +796,10 @@ static void TRANSMITTER_AcquireTouchButtons_TX(void) {
 				(TS_State.touchY[0] > TOUCH_START_TX_YMIN) &&
 				(TS_State.touchY[0] < TOUCH_START_TX_YMAX))
 			{
-				AudioState = AUDIO_STATE_TRANSMISSION;
+				AudioState = AUDIO_STATE_PREPARING_TRANSMISSION;
+				BSP_LCD_Clear(LCD_COLOR_DARKGREEN);
+				BSP_LCD_SetTextColor(LCD_COLOR_LIGHTGREEN);
+				BSP_LCD_SetFont(&LCD_LOG_TEXT_FONT);
 
 			}else if ((TS_State.touchX[0] > TOUCH_BTM_XMIN) &&
 					  (TS_State.touchX[0] < TOUCH_BTM_XMAX) &&
@@ -984,61 +811,6 @@ static void TRANSMITTER_AcquireTouchButtons_TX(void) {
 				BSP_LCD_SetFont(&LCD_LOG_TEXT_FONT);
 
 				AudioState = AUDIO_STATE_RETURN;
-			}
-		}
-	}
-}
-
-
-
-/**
- * @brief  Test touch screen state and modify audio state machine according to that
- * @param  None
- * @retval None
- */
-static void AUDIO_AcquireTouchButtons(void) {
-	static TS_StateTypeDef TS_State = { 0 };
-
-	if (TS_State.touchDetected == 1) /* If previous touch has not been released, we don't proceed any touch command */
-	{
-		BSP_TS_GetState(&TS_State);
-	} else {
-		BSP_TS_GetState(&TS_State);
-		if (TS_State.touchDetected == 1) {
-			if ((TS_State.touchX[0] > TOUCH_PAUSE_XMIN)
-					&& (TS_State.touchX[0] < TOUCH_PAUSE_XMAX)
-					&& (TS_State.touchY[0] > TOUCH_PAUSE_YMIN)
-					&& (TS_State.touchY[0] < TOUCH_PAUSE_YMAX)) {
-				if (AudioState == AUDIO_STATE_PLAY) {
-					AudioState = AUDIO_STATE_PAUSE;
-				} else {
-					AudioState = AUDIO_STATE_RESUME;
-				}
-			} else if ((TS_State.touchX[0] > TOUCH_NEXT_XMIN)
-					&& (TS_State.touchX[0] < TOUCH_NEXT_XMAX)
-					&& (TS_State.touchY[0] > TOUCH_NEXT_YMIN)
-					&& (TS_State.touchY[0] < TOUCH_NEXT_YMAX)) {
-				AudioState = AUDIO_STATE_NEXT;
-			} else if ((TS_State.touchX[0] > TOUCH_PREVIOUS_XMIN)
-					&& (TS_State.touchX[0] < TOUCH_PREVIOUS_XMAX)
-					&& (TS_State.touchY[0] > TOUCH_PREVIOUS_YMIN)
-					&& (TS_State.touchY[0] < TOUCH_PREVIOUS_YMAX)) {
-				AudioState = AUDIO_STATE_PREVIOUS;
-			} else if ((TS_State.touchX[0] > TOUCH_STOP_XMIN)
-					&& (TS_State.touchX[0] < TOUCH_STOP_XMAX)
-					&& (TS_State.touchY[0] > TOUCH_STOP_YMIN)
-					&& (TS_State.touchY[0] < TOUCH_STOP_YMAX)) {
-				AudioState = AUDIO_STATE_STOP;
-			} else if ((TS_State.touchX[0] > TOUCH_VOL_MINUS_XMIN)
-					&& (TS_State.touchX[0] < TOUCH_VOL_MINUS_XMAX)
-					&& (TS_State.touchY[0] > TOUCH_VOL_MINUS_YMIN)
-					&& (TS_State.touchY[0] < TOUCH_VOL_MINUS_YMAX)) {
-				AudioState = AUDIO_STATE_VOLUME_DOWN;
-			} else if ((TS_State.touchX[0] > TOUCH_VOL_PLUS_XMIN)
-					&& (TS_State.touchX[0] < TOUCH_VOL_PLUS_XMAX)
-					&& (TS_State.touchY[0] > TOUCH_VOL_PLUS_YMIN)
-					&& (TS_State.touchY[0] < TOUCH_VOL_PLUS_YMAX)) {
-				AudioState = AUDIO_STATE_VOLUME_UP;
 			}
 		}
 	}

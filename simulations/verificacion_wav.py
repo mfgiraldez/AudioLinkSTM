@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import wave
 
 # Abrimos el archivo de audio
-audio = wave.open("Wave_ejemplo_14_01.wav", "r")
+audio = wave.open("kirbyModuladoDoblePeriodo.wav", "r")
 
 # Obtenemos los datos del audio
 frames = audio.readframes(-1)
