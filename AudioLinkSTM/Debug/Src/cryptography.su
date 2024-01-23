@@ -1,0 +1,2 @@
+../Src/cryptography.c:3:6:SeqGenerator_Init	0	static
+../Src/cryptography.c:12:6:SeqGenerator_Update	0	static

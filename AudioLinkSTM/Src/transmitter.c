@@ -47,45 +47,12 @@
 #include "transmitter.h"
 
 /* Private define ------------------------------------------------------------*/
-//#define TOUCH_NEXT_XMIN         325
-//#define TOUCH_NEXT_XMAX         365
-//#define TOUCH_NEXT_YMIN         212
-//#define TOUCH_NEXT_YMAX         252
 
 #define TOUCH_BEGIN_TRANSMISSION_XMIN     185
 #define TOUCH_BEGIN_TRANSMISSION_XMAX     430
 #define TOUCH_BEGIN_TRANSMISSION_YMIN     180
 #define TOUCH_BEGIN_TRANSMISSION_YMAX     215
 
-#define TOUCH_STOP_XMIN         170
-#define TOUCH_STOP_XMAX         210
-#define TOUCH_STOP_YMIN         212
-#define TOUCH_STOP_YMAX         252
-
-#define TOUCH_PAUSE_XMIN        100
-#define TOUCH_PAUSE_XMAX        124
-#define TOUCH_PAUSE_YMIN        212
-#define TOUCH_PAUSE_YMAX        252
-
-#define TOUCH_VOL_MINUS_XMIN    20
-#define TOUCH_VOL_MINUS_XMAX    70
-#define TOUCH_VOL_MINUS_YMIN    212
-#define TOUCH_VOL_MINUS_YMAX    252
-
-#define TOUCH_VOL_PLUS_XMIN     402
-#define TOUCH_VOL_PLUS_XMAX     452
-#define TOUCH_VOL_PLUS_YMIN     212
-#define TOUCH_VOL_PLUS_YMAX     252
-
-// Modified 2019/10/19, Jose A. Tarifa Galisteo
-#define TOUCH_MUTE_XMIN     402
-#define TOUCH_MUTE_XMAX     452
-#define TOUCH_MUTE_YMIN     155
-#define TOUCH_MUTE_YMAX     179
-#define TOUCH_FX_XMIN     402
-#define TOUCH_FX_XMAX     452
-#define TOUCH_FX_YMIN     83
-#define TOUCH_FX_YMAX     126
 
 // Se definen los puntos para los nuevos botones (PREVIOUS)  (NEXT)  (RETURN) (BEGGING TRANSMISSION) del transmisor
 #define TOUCH_PREVIOUS_XMIN     80
@@ -148,31 +115,6 @@ const int16_t sineSamples[] = {
     0b1000000000000001,
     0b1010010101111111
 };
-
-//static Point ReturnButtonPoints[] = {{TOUCH_RETURN_XMIN, TOUCH_RETURN_YMIN},
-//									 {TOUCH_RETURN_XMIN, TOUCH_RETURN_YMAX},
-//									 {TOUCH_RETURN_XMAX, TOUCH_RETURN_YMIN},
-//									 {TOUCH_RETURN_XMAX, TOUCH_RETURN_YMAX}};
-//
-////static Point puntos_BTM[] = {{TOUCH_BTM_XMIN,TOUCH_BTM_YMIN},
-////							 {TOUCH_BTM_XMIN, TOUCH_BTM_YMAX},
-////							 {TOUCH_BTM_XMAX, TOUCH_BTM_YMIN},
-////							 {TOUCH_BTM_XMAX, TOUCH_BTM_YMAX}};
-////
-////static Point puntos_START[] = {{TOUCH_START_TX_XMIN,TOUCH_START_TX_YMIN},
-////							   {TOUCH_START_TX_XMIN, TOUCH_START_TX_YMAX},
-////							   {TOUCH_START_TX_XMAX, TOUCH_START_TX_YMIN},
-////							   {TOUCH_START_TX_XMAX, TOUCH_START_TX_YMAX}};
-//
-//static Point puntos_NEXT[] = {{TOUCH_NEXT_XMIN,TOUCH_NEXT_YMIN},
-//							   {TOUCH_NEXT_XMIN, TOUCH_NEXT_YMAX},
-//							   {TOUCH_NEXT_XMAX, TOUCH_NEXT_YMIN},
-//							   {TOUCH_NEXT_XMAX, TOUCH_NEXT_YMAX}};
-//
-//static Point puntos_PREVIOUS[] = {{TOUCH_PREVIOUS_XMIN,TOUCH_PREVIOUS_YMIN},
-//							   {TOUCH_PREVIOUS_XMIN, TOUCH_PREVIOUS_YMAX},
-//							   {TOUCH_PREVIOUS_XMAX, TOUCH_PREVIOUS_YMIN},
-//							   {TOUCH_PREVIOUS_XMAX, TOUCH_PREVIOUS_YMAX}};
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -296,15 +238,7 @@ AUDIO_ErrorTypeDef TRANSMITTER_Process(void) {
 	static uint32_t prev_elapsed_time = 0xFFFFFFFF;
 	uint8_t str[16];
 	uint8_t strFileName[FILEMGR_FILE_NAME_SIZE + 20];
-//	Point Begin_TransmissionPoints[] = {{TOUCH_BEGIN_TRANSMISSION_XMIN,TOUCH_BEGIN_TRANSMISSION_YMIN},
-//	                             {TOUCH_BEGIN_TRANSMISSION_XMAX, TOUCH_BEGIN_TRANSMISSION_YMIN},
-//	                             {TOUCH_BEGIN_TRANSMISSION_XMAX, TOUCH_BEGIN_TRANSMISSION_YMAX},
-//	    						  {TOUCH_BEGIN_TRANSMISSION_XMIN, TOUCH_BEGIN_TRANSMISSION_YMAX}};
 
-	//	Point PreviousButtonPoints[] = {{TOUCH_PREVIOUS_XMIN, TOUCH_PREVIOUS_YMIN},
-//		                             {TOUCH_PREVIOUS_XMAX, TOUCH_PREVIOUS_YMIN},
-//		                             {TOUCH_PREVIOUS_XMAX, TOUCH_PREVIOUS_YMAX},
-//		    						  {TOUCH_PREVIOUS_XMIN, TOUCH_PREVIOUS_YMAX}};
 
 	switch (AudioState) {
 

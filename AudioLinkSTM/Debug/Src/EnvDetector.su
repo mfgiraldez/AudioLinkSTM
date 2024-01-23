@@ -1,0 +1,2 @@
+../Src/EnvDetector.c:4:6:EnvDetector_Init	8	static
+../Src/EnvDetector.c:15:7:EnvDetector_Update	8	static

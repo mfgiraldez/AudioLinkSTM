@@ -1,8 +1,8 @@
-../Src/transmitter.c:663:13:InsertarBit	6
-../Src/transmitter.c:199:20:AUDIO_PLAYER_Init	1
-../Src/transmitter.c:213:20:ReadFileIntoBuffer	5
-../Src/transmitter.c:253:20:AUDIO_PLAYER_Start	5
-../Src/transmitter.c:290:20:TRANSMITTER_Process	28
-../Src/transmitter.c:626:20:AUDIO_PLAYER_Stop	1
-../Src/transmitter.c:640:6:BSP_AUDIO_OUT_TransferComplete_CallBack	1
-../Src/transmitter.c:651:6:BSP_AUDIO_OUT_HalfTransfer_CallBack	1
+../Src/transmitter.c:597:13:InsertarBit	6
+../Src/transmitter.c:141:20:AUDIO_PLAYER_Init	1
+../Src/transmitter.c:155:20:ReadFileIntoBuffer	5
+../Src/transmitter.c:195:20:AUDIO_PLAYER_Start	5
+../Src/transmitter.c:232:20:TRANSMITTER_Process	28
+../Src/transmitter.c:560:20:AUDIO_PLAYER_Stop	1
+../Src/transmitter.c:574:6:BSP_AUDIO_OUT_TransferComplete_CallBack	1
+../Src/transmitter.c:585:6:BSP_AUDIO_OUT_HalfTransfer_CallBack	1
